@@ -5,7 +5,7 @@
     "author": "1269106688@qq.com",
     "private": true,
     "scripts": {
-        "dev": "nuxt",
+        "dev": "nuxt --open",
         "build": "nuxt build",
         "start": "nuxt start",
         "server": "cross-env NODE_ENV=production forever server/index.js",

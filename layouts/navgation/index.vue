@@ -1,4 +1,5 @@
 <template>
+    <header id="header" ref="header"></header>
 </template>
 
 <script>

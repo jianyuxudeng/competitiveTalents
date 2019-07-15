@@ -1,0 +1,52 @@
+html,
+body,
+ul,
+li,
+nav,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    margin: 0;
+    padding: 0;
+}
+
+*{
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+    font-family: 'PingFangSC-Regular', '微软雅黑';
+}
+
+body {
+    font-size: 0.14rem;
+    background-color: #ffffff;
+    position: relative;
+    min-height: 100vh;
+}
+li {
+    list-style-type: none;
+}
+
+img {
+    display: inline-block;
+    width: 100%;
+    border: 0;
+}
+
+a {
+    cursor: pointer;
+    text-decoration: none;
+    color: #333333;
+}
+
+input {
+    height: 0.3rem;
+    border: 1px solid #dddddd;
+    background-color: #ffffff;
+    width: 60%;
+    padding: 0 0.1rem;
+}

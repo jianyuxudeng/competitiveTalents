@@ -39,9 +39,9 @@ module.exports = {
      ** Build configuration
      */
     build: {
-        plugins: [
-            new MiniCssExtractPlugin({ filename: "[name]/css/[name].[chunkhash:8].css" }),
-        ],
+        // plugins: [
+        //     new MiniCssExtractPlugin({ filename: "[name]/css/[name].[chunkhash:8].css" }),
+        // ],
         postcss: {
             preset: {
                 autoprefixer: {
@@ -49,46 +49,53 @@ module.exports = {
                 }
             }
         },
-        extend(config, { isDev, isClient }) {
-            if (isDev && isClient) {
-                config.module.rules.push({
-                    enforce: 'pre',
-                    test: /\.(js|vue)$/,
-                    loader: 'eslint-loader',
-                    exclude: /(node_modules)/
-                }, {
-                    test: /\.less$/,
-                    exclude: /node_modules/,
-                    use: [
+        // extend(config, { isDev, isClient }) {
+        //     if (isDev && isClient) {
+        //         config.module.rules.push({
+        //             enforce: 'pre',
+        //             test: /\.(js|vue)$/,
+        //             loader: 'eslint-loader',
+        //             exclude: /(node_modules)/
+        //         }, {
+        //             test: /\.less$/,
+        //             exclude: /node_modules/,
+        //             use: [
 
-                        MiniCssExtractPlugin.loader, {
-                            loader: "css-loader",
-                            options: {
-                                minimize: true
-                            }
-                        }, {
-                            loader: "less-loader"
-                        }, {
-                            loader: "postcss-loader"
-                        }
-                    ]
-                }, {
-                    test: /\.css$/,
-                    use: [
-                        MiniCssExtractPlugin.loader, {
-                            loader: "css-loader",
-                            options: {
-                                minimize: true
-                            }
-                        },
-                        "postcss-loader"
-                    ]
-                })
-            }
-        },
-        filenames: {
-            css: ({ isDev }) => isDev ? '[name].css' : '[contenthash].css',
-        },
+        //                 // MiniCssExtractPlugin.loader, {
+        //                 //     loader: "css-loader",
+        //                 //     options: {
+        //                 //         minimize: true
+        //                 //     }
+        //                 // }, 
+        //                 {
+        //                     loader: "css-loader"
+        //                 },
+        //                 {
+        //                     loader: "less-loader"
+        //                 }, {
+        //                     loader: "postcss-loader"
+        //                 }
+        //             ]
+        //         }, {
+        //             test: /\.css$/,
+        //             use: [
+        //                 // MiniCssExtractPlugin.loader, {
+        //                 //     loader: "css-loader",
+        //                 //     options: {
+        //                 //         minimize: true
+        //                 //     }
+        //                 // },
+        //                 {
+        //                     loader: "css-loader"
+        //                 },
+        //                 "postcss-loader"
+        //             ]
+        //         })
+        //     }
+        // },
+        // filenames: {
+        //     css: ({ isDev }) => isDev ? '[name].css' : '[contenthash].css',
+        // },
     },
 
     router: {
@@ -96,7 +103,7 @@ module.exports = {
             routes.push( {
                 name: 'mhome',
                 path: '/mobile',
-                component: resolve(__dirname, './pages/mobile/home/index.vue')
+                component: resolve(__dirname, './pages/mobile/index.vue')
             })
         }
     }

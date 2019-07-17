@@ -6,10 +6,10 @@
 </template>
 
 <script>
-import "./page-title.less";
+import "./Title.less";
 
 export default {
-  name: "page-title",
+  name: "Title",
   props: ['title', 'titleEn'],
   async asyncData(){
      return{

@@ -4,12 +4,12 @@
         <!-- logo -->
         <div class="head_logo">
           <em><img src="../../assets/images/LOGO.png" alt=""></em>
-          <a href="javascript:;">首页</a>
-          <a href="javascript:;">行业资讯</a>
+          <a @click="goHome">首页</a>
+          <a>行业资讯</a>
         </div>
         <!-- nav -->
         <div class="head_nav">
-          <a href="javascript:;" v-for="item in navs" :key="item.code" @click="navLink(item.code)">{{item.name}}</a>
+          <a v-for="item in navs" :key="item.code" @click="navLink(item.code)">{{item.name}}</a>
         </div>
       </div>
     </div>
@@ -65,6 +65,12 @@ export default {
     //导航路由跳转
     navLink(code) {
       console.log(code)
+    },
+    //首页
+    goHome() {
+      this.$router.push({
+        path: '/'
+      })
     }
   },
   components: {}

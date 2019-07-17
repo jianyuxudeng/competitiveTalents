@@ -24,9 +24,11 @@
     </div>
     <!-- freeker -->
     <div class="services freeker">
-      <PageTitle :title="freeker.title" :titleEn="freeker.titleEn"></PageTitle>
+      <Title :title="freeker.title" :titleEn="freeker.titleEn"></Title>
       <div class="freeker_search">
-        <Search className="freeker" placeholder="查找职位" @searchHandle="onSearch"></Search>
+        <a-input-search
+            @search="onSearch"
+        />
       </div>
       <div class="freeker_conten">
         <Services className="freeker" :list="freeker.list"></Services>
@@ -34,14 +36,14 @@
     </div>
     <!-- enterprise -->
     <div class="services enterprise">
-      <PageTitle :title="enterprise.title" :titleEn="enterprise.titleEn"></PageTitle>
+      <Title :title="enterprise.title" :titleEn="enterprise.titleEn"></Title>
       <div class="enterprise_conten">
         <Services className="enterprise" :list="enterprise.list"></Services>
       </div>
     </div>
     <!-- demands -->
     <div class="services demands">
-      <PageTitle :title="demands.title" :titleEn="demands.titleEn"></PageTitle>
+      <Title :title="demands.title" :titleEn="demands.titleEn"></Title>
       <div class="demands_conten">
         <Demands :list="demands.list"></Demands>
       </div>
@@ -49,7 +51,7 @@
     </div>
     <!-- information -->
     <div class="services information">
-      <PageTitle :title="information.title" :titleEn="information.titleEn"></PageTitle>
+      <Title :title="information.title" :titleEn="information.titleEn"></Title>
       <ul>
         <li>
           <Information :list="information.dynamic" title="行业动态"></Information>
@@ -65,8 +67,7 @@
 <script>
 import Vue from "vue";
 import "./index.less";
-import PageTitle from "../components/atom/page-title/page-title";
-import Search from "../components/atom/search/search";
+import Title from "../components/atom/Title/Title";
 import Services from "../components/molecule/services/services";
 import Demands from "../components/molecule/demands/demands";
 import Information from "../components/molecule/information/information";
@@ -74,8 +75,7 @@ import Information from "../components/molecule/information/information";
 export default {
   name: "home",
   components: {
-    PageTitle,
-    Search,
+    Title,
     Services,
     Demands,
     Information
@@ -190,8 +190,8 @@ export default {
   mounted() {
   },
   methods: {
-    onSearch(e) { //搜索
-      console.log(e)
+    onSearch(value) { //搜索
+      console.log(value)
     },
     onMore() { //点击MORE按钮
       console.log(111)

@@ -65,9 +65,8 @@ export default {
     //导航路由跳转
     navLink(code) {
       this.$router.push({
-        path: '/' + company-info
+        path: '/' + code
       })
-      console.log(code)
     },
     //首页
     goHome() {

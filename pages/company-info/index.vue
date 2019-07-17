@@ -1,16 +1,13 @@
 <template>
-  <section class="page_title">
-      <span>{{title}}</span>
-      <p>{{titleEn}}</p>
+  <section class="company-info">
   </section>
 </template>
 
 <script>
-import "./Title.less";
+import "./index.less";
 
 export default {
-  name: "Title",
-  props: ['title', 'titleEn'],
+  name: "company-info",
   async asyncData(){
      return{
 

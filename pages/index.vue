@@ -67,10 +67,10 @@
 <script>
 import Vue from "vue";
 import "./index.less";
-import Title from "../components/atom/Title/Title";
-import Services from "../components/molecule/services/services";
-import Demands from "../components/molecule/demands/demands";
-import Information from "../components/molecule/information/information";
+import Title from "../components/atom/Title";
+import Services from "../components/molecule/services";
+import Demands from "../components/molecule/demands";
+import Information from "../components/molecule/information";
 
 export default {
   name: "home",

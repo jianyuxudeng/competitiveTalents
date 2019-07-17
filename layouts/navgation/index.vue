@@ -41,7 +41,7 @@ export default {
         },
         {
           name: '企业信息',
-          code: '5'
+          code: 'company-info'
         }
       ]
     };
@@ -64,6 +64,9 @@ export default {
   methods: {
     //导航路由跳转
     navLink(code) {
+      this.$router.push({
+        path: '/' + company-info
+      })
       console.log(code)
     },
     //首页

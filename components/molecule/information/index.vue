@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import "./information.less";
+import "./index.less";
 
 export default {
   name: "information",

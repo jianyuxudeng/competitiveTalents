@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import "./demands.less";
+import "./index.less";
 
 export default {
   name: "demands",

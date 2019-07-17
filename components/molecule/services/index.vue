@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import "./services.less";
+import "./index.less";
 
 export default {
   name: "services",

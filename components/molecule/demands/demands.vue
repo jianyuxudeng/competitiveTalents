@@ -1,7 +1,7 @@
 <template>
   <section class="demands_page">
       <ul>
-          <li v-for="(item, index) in listCope" :key="index">
+          <li v-for="(item, index) in listCope" :key="index" @click="onClick(index)">
               <div class="demands_top">
                   <div class="demands_text">
                       <div>
@@ -52,7 +52,7 @@ export default {
       this.init();
   },
   methods: {
-      init() {
+      init() { //初始化
           if(this.list.length > 0) {
             this.listCope = this.list.map(item => {
                 switch (item.state) {
@@ -74,6 +74,9 @@ export default {
                 return item;
             });
           }
+      },
+      onClick(index) { //点击每个item
+          console.log(index)
       }
   }
 };

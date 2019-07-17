@@ -45,7 +45,7 @@
       <div class="demands_conten">
         <Demands :list="demands.list"></Demands>
       </div>
-      <div class="btn"><a>MORE +</a></div>
+      <div class="btn"><a @click="onMore">MORE +</a></div>
     </div>
     <!-- information -->
     <div class="services information">
@@ -190,8 +190,11 @@ export default {
   mounted() {
   },
   methods: {
-    onSearch(e) {
+    onSearch(e) { //搜索
       console.log(e)
+    },
+    onMore() { //点击MORE按钮
+      console.log(111)
     }
   }
 };

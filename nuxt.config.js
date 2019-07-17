@@ -33,7 +33,8 @@ module.exports = {
         './static/index.css'
     ],
     plugins: [
-        "./plugins/utils/adtion.js"
+        "./plugins/utils/adtion.js",
+        "./plugins/utils/antd.js"
     ],
     /*
      ** Build configuration

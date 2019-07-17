@@ -1,0 +1,87 @@
+.container{
+    background: #f8f8f8;
+    // banner
+    .banner{
+        .ant-carousel{
+            .custom-slick-arrow {
+                width: .5rem;
+                height: .5rem;
+                font-size: .5rem;
+                color: #fff;
+                opacity: 0.5;
+                top: 60%;
+            }
+            .custom-slick-arrow:before {
+                display: none;
+            }
+            .custom-slick-arrow:hover {
+                opacity: 0.5;
+            }
+            .slick-dots{
+                height: auto;
+            }
+            .slick-thumb{
+                bottom: .34rem;
+                li{
+                    margin: 0 .05rem;
+                    button{
+                        width: .11rem;
+                        height: .11rem;
+                        background: #9284c2;
+                        border-radius: 100%;
+                        opacity: 1;
+                    }
+                    &.slick-active{
+                        button{
+                            width: .6rem;
+                            background: #ffffff;
+                            border-radius: .5rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    //services
+    .services{
+        padding: .4rem 0;
+        .freeker_search{
+            width: 9.74rem;
+            margin: .4rem auto 0;
+        }
+    }
+    //demands
+    .demands{
+        background: #fff;
+        .demands_conten{
+            width: 12rem;
+            margin: .4rem auto 0;
+        }
+        .btn{
+            display: flex;
+            justify-content: center;
+            margin: .2rem auto 0;
+            a{
+                width: 1.62rem;
+                height: .41rem;
+                border: 2px solid #a8affe;
+                font-size: .16rem;
+                color: #515ffd;
+                text-align: center;
+                line-height: .41rem;
+            }
+        }
+    }
+    //information
+    .information{
+        ul{
+            width: 11.8rem;
+            margin: .5rem auto .2rem;
+            display: flex;
+            justify-content: space-between;
+            li{
+                width: 5.74rem;
+            }
+        }
+    }
+}

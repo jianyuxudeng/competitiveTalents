@@ -1,5 +1,18 @@
 <template>
-    <header id="header" ref="header"></header>
+    <div class="navgation">
+      <div class="head_flex">
+        <!-- logo -->
+        <div class="head_logo">
+          <em><img src="../../assets/images/LOGO.png" alt=""></em>
+          <a href="javascript:;">首页</a>
+          <a href="javascript:;">行业资讯</a>
+        </div>
+        <!-- nav -->
+        <div class="head_nav">
+          <a href="javascript:;" v-for="item in navs" :key="item.code" @click="navLink(item.code)">{{item.name}}</a>
+        </div>
+      </div>
+    </div>
 </template>
 
 <script>
@@ -9,7 +22,28 @@ export default {
   name: "navgation",
   data() {
     return {
-    
+      navs: [
+        {
+          name: '职位发布',
+          code: '1'
+        },
+        {
+          name: '职位管理',
+          code: '2'
+        },
+        {
+          name: '简历搜索',
+          code: '3'
+        },
+        {
+          name: '收件箱',
+          code: '4'
+        },
+        {
+          name: '企业信息',
+          code: '5'
+        }
+      ]
     };
   },
   async asyncData() {
@@ -28,7 +62,10 @@ export default {
     
   },
   methods: {
-   
+    //导航路由跳转
+    navLink(code) {
+      console.log(code)
+    }
   },
   components: {}
 };

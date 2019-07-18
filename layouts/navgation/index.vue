@@ -33,7 +33,7 @@ export default {
         },
         {
           name: '简历搜索',
-          code: '3'
+          code: 'resume-manage'
         },
         {
           name: '收件箱',

@@ -27,6 +27,16 @@ export default {
       isLogin: false
     };
   },
+  watch: {
+    $route() {
+      let name = this.$router.history.current.name;
+      if(name == 'login') {
+        this.isLogin = true;
+      }else{
+        this.isLogin = false;
+      };
+    }
+  },
   created() {
     let fullpath = this.$router.history.current.fullPath;
     let name = this.$router.history.current.name;

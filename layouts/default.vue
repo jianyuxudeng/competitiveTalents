@@ -1,14 +1,14 @@
 <template>
   <div>
     <div v-show="isPc">
-        <navgation></navgation>
+        <navgation v-if="!isLogin"></navgation>
     </div>
     <div v-show="!isPc">
         <mobile-navgation></mobile-navgation>
     </div>
     <nuxt/>
     <div v-show="isPc">
-      <footer-bot></footer-bot>
+      <footer-bot v-if="!isLogin"></footer-bot>
     </div>
     <div v-show="!isPc">
         <mobile-footer ></mobile-footer>
@@ -23,11 +23,18 @@ const mobileFooter = () => import("./mobile/mobile-footer/index.vue");
 export default {
   data() {
     return {
-      isPc: false
+      isPc: false,
+      isLogin: false
     };
   },
   created() {
     let fullpath = this.$router.history.current.fullPath;
+    let name = this.$router.history.current.name;
+    if(name == 'login') {
+      this.isLogin = true;
+    }else{
+      this.isLogin = false;
+    };
     if (process.browser) {
       if (document.documentElement.clientWidth > 750) {
         if(fullpath.indexOf('mobile')>-1){

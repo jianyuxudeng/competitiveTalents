@@ -53,14 +53,32 @@
                             <span>{{item.num}}</span>
                         </a>
                     </div>
-                    <a-select defaultValue="1">
-                        <a-select-option value="1">每页20条</a-select-option>
+                    <a-select defaultValue="20" @change="showSizeChange">
+                        <a-select-option 
+                            v-for="(item, index) in pagination.pageSizeOptions" 
+                            :value="item"
+                            :key="index"
+                        >每页{{item}}条</a-select-option>
                     </a-select>
                 </div>
             </div>
             <!-- table表格 -->
             <div class="table">
-                <a-table :columns="columns" :dataSource="rows" :rowSelection="rowSelection"></a-table>
+                <a-table :columns="columns" :dataSource="rows" :rowSelection="rowSelection" :pagination="pagination">
+                    <template slot="operation" slot-scope="text">
+                        <div class="operation">
+                            <span>职位置顶</span>
+                            <span>职位刷新</span>
+                            <span>职位推荐</span>
+                        </div>
+                    </template>
+                    <template slot="operationBtn" slot-scope="text">
+                        <div class="operation_btn">
+                            <span>修改职位</span>
+                            <span>下线职位</span>
+                        </div>
+                    </template>
+                </a-table>
             </div>
         </div>
     </section>
@@ -88,9 +106,22 @@ export default {
             {title: '所属部门', dataIndex: 'department'},
             {title: '发布地点', dataIndex: 'place'},
             {title: '投递', dataIndex: 'delivery'},
-            {title: '操作', dataIndex: ''}
+            {
+                title: '操作', 
+                dataIndex: 'operation', 
+                colSpan: 2,
+                width: '1.8rem',
+                scopedSlots: { customRender: 'operation' }
+            },
+            {
+                title: '操作', 
+                dataIndex: 'operationBtn', 
+                colSpan: 0,
+                width: '1rem',
+                scopedSlots: { customRender: 'operationBtn' }
+            }
         ],
-        rows: [
+        rows: [ //列表数据
             {
                 key: 1, 
                 name: '电竞内容后期制作', 
@@ -99,9 +130,45 @@ export default {
                 department: '上海电竞委员活动有限公司', 
                 place: '上海', 
                 delivery: '54'
+            },
+            {
+                key: 2, 
+                name: '电竞内容后期制作', 
+                stateTime: '2019-06-26', 
+                endTime: '2019-07-26', 
+                department: '上海电竞委员活动有限公司', 
+                place: '上海', 
+                delivery: '54'
+            },
+            {
+                key: 3, 
+                name: '电竞内容后期制作', 
+                stateTime: '2019-06-26', 
+                endTime: '2019-07-26', 
+                department: '上海电竞委员活动有限公司', 
+                place: '上海', 
+                delivery: '54'
             }
         ],
-        rowSelection: {}
+        rowSelection: {}, //select选项
+        pagination: { //自定义分页
+            //total: 0, //数据总数
+            pageSize: 20, // 默认每页显示数量
+            pageSizeOptions: ['10', '20', '50', '100'], // 每页数量选项
+            hideOnSinglePage: true, //只有一页时是否隐藏分页器
+            showQuickJumper: true, //是否可以快速跳转至某页
+            showSizeChanger: false, // 是否可以改变 pageSize
+            onShowSizeChange: (current, pageSize) => this.pageSize = pageSize, // 改变每页数量时更新显示
+            //showTotal: total => `${total}`, //显示总数据
+            itemRender: (current, type, originalElement) => {
+                if (type === 'prev') {
+                    return <a-button>上一页</a-button>;
+                } else if (type === 'next') {
+                    return <a-button>下一页</a-button>;
+                };
+                return originalElement;
+            }
+        }
     };
   },
   async asyncData() {
@@ -111,7 +178,7 @@ export default {
   
   },
   mounted() {
-   
+     //this.pagination = Object.assign(this.pagination, {total: this.rows.length});
   },
   watch: {
    
@@ -120,6 +187,9 @@ export default {
     
   },
   methods: {
+      showSizeChange(val) { //选择每页条数后重新渲染数据
+          this.pagination = Object.assign(this.pagination, {pageSize: Number(val)});
+      },
       //重置搜索
       handleReset() {
           this.form.resetFields();

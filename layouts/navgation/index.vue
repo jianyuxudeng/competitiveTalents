@@ -6,6 +6,7 @@
           <em><img src="../../assets/images/LOGO.png" alt=""></em>
           <a @click="goHome">首页</a>
           <a>行业资讯</a>
+          <a>企业用户登录</a>
         </div>
         <!-- nav -->
         <div class="head_nav">
@@ -40,8 +41,8 @@ export default {
           code: '4'
         },
         {
-          name: '企业信息',
-          code: 'company-info'
+          name: '求职者登录',
+          code: 'login'
         }
       ]
     };

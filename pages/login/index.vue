@@ -208,12 +208,23 @@
                       </a-input>
                     </a-form-item>
                   </section>
+                  <section class="password_ok" v-if="isShow == 4">
+                    <a-form-item>
+                      <em><img src="../../assets/images/password_ok.png" alt=""></em>
+                    </a-form-item>
+                    <a-form-item>
+                      <p>重设密码完成</p>
+                      <p>请返回登录页面重新登录</p>
+                    </a-form-item>
+                  </section>
+                  <!-- 登录方式 -->
                   <a-form-item>
                     <div class="isPhone">
                       <a @click="handleClick" v-if="isShow == 1">{{isPhone ? '账号密码登录' : '手机验证码登录'}}</a>
                       <a v-if="!isPhone && isShow == 1" @click="retrievePassword">忘记密码？</a>
                     </div>
                   </a-form-item>
+                  <!-- btn按钮 -->
                   <a-form-item>
                     <a-button type="primary" html-type="submit" v-if="isShow == 1">登录</a-button>
                     <a-button type="primary" html-type="submit" v-if="isShow == 2">注册</a-button>
@@ -221,6 +232,7 @@
                       <a-button type="primary" html-type="submit" v-if="active == '1'">找回密码</a-button>
                       <a-button type="primary" html-type="submit" v-if="active == '2'">完成设置</a-button>
                     </section>
+                    <a-button type="primary" html-type="submit" v-if="isShow == 4">去登录</a-button>
                   </a-form-item>
                   <a-form-item class="center" v-if="isShow == 1">
                     <a @click="toRegister">立即注册</a>
@@ -255,7 +267,7 @@ export default {
           newPassword: ''
         },
         isPhone: true, //手机号还是账号登录
-        isShow: 1 //1：登录   2：注册   3：找回密码
+        isShow: 1 //1：登录   2：注册   3：找回密码   4：重设密码完成
       }
   },
   mounted() {
@@ -293,10 +305,23 @@ export default {
         if (!err) {
           switch (this.isShow) {
             case 1:
-              
+              this.form.resetFields();
+              this.$router.push({
+                path: '/'
+              })
               break;
             case 2:
               this.form.resetFields();
+              this.isShow = 1;
+              break;
+            case 3:
+              if(this.active == '1') {};
+              if(this.active == '2') {
+                this.form.resetFields();
+                this.isShow = 4;
+              };
+              break;
+            case 4:
               this.isShow = 1;
               break;
           

@@ -101,7 +101,10 @@ export default {
         active: 0, //职位筛选tab高亮
         columns: [ //table表头
             {title: '职位名称', dataIndex: 'name'},
-            {title: '发布日期', dataIndex: 'stateTime'},
+            {
+                title: '发布日期', 
+                dataIndex: 'stateTime'
+            },
             {title: '截至日期', dataIndex: 'endTime'},
             {title: '所属部门', dataIndex: 'department'},
             {title: '发布地点', dataIndex: 'place'},

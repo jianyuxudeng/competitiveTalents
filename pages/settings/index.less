@@ -1,26 +1,147 @@
-.ant-tabs{
-    width: 9rem;
-    margin: .58rem auto;
-    .ant-tabs-left-bar{
-        border-right: none;
-        width: 1.7rem;
-        margin-right: 0;
-        .ant-tabs-tab{
-            text-align: center;
-            background: #f8f8f8;
-            color: #646464;
-            margin: .02rem 0;
-            &.ant-tabs-tab-active{
-                background: #515ffd;
-                color: #fff;
+.settings{
+    .ant-tabs{
+        width: 9rem;
+        min-height: 3.2rem;
+        margin: .58rem auto;
+        font-size: .16rem;
+        .ant-tabs-left-bar{
+            border-right: none;
+            width: 1.7rem;
+            margin-right: 0;
+            .ant-tabs-tab{
+                text-align: center;
+                background: #f8f8f8;
+                color: #646464;
+                margin: .02rem 0;
+                &.ant-tabs-tab-active{
+                    background: #515ffd;
+                    color: #fff;
+                }
+            }
+        }
+        .ant-tabs-ink-bar{
+            background: transparent;
+        }
+        .ant-tabs-left-content{
+            border-left: none;
+            padding-left: .94rem;
+        }
+    }
+    // 账号绑定
+    .account{
+        .head{
+            border-bottom: 1px solid #bebebe;
+            p{
+                margin-top: .06rem;
+                color: #969696;
+            }
+        }
+        .cent{
+            margin-top: .3rem;
+            font-size: .16rem;
+            p{
+                display: flex;
+                align-items: center;
+                margin-bottom: .3rem;
+                span{
+                    color: #969696;
+                    margin-right: .2rem;
+                }
+                &:nth-of-type(1) {
+                    &.active{
+                        .anticon{
+                            color: #000;
+                        }
+                    }
+                }
+                &:nth-of-type(2) {
+                    &.active{
+                        .anticon{
+                            color: #e02b20;
+                        }
+                    }
+                }
+                &:nth-of-type(3) {
+                    &.active{
+                        .anticon{
+                            color: #79ce4c;
+                        }
+                    }
+                }
+            }
+            .anticon{
+                font-size: .2rem;
+                margin-right: .2rem;
             }
         }
     }
-    .ant-tabs-ink-bar{
-        background: transparent;
+    // 隐私设置
+    .privacy{
+        dl{
+            margin-bottom: .4rem;
+        }
+        dt{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            span{
+                font-size: .16rem;
+                color: #464646;
+                border-radius: 100%;
+                font-weight: bold;
+            }
+            label{
+                span{
+                    color: #969696;
+                }
+            }
+        }
+        dd{
+            p{
+                font-size: .13rem;
+                color: #969696;
+                margin-top: .1rem;
+            }
+            label{
+                display: block;
+                margin: .1rem 0;
+                span{
+                    color: #969696;
+                }
+                img{
+                    width: .42rem;
+                    height: .42rem;
+                    border-radius: 100%;
+                    overflow: hidden;
+                    margin-right: .2rem;
+                }
+            }
+            .privacy_input{
+                margin: .3rem 0 .12rem;
+            }
+            .privacy_del{
+                width: 5rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                span{
+                    color: #464646;
+                }
+            }
+        }
     }
-    .ant-tabs-left-content{
-        border-left: none;
-        padding-left: .94rem;
+    //修改密码
+    .new_password{
+        width: 3.62rem;
+        .ant-row-flex-start{
+            margin-bottom: .2rem;
+            color: #464646;
+        }
+        .ant-form-item{
+            margin-bottom: .2rem;
+        }
+        .ant-btn{
+            width: 100%;
+        }
     }
 }

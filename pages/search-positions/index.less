@@ -1,0 +1,95 @@
+.search_positions{
+    .banner{
+        width: 100%;
+        position: relative;
+        .banner_cent{
+            width: 50%;
+            height: 100%;
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translate(-50%, 0);
+            >span{
+                position: absolute;
+                left: 5%;
+                top: 64%;
+            }
+            .ant-btn{
+                background: transparent;
+                border: 1px solid #eaebff;
+                color: #eaebff;
+            }
+            .anticon{
+                color: #eaebff;
+            }
+            .ant-upload-list-item-name{
+                color: #eaebff;
+            }
+        }
+    }
+    .centent{
+        width: 11.93rem;
+        margin: .4rem auto;
+        display: flex;
+        justify-content: space-between;
+        .left{
+            width: 9.2rem;
+            .pos_selsct{
+                width: 1.2rem;
+            }
+            .pos_search{
+                width: 8rem;
+            }
+            .search_list{
+                width: 100%;
+                border: 1px solid #c7c7c7;
+                border-radius: .08rem;
+                margin: .1rem auto;
+                div{
+                    padding: .06rem 0;
+                    &.search_area{
+                        border-bottom: 1px solid #c7c7c7;
+                        padding: .06rem 0;
+                    } 
+                }
+                dl{
+                    display: flex;
+                    margin: .03rem 0;                  
+                }
+                dt{
+                    width: .7rem;
+                    text-align: right;
+                    padding: .02rem 0;
+                    margin: .04rem .16rem 0 0;
+                    font-size: .13rem;
+                    color: #464646;
+                    font-weight: bold;
+                }
+                dd{
+                    width: 7.9rem;
+                    display: flex;
+                    flex-wrap: wrap;
+                    margin: 0;
+                    span{
+                        padding: .02rem .12rem;
+                        margin: .04rem 0;
+                        text-align: center;
+                        font-size: .13rem;
+                        color: #464646;
+                        border-radius: .04rem;
+                        &.active{
+                            background: #515ffd;
+                            color: #fff;
+                        }
+                    }
+                }
+            }
+        }
+        .right{
+            width: 2.41rem;
+            div{
+                margin: 0 auto .08rem;
+            }
+        }
+    }
+}

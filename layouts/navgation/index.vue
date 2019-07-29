@@ -26,11 +26,11 @@ export default {
       navs: [
         {
           name: '职位发布',
-          code: '1'
+          code: 'job-release'
         },
         {
-          name: '职位管理',
-          code: '2'
+          name: '搜索职位',
+          code: 'search-positions'
         },
         {
           name: '简历搜索',

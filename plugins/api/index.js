@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { async } from 'q';
 
 const netWork = (()=>{
     const update = (obj) => {

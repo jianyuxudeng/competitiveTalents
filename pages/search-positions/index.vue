@@ -65,6 +65,78 @@
                       </dl>
                   </div>
               </div>
+              <div class="search_list">
+                  <div class="sorting">
+                      <dl>
+                          <dt>排序方式</dt>
+                          <dd>
+                              <span v-for="(item, index) in sortingList" :key="index" :class="{active: params.sorting == index}">{{item}}</span>
+                          </dd>
+                      </dl>
+                      <dl>
+                          <dt>月薪</dt>
+                          <dd>
+                              <a-select defaultValue="不限">
+                                  <a-select-option value="不限">不限</a-select-option>
+                              </a-select>
+                          </dd>
+                      </dl>
+                      <dl>
+                          <dt>工作性质</dt>
+                          <dd>
+                              <a-select defaultValue="不限">
+                                  <a-select-option value="不限">不限</a-select-option>
+                              </a-select>
+                          </dd>
+                      </dl>
+                  </div>
+              </div>
+              <div class="rows">
+                  <div class="rows_li" v-for="item in 5" :key="item">
+                    <div class="head">
+                        <span>急<br />聘</span>
+                        <div class="rows_left">
+                            <div class="title"><span>电竞内容后期制作[ 上海 ]</span>经验5年以上 / 本科</div>
+                            <div class="list">
+                                <div class="li">
+                                    <p><a-icon type="appstore" theme="filled" />招聘类型</p>
+                                    <p>全日制外包</p>
+                                </div>
+                                <em></em>
+                                <div class="li">
+                                    <p><a-icon type="calendar" />周期</p>
+                                    <p>3-6个月</p>
+                                </div>
+                                <em></em>
+                                <div class="li">
+                                    <p><a-icon type="appstore" theme="filled" />形式</p>
+                                    <p>外派</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rows_right">
+                            <div>
+                                <p>20k-30k/月</p>
+                                <p>腾讯电竞</p>
+                                <p>电子竞技/上市公司/上海</p>
+                            </div>
+                            <em><img src="../../assets/images/positions_img.png" alt=""></em>
+                        </div>
+                    </div>
+                    <div class="foot">
+                        <div class="btn">
+                            <span>赛事相关经验</span>
+                            <span>APP设计</span>
+                            <span>H5制作</span>
+                        </div>
+                        <div class="times">
+                            <a-icon type="clock-circle" />
+                            <span>发布时间 2019-08-35   15:20</span>
+                        </div>
+                    </div>
+                  </div>
+              </div>
+              <a-pagination showQuickJumper :defaultCurrent="1" :total="500" @change="onChangePage" />
           </div>
           <div class="right">
               <div><img src="../../assets/images/positions_1.jpg" alt=""></div>
@@ -111,6 +183,7 @@ export default {
               {id: 1, name: '赛事相关职位'},
               {id: 2, name: '电竞俱乐部'}
           ],
+          sortingList: ['默认', '最新发布'], //排序方式
           params: { //筛选参数
               region: { //地区
                   area: 0, 
@@ -120,7 +193,8 @@ export default {
               educational: 0, //学历要求
               capitalize: 0, //融资阶段
               companySize: 0, //公司规模
-              trade: 0 //行业领域
+              trade: 0, //行业领域
+              sorting: 0 //排序方式
           }
       }
   },
@@ -165,8 +239,11 @@ export default {
           });
           this.fileList = fileList;
       },
-      handleArea(name, val) {
+      handleArea(name, val) { //筛选
           this.params = Object.assign(this.params, {[name]: val});
+      },
+      onChangePage(pageNumber) { //分页
+          console.log('Page: ', pageNumber);
       }
   }
 };

@@ -138,7 +138,9 @@ export default {
     },
     toRegister() { //进入注册
       this.form.resetFields();
-      this.$emit('handleShow', 2);
+      this.$emit('handleShow', {
+        val: 2
+      });
     },
     retrievePassword() { //找回密码
       this.form.resetFields();

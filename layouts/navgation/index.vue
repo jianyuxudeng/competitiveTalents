@@ -37,8 +37,8 @@ export default {
           code: 'resume-manage'
         },
         {
-          name: '账号设置',
-          code: 'settings'
+          name: '收件管理',
+          code: 'mailbox'
         },
         {
           name: '求职者登录',

@@ -99,17 +99,26 @@
                             <div class="title"><span>电竞内容后期制作[ 上海 ]</span>经验5年以上 / 本科</div>
                             <div class="list">
                                 <div class="li">
-                                    <p><a-icon type="appstore" theme="filled" />招聘类型</p>
+                                    <p>
+                                        <em><img src="../../assets/images/type.png" alt=""></em>
+                                        <span>招聘类型</span>
+                                    </p>
                                     <p>全日制外包</p>
                                 </div>
                                 <em></em>
                                 <div class="li">
-                                    <p><a-icon type="calendar" />周期</p>
+                                    <p>
+                                        <em><img src="../../assets/images/cycle.png" alt=""></em>
+                                        <span>周期</span>
+                                    </p>
                                     <p>3-6个月</p>
                                 </div>
                                 <em></em>
                                 <div class="li">
-                                    <p><a-icon type="appstore" theme="filled" />形式</p>
+                                    <p>
+                                        <em><img src="../../assets/images/shape.png" alt=""></em>
+                                        <span>形式</span>
+                                    </p>
                                     <p>外派</p>
                                 </div>
                             </div>

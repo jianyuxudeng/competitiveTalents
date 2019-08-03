@@ -38,7 +38,12 @@
                   <span>每页50条</span>
               </p>
           </div>
-          <a-table :columns="columns" :dataSource="rows" :pagination="false">
+          <a-table 
+              :columns="columns" 
+              :dataSource="rows" 
+              :pagination="false" 
+              :customRow="handleItem"
+          >
               <template slot="follow" slot-scope="follow">
                   <a-icon type="star" :theme="follow ? 'filled' : 'outlined'" />
               </template>
@@ -105,7 +110,22 @@ export default {
   mounted() {
   },
   methods: {
-      callbackTab(key) {}
+      callbackTab(key) {},
+      handleItem(record, index) { //点击列表里的每一行
+          return {
+              on: {
+                  click: () => {
+                      //console.log(record, index)
+                      this.$router.push({
+                          path: 'resume-detail',
+                          query: {
+                              isEdit: false
+                          }
+                      })
+                  }
+              }
+          }
+      }
   }
 };
 </script>

@@ -86,6 +86,23 @@
         }
     }
     .table{
+        .stateTime{
+            background: #fff;
+            border-radius: .04rem;
+            box-shadow: 0 .02rem .08rem rgba(0, 0, 0, .15);
+            a{
+                display: block;
+                color: rgba(0, 0, 0, 0.65);
+                padding: .08rem;
+                border-bottom: 1px solid #dcdcdd;
+                &:last-child{
+                    border-bottom: none;
+                }
+                &.selectActive{
+                    color: #515ffd;
+                }
+            }
+        }
         .ant-table{
             border: 1px solid #dcdcdd;
             border-radius: 0 0 .08rem .08rem;

@@ -65,6 +65,7 @@
             <!-- table表格 -->
             <div class="table">
                 <a-table :columns="columns" :dataSource="rows" :rowSelection="rowSelection" :pagination="pagination">
+                    <a-icon slot="filterIcon" slot-scope="filtered" type='down' />
                     <template slot="operation" slot-scope="text">
                         <div class="operation">
                             <span>职位置顶</span>
@@ -103,7 +104,15 @@ export default {
             {title: '职位名称', dataIndex: 'name'},
             {
                 title: '发布日期', 
-                dataIndex: 'stateTime'
+                dataIndex: 'stateTime',
+                scopedSlots: {
+                    filterIcon: 'filterIcon'
+                },
+                filters: [
+                    {text: '111111', value: '1'},
+                    {text: '222222', value: '2'},
+                    {text: '333333', value: '3'}
+                ]
             },
             {title: '截至日期', dataIndex: 'endTime'},
             {title: '所属部门', dataIndex: 'department'},
@@ -171,7 +180,8 @@ export default {
                 };
                 return originalElement;
             }
-        }
+        },
+        selectActive: null
     };
   },
   async asyncData() {

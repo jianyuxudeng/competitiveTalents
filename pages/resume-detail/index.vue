@@ -33,7 +33,9 @@
             </div>
             <!-- 视频 -->
             <div id="video">
-              <div class="title">可视化描述</div>
+              <div class="title">
+                <span>可视化描述</span>
+              </div>
               <a-row type="flex" justify="space-between" align="top">
                 <div class="video">
                   <video width="100%" height="100%" controls>
@@ -45,7 +47,7 @@
                 <div class="btn">
                   <a>
                     <em><img src="../../assets/images/edit.png" alt=""></em>
-                    <span>编辑</span>
+                    <span @click="edit('video')">编辑</span>
                   </a>
                   <a>
                     <em><a-icon type="close-square" /></em>
@@ -265,13 +267,13 @@
           </div>
         </div>
       </a-row>
-      <editModel :modelEdit="modelEdit" @cancelModel="cancelModel"></editModel>
+      <infoModal :modelEdit="infoModel" @cancelModel="cancelModel"></infoModal>
+      <videoModal :modelEdit="videoModel" @cancelModel="cancelModel"></videoModal>
   </section>
 </template>
 
 <script>
 import "./index.less";
-import editModel from '../../components/atom/Modal';
 import ajax from '../../plugins/api';
 
 export default {
@@ -282,13 +284,15 @@ export default {
      }
   },
   components: {
-    editModel
+    infoModal: () => import('../../components/molecule/infoModal'),
+    videoModal: () => import('../../components/molecule/videoModal')
   },
   data() {
       return{
         isEdit: true,
         active: null,
-        modelEdit: null,
+        infoModel: null,
+        videoModel: null,
         navs: [
           {name: '基本信息', url: 'info'},
           {name: '可视化描述', url: 'video'},
@@ -298,7 +302,8 @@ export default {
           {name: '社交主页', url: 'social_url'},
           {name: '图片作品', url: 'picture'}
         ],
-        userDetail: {}
+        userDetail: null,
+        desVideo: null
       }
   },
   mounted() {
@@ -312,27 +317,29 @@ export default {
       this.active = index;
     },
     edit(name) { //编辑
-      let _modelEdit = null;
       switch (name) {
         case 'info':
-          _modelEdit = Object.assign(this.userDetail, {
-            title: '上传附件简历'
+          this.infoModel = Object.assign(this.userDetail, {
+            title: ''
           });
           break;
-      
+        case 'video':
+          this.videoModel = Object.assign(this.userDetail, {
+            title: '上传可视化描述视频'
+          });
         default:
           break;
       };
-      this.modelEdit = _modelEdit;
     },
-    cancelModel() { //点击弹窗关闭按钮时，清空弹窗数据
-      this.modelEdit = null;
+    cancelModel(name) { //点击弹窗关闭按钮时，清空弹窗数据
+      this[name] = null;
     },
     getData() { //获取数据
       ajax.get('user/resume/detail', {user_id: 5}).then(res => {
         let _data = res.data;
         if(_data) {
-          this.userDetail = _data.userDetail[0] || {}
+          this.userDetail = _data.userDetail[0] || null,
+          this.desVideo = _data.desVideo[0] || null
         }
         console.log(res)
       })

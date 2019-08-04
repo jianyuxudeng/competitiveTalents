@@ -32,10 +32,27 @@
             }
         }
         .head_nav{
+            display: flex;
             a{
                 font-size: .18rem;
                 color: #ffffff;
                 margin: 0 .15rem;
+                display: flex;
+                align-items: center;
+                position: relative;
+                ul{
+                    width: 100%;
+                    position: absolute;
+                    left: 0;
+                    top: .59rem;
+                }
+                li{
+                    background: rgba(24, 29, 76, .8);
+                    padding: 0 0 .1rem;
+                    margin: 0;
+                    text-align: center;
+                    z-index: 2;
+                }
             }
         }
     }

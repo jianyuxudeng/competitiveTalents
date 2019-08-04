@@ -23,7 +23,7 @@
       </a-carousel>
     </div>
     <!-- freeker -->
-    <div class="services freeker">
+    <div class="services freeker" v-if="!userInfo">
       <Title :title="freeker.title" :titleEn="freeker.titleEn"></Title>
       <div class="freeker_search">
         <a-input-search
@@ -67,18 +67,15 @@
 <script>
 import Vue from "vue";
 import "./index.less";
-import Title from "../components/atom/Title";
-import Services from "../components/molecule/services";
-import Demands from "../components/molecule/demands";
-import Information from "../components/molecule/information";
+import util from '../plugins/utils/util';
 
 export default {
   name: "home",
   components: {
-    Title,
-    Services,
-    Demands,
-    Information
+    Title: () => import('../components/atom/Title'),
+    Services: () => import('../components/molecule/services'),
+    Demands: () => import('../components/molecule/demands'),
+    Information: () => import('../components/molecule/information')
   },
   async asyncData(){
      return{
@@ -181,15 +178,20 @@ export default {
            {text: '学习电子竞技行业新知识，关注电.......', times: '2019-06-27'},
            {text: '学习电子竞技行业新知识，关注电.......', times: '2019-06-27'}
          ]
-       }
+       },
+       userInfo: null
      }
   },
   data() {
   
   },
   mounted() {
+    this.init();
   },
   methods: {
+    init() { //初始化
+      this.userInfo = util.getStore('userInfo') || null
+    },
     onSearch(value) { //搜索
       console.log(value)
     },

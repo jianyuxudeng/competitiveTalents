@@ -84,6 +84,7 @@
 <script>
 import "./index.less";
 import ajax from '../../../plugins/api';
+import util from '../../../plugins/utils/util';
 
 export default {
   async asyncData(){
@@ -156,6 +157,7 @@ export default {
             values = Object.assign(values, {type: this.active, loginType: this.isPhone ? 1 : 2});
             ajax.post('login', values).then(res => {
                 if(res.retcode == 0) {
+                    util.setStore('userInfo', res.data);
                     this.$router.push({
                         path: '/'
                     })

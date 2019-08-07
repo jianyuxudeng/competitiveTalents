@@ -64,16 +64,24 @@
             </div>
             <!-- table表格 -->
             <div class="table">
-                <a-table :columns="columns" :dataSource="rows" :rowSelection="rowSelection" :pagination="pagination">
-                    <a-icon slot="filterIcon" slot-scope="filtered" type='down' />
-                    <template slot="operation" slot-scope="text">
+                <a-table 
+                    :columns="columns" 
+                    :dataSource="rows" 
+                    :rowSelection="rowSelection" 
+                    :pagination="pagination"
+                >
+                    <a-icon slot="filterIcon" type='down' />
+                    <template slot="name" slot-scope="text, record">
+                        <span @click="() => handleItem(record)">{{text}}</span>
+                    </template>
+                    <template slot="operation" slot-scope="text, record">
                         <div class="operation">
-                            <span>职位置顶</span>
+                            <span @click="() => placement(record)">职位置顶</span>
                             <span>职位刷新</span>
                             <span>职位推荐</span>
                         </div>
                     </template>
-                    <template slot="operationBtn" slot-scope="text">
+                    <template slot="operationBtn">
                         <div class="operation_btn">
                             <span>修改职位</span>
                             <span>下线职位</span>
@@ -101,7 +109,11 @@ export default {
         ],
         active: 0, //职位筛选tab高亮
         columns: [ //table表头
-            {title: '职位名称', dataIndex: 'name'},
+            {
+                title: '职位名称', 
+                dataIndex: 'name',
+                scopedSlots: { customRender: 'name' }
+            },
             {
                 title: '发布日期', 
                 dataIndex: 'stateTime',
@@ -196,9 +208,6 @@ export default {
   watch: {
    
   },
-  props: {
-    
-  },
   methods: {
       showSizeChange(val) { //选择每页条数后重新渲染数据
           this.pagination = Object.assign(this.pagination, {pageSize: Number(val)});
@@ -219,6 +228,17 @@ export default {
       //职位筛选tab
       tabItem(index) {
           this.active = index;
+      },
+      //点击tabel里的每一项
+      handleItem(record) {
+          //console.log(record)
+          this.$router.push({
+              path: 'job-detail'
+          })
+      },
+      //置顶
+      placement(record) {
+          console.log(record)
       }
   }
 };

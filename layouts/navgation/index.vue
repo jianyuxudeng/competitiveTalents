@@ -65,11 +65,11 @@ export default {
               },
               {
                 name: '投递情况',
-                code: 'job-detail'
+                code: 'delivery-status'
               },
               {
                 name: '收藏夹',
-                code: 'job-release'
+                code: 'job-collection'
               },
               {
                 name: '账号设置',
@@ -103,6 +103,10 @@ export default {
               {
                 name: '企业信息',
                 code: 'company-info'
+              },
+              {
+                name: userInfo.username,
+                code: 'logout'
               }
             ];
             break;
@@ -119,11 +123,11 @@ export default {
             },
             {
               name: '投递情况',
-              code: 'job-detail'
+              code: 'delivery-status'
             },
             {
               name: '收藏夹',
-              code: 'job-release'
+              code: 'job-collection'
             },
             {
               name: '账号设置',
@@ -166,7 +170,7 @@ export default {
         util.setStore('userInfo', null)
         this.init();
         this.$router.push({
-          path: '/'
+          path: '/login'
         })
       })
     }

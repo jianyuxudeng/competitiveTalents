@@ -3,15 +3,20 @@
       <ul>
           <li v-for="(item, index) in listCope" :key="index" @click="onClick(index)">
               <div class="demands_top">
-                  <div class="demands_text">
+                  <div class="demands_text" :class="{size: isWork == 'resume'}">
                       <div>
-                          <p>{{item.title}}</p>
-                          <p>{{item.ner}}</p>
+                          <p v-if="isWork == 'work'">{{item.title}}</p>
+                          <p v-if="isWork == 'resume'">{{item.title}} <span>[电竞内容后期制作]</span></p>
+                          <p v-if="isWork == 'work'">{{item.workExperience}}/{{item.educational}}</p>
                       </div>
                       <div>
-                          <span>{{item.times}}</span>
-                          <span>{{item.nub}}</span>
+                          <span v-if="isWork == 'work'">{{item.times}}</span>
+                          <span>{{item.jobPrice}}/月</span>
                       </div>
+                  </div>
+                  <div class="resume_text" v-if="isWork == 'resume'">
+                      <span>求职期望：上海</span>
+                      <span>工作经历：1年</span>
                   </div>
                   <div class="demands_btn">
                       <span :class="item.className">{{item.stateName}}</span>
@@ -20,12 +25,15 @@
                       <span>{{item.zhi}}</span>
                   </div>
               </div>
-              <dl>
+              <dl v-if="isWork == 'work'">
                   <dt><img :src="item.tx" alt=""></dt>
                   <dd>
                       <p>{{item.xuexiao}}</p>
                       <p>{{item.zhuanye}}</p>
                   </dd>
+              </dl>
+              <dl v-if="isWork == 'resume'">
+                  <dd>{{item.zhuanye}}</dd>
               </dl>
           </li>
       </ul>
@@ -37,7 +45,7 @@ import "./index.less";
 
 export default {
   name: "demands",
-  props: ['list'],
+  props: ['list', 'isWork'],
   async asyncData(){
      return{
 
@@ -46,6 +54,12 @@ export default {
   data() {
       return{
           listCope: []
+      }
+  },
+  watch: {
+      isWork() {
+          this.init();
+          return this.isWork;
       }
   },
   mounted() {

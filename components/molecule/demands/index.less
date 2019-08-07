@@ -4,7 +4,6 @@
         flex-wrap: wrap;
         li{
             width: 3.83rem;
-            height: 2.05rem;
             background: #f8f8f8;
             border-radius: .08rem;
             margin: .08rem;
@@ -18,20 +17,51 @@
                             font-size: .14rem;
                             color: #969696;
                             margin: 0;
+                            span{
+                                font-size: .18rem;
+                                color: #515ffd;
+                            }
                             &:first-child{
                                 font-size: .18rem;
                                 color: #464646;
                             }
                         }
-                        span{
+                        >span{
                             font-size: .18rem;
                             color: #515ffd;
                             margin-right: .12rem;
                             &:first-child{
                                 font-size: .14rem;
                                 color: #969696;
+                                margin-right: .04rem;
                             }
                         }
+                    }
+                    &.size{
+                        div{
+                            p{
+                                &:first-child{
+                                    font-size: .16rem;
+                                }
+                                span{
+                                    font-size: .16rem;
+                                }
+                            }
+                            >span{
+                                &:first-child{
+                                    font-size: .16rem;
+                                    color: #515ffd;
+                                    margin-right: .12rem;
+                                }
+                            }
+                        }
+                    }
+                }
+                .resume_text{
+                    font-size: .14rem;
+                    color: #969696;
+                    span{
+                        margin-right: .16rem;
                     }
                 }
                 .demands_btn{
@@ -79,10 +109,10 @@
                 }
                 dd{
                     margin: 0;
+                    font-size: .13rem;
+                    color: #969696;
                     p{
                         margin: 0;
-                        font-size: .13rem;
-                        color: #969696;
                         &:first-child{
                             color: #464646;
                         }

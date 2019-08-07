@@ -1,7 +1,7 @@
 <template>
   <section :class="className" class="services_page">
       <ul>
-          <li v-for="(item, index) in list" :key="index">
+          <li v-for="(item, index) in servicesList" :key="index" @click="handleClick(item)">
               <dl>
                   <dt><img :src="item.img"></dt>
                   <dd>{{item.text}}</dd>
@@ -24,11 +24,25 @@ export default {
      }
   },
   data() {
-      return{}
+      return{
+          servicesList: []
+      }
+  },
+  watch: {
+      list() {
+          this.init();
+      }
   },
   mounted() {
+      this.init();
   },
   methods: {
+      init() {
+          this.servicesList = this.list;
+      },
+      handleClick(e) {
+          this.$emit('servicesItem', e);
+      }
   }
 };
 </script>

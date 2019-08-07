@@ -5,7 +5,6 @@
       <a-carousel arrows dotsClass="slick-dots slick-thumb">
         <div
           slot="prevArrow" 
-          slot-scope="props"
           class="custom-slick-arrow"
           style="left: 1.9rem; zIndex: 1"
         >
@@ -13,7 +12,6 @@
         </div>
         <div
           slot="nextArrow" 
-          slot-scope="props"
           class="custom-slick-arrow"
           style="right: 1.9rem"
         >
@@ -34,18 +32,33 @@
         <Services className="freeker" :list="freeker.list"></Services>
       </div>
     </div>
-    <!-- enterprise -->
-    <div class="services enterprise">
-      <Title :title="enterprise.title" :titleEn="enterprise.titleEn"></Title>
+    <!-- infoEnterprise -->
+    <div class="services enterprise" v-if="userInfo">
+      <Title :title="infoEnterprise.title" :titleEn="infoEnterprise.titleEn"></Title>
       <div class="enterprise_conten">
-        <Services className="enterprise" :list="enterprise.list"></Services>
+        <Services className="enterprise" :list="infoEnterprise.list" @servicesItem="handleInfoEnterprise"></Services>
       </div>
     </div>
+    <!-- enterprise -->
+    <div class="services enterprise" v-else>
+      <Title :title="enterprise.title" :titleEn="enterprise.titleEn"></Title>
+      <div class="enterprise_conten">
+        <Services className="enterprise" :list="enterprise.list" @servicesItem="handleEnterprise"></Services>
+      </div>
+    </div>
+    <!-- recommend -->
+    <div class="services demands" v-if="userInfo">
+      <Title :title="recommend.title" :titleEn="recommend.titleEn"></Title>
+      <div class="demands_conten">
+        <Demands :list="recommend.list" isWork="resume"></Demands>
+      </div>
+      <div class="btn"><a @click="onMore">MORE +</a></div>
+    </div>
     <!-- demands -->
-    <div class="services demands">
+    <div class="services demands" v-else>
       <Title :title="demands.title" :titleEn="demands.titleEn"></Title>
       <div class="demands_conten">
-        <Demands :list="demands.list"></Demands>
+        <Demands :list="demands.list" isWork="work"></Demands>
       </div>
       <div class="btn"><a @click="onMore">MORE +</a></div>
     </div>
@@ -68,6 +81,7 @@
 import Vue from "vue";
 import "./index.less";
 import util from '../plugins/utils/util';
+import ajax from '../plugins/api'
 
 export default {
   name: "home",
@@ -106,6 +120,16 @@ export default {
            {img: require('../assets/images/freeker5.png'), text: '电竞衍生领域'}
          ]
        },
+       //infoEnterprise
+       infoEnterprise: {
+         title: '企业电竞服务',
+         titleEn: 'ENTERPRISE SERVIVES',
+         list: [
+           {img: require('../assets/images/enterprise1.png'), text: '职位发布'},
+           {img: require('../assets/images/release.png'), text: '职位管理'},
+           {img: require('../assets/images/inbox.png'), text: '收件箱'},
+         ]
+       },
        //enterprise
        enterprise: {
          title: '企业电竞服务',
@@ -122,9 +146,14 @@ export default {
        demands: {
          title: '最新用人需求',
          titleEn: 'THE LATEST DEMANDS',
+         list: []
+       },
+       recommend: {
+         title: '推荐新人简历',
+         titleEn: 'NEW RESUMES',
          list: [
            {
-             title: '电竞内容后期制作',
+             title: '张三',
              ner: '经验不限 / 大专',
              times: '[21:35发布]',
              nub: '20k-30k/月',
@@ -137,7 +166,7 @@ export default {
              zhuanye: '教育领域/不需要融资/上海'
            },
            {
-             title: '电竞内容后期制作',
+             title: '张三',
              ner: '经验不限 / 大专',
              times: '[21:35发布]',
              nub: '20k-30k/月',
@@ -150,7 +179,7 @@ export default {
              zhuanye: '教育领域/不需要融资/上海'
            },
            {
-             title: '电竞内容后期制作',
+             title: '张三',
              ner: '经验不限 / 大专',
              times: '[21:35发布]',
              nub: '20k-30k/月',
@@ -190,13 +219,36 @@ export default {
   },
   methods: {
     init() { //初始化
-      this.userInfo = util.getStore('userInfo') || null
+      let _userInfo = util.getStore('userInfo') || null;
+      this.userInfo = _userInfo;
+      if(!_userInfo) {
+        this.getData();
+      }
     },
     onSearch(value) { //搜索
       console.log(value)
     },
     onMore() { //点击MORE按钮
       console.log(111)
+    },
+    handleInfoEnterprise(e) {
+      if(this.userInfo) {
+        this.$router.push({
+          path: '/login'
+        })
+      }
+    },
+    handleEnterprise(e) {
+      if(this.userInfo) {
+        this.$router.push({
+          path: '/login'
+        })
+      }
+    },
+    getData() {
+      ajax.get('jobs/home').then(res => {
+        this.demands.list = res.data || [];
+      })
     }
   }
 };

@@ -3,37 +3,52 @@
       <ul>
           <li v-for="(item, index) in listCope" :key="index" @click="onClick(index)">
               <div class="demands_top">
-                  <div class="demands_text" :class="{size: isWork == 'resume'}">
+                  <div class="demands_text size" v-if="userInfo && userInfo.type == 3">
                       <div>
-                          <p v-if="isWork == 'work'">{{item.title}}</p>
-                          <p v-if="isWork == 'resume'">{{item.title}} <span>[电竞内容后期制作]</span></p>
-                          <p v-if="isWork == 'work'">{{item.workExperience}}/{{item.educational}}</p>
+                          <p>{{item.username}} <span>[{{item.expected_position_name}}]</span></p>
                       </div>
                       <div>
-                          <span v-if="isWork == 'work'">{{item.times}}</span>
+                          <span>{{item.expected_salary}}</span>
+                      </div>
+                  </div>
+                  <div class="demands_text" v-else>
+                      <div>
+                          <p>{{item.companyName}}</p>
+                          <p>
+                              {{item.workExperience ? labels.workExpress.find(i => i.id == item.workExperience).labelName : null}}
+                              /
+                              {{item.educational ? labels.educationals.find(i => i.id == item.educational).labelName : null}}
+                          </p>
+                      </div>
+                      <div>
+                          <span>[{{util.formatTime(item.sendTime)}}发布]</span>
                           <span>{{item.jobPrice}}/月</span>
                       </div>
                   </div>
-                  <div class="resume_text" v-if="isWork == 'resume'">
-                      <span>求职期望：上海</span>
-                      <span>工作经历：1年</span>
+                  <div class="resume_text" v-if="userInfo && userInfo.type == 3">
+                      <span>求职期望：{{JSON.parse(item.city).cityName}}</span>
+                      <span>工作经历：{{item.workTime}}年</span>
                   </div>
                   <div class="demands_btn">
-                      <span :class="item.className">{{item.stateName}}</span>
-                      <span>{{item.jin}}</span>
-                      <span>{{item.she}}</span>
-                      <span>{{item.zhi}}</span>
+                      <span :class="item.className">{{item.labelName || item.job_type_name}}</span>
+                      <span v-for="(i, index) in item.skills" :key="index">{{i}}</span>
                   </div>
               </div>
-              <dl v-if="isWork == 'work'">
-                  <dt><img :src="item.tx" alt=""></dt>
-                  <dd>
-                      <p>{{item.xuexiao}}</p>
-                      <p>{{item.zhuanye}}</p>
-                  </dd>
+              <dl v-if="userInfo && userInfo.type == 3">
+                  <dd>增任职单位：{{item.company_name}}</dd>
               </dl>
-              <dl v-if="isWork == 'resume'">
-                  <dd>{{item.zhuanye}}</dd>
+              <dl v-else>
+                  <dt><img :src="item.logo" alt=""></dt>
+                  <dd>
+                      <p>{{item.companyName}}</p>
+                      <p>
+                          {{item.trade ? labels.trades.find(i => i.id == item.trade).labelName : null}}
+                          /
+                          {{item.capitalize ? labels.capitalizes.find(i => i.id == item.capitalize).labelName : null}}
+                          /
+                          {{JSON.parse(item.companyRegion).cityName}}
+                      </p>
+                  </dd>
               </dl>
           </li>
       </ul>
@@ -42,10 +57,12 @@
 
 <script>
 import "./index.less";
+import ajax from '../../../plugins/api';
+import util from '../../../plugins/utils/util';
 
 export default {
   name: "demands",
-  props: ['list', 'isWork'],
+  props: ['userInfo'],
   async asyncData(){
      return{
 
@@ -53,34 +70,44 @@ export default {
   },
   data() {
       return{
-          listCope: []
+          listCope: [],
+          labels: null,
+          util: util
       }
   },
   watch: {
-      isWork() {
+      userInfo() {
           this.init();
-          return this.isWork;
       }
   },
   mounted() {
-      this.init();
+      this.getLabelData();
   },
   methods: {
       init() { //初始化
-          if(this.list.length > 0) {
-            this.listCope = this.list.map(item => {
-                switch (item.state) {
-                    case '1':
+          this.listCope = [];
+          if(this.userInfo && this.userInfo.type == 3) {
+              this.getDataInfo(this.userInfo.id);
+          }else{
+              this.getData();
+          };
+      },
+      onClick(index) { //点击每个item
+          console.log(index)
+      },
+      handleState(arr=[]) {
+          if(arr.length > 0) {
+              arr.map(item => {
+                item.skills = item.skills.split(',') || [];
+                switch (item.labelName || item.job_type_name) {
+                    case '全职':
                         item.className = 'blue';
-                        item.stateName = '全职';
                         break;
-                    case '2':
+                    case '兼职':
                         item.className = 'orange';
-                        item.stateName = '兼职';
                         break;
-                    case '3':
+                    case '外包':
                         item.className = 'green';
-                        item.stateName = '外包';
                         break;
                     default:
                         break;
@@ -89,8 +116,23 @@ export default {
             });
           }
       },
-      onClick(index) { //点击每个item
-          console.log(index)
+      getData() { //未登录获取推荐职位
+          ajax.get('jobs/home').then(res => {
+              this.listCope = res.data || [];
+              this.handleState(this.listCope);
+          })
+      },
+      getDataInfo(id) { //企业登录获取推荐简历
+          ajax.get('company/home/resumes', {company_id: id}).then(res => {
+              this.listCope = res.data || [];
+              this.handleState(this.listCope);
+          })
+      },
+      getLabelData() {
+          ajax.get('label').then(res => {
+              this.labels = res.data || null;
+              this.init();
+          })
       }
   }
 };

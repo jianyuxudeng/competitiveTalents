@@ -8,6 +8,10 @@
                   name="file" 
                   :multiple="true" 
                   :fileList="fileList"
+                  :action="uploadUrl"
+                  :supportServerRender="true"
+                  :withCredentials="true"
+                  :beforeUpload="beforeUpload"
                   @change="handleFile"
               >
                   <a-button>立即上传</a-button>
@@ -204,12 +208,13 @@ export default {
           areaItem: {
               id: '',
               name: ''
-          }
+          },
+          uploadUrl: util.upLoadUrl,
+          isZip: true
       }
   },
   mounted() {
       this.getData();
-      this.searchData();
   },
   methods: {
       init(obj) { //初始化数据
@@ -232,12 +237,17 @@ export default {
               if (file.response) {
                   file.url = file.response.url;
               };
-              let fd = new FormData;
-              fd.append('file', file);
-              ajax.post(util.upLoadUrl, fd, {headers: {'Content-Type': 'form-data'}});
               return file;
           });
-          this.fileList = fileList;
+          this.fileList = this.isZip ? fileList : [];
+      },
+      beforeUpload(file) { //上传格式设置
+          const isZip = file.type === util.uploadType.excel;
+          if (!isZip) {
+              this.isZip = false;
+              this.$message.warning('上传文件格式不正确！');
+          };
+          return isZip;
       },
       onSearch(value) { //关键字筛选
           this.params = Object.assign(this.params, {keywords: value});

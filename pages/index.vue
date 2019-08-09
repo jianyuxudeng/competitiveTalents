@@ -21,7 +21,7 @@
       </a-carousel>
     </div>
     <!-- freeker -->
-    <div class="services freeker" v-if="!userInfo">
+    <div class="services freeker" v-if="!userInfo || userInfo.type == 2">
       <Title :title="freeker.title" :titleEn="freeker.titleEn"></Title>
       <div class="freeker_search">
         <a-input-search
@@ -33,32 +33,27 @@
       </div>
     </div>
     <!-- infoEnterprise -->
-    <div class="services enterprise" v-if="userInfo">
+    <div class="services enterprise" v-if="userInfo && userInfo.type == 3">
       <Title :title="infoEnterprise.title" :titleEn="infoEnterprise.titleEn"></Title>
       <div class="enterprise_conten">
         <Services className="enterprise" :list="infoEnterprise.list" @servicesItem="handleInfoEnterprise"></Services>
       </div>
     </div>
     <!-- enterprise -->
-    <div class="services enterprise" v-else>
+    <div class="services enterprise" v-if="!userInfo">
       <Title :title="enterprise.title" :titleEn="enterprise.titleEn"></Title>
       <div class="enterprise_conten">
         <Services className="enterprise" :list="enterprise.list" @servicesItem="handleEnterprise"></Services>
       </div>
     </div>
     <!-- recommend -->
-    <div class="services demands" v-if="userInfo">
-      <Title :title="recommend.title" :titleEn="recommend.titleEn"></Title>
+    <div class="services demands">
+      <Title 
+        :title="userInfo ? recommend.title : demands.title" 
+        :titleEn="userInfo ? recommend.titleEn : demands.titleEn"
+      ></Title>
       <div class="demands_conten">
-        <Demands :list="recommend.list" isWork="resume"></Demands>
-      </div>
-      <div class="btn"><a @click="onMore">MORE +</a></div>
-    </div>
-    <!-- demands -->
-    <div class="services demands" v-else>
-      <Title :title="demands.title" :titleEn="demands.titleEn"></Title>
-      <div class="demands_conten">
-        <Demands :list="demands.list" isWork="work"></Demands>
+        <Demands :userInfo="userInfo"></Demands>
       </div>
       <div class="btn"><a @click="onMore">MORE +</a></div>
     </div>
@@ -81,7 +76,6 @@
 import Vue from "vue";
 import "./index.less";
 import util from '../plugins/utils/util';
-import ajax from '../plugins/api'
 
 export default {
   name: "home",
@@ -145,53 +139,11 @@ export default {
        //demands 1:全职 2:兼职 3:外包
        demands: {
          title: '最新用人需求',
-         titleEn: 'THE LATEST DEMANDS',
-         list: []
+         titleEn: 'THE LATEST DEMANDS'
        },
        recommend: {
          title: '推荐新人简历',
-         titleEn: 'NEW RESUMES',
-         list: [
-           {
-             title: '张三',
-             ner: '经验不限 / 大专',
-             times: '[21:35发布]',
-             nub: '20k-30k/月',
-             state: '1',
-             jin: '赛事相关经验',
-             she: 'APP设计',
-             zhi: 'H5制作',
-             tx: require('../assets/images/demands.png'),
-             xuexiao: '上海市对外经贸进修学院',
-             zhuanye: '教育领域/不需要融资/上海'
-           },
-           {
-             title: '张三',
-             ner: '经验不限 / 大专',
-             times: '[21:35发布]',
-             nub: '20k-30k/月',
-             state: '2',
-             jin: '赛事相关经验',
-             she: 'APP设计',
-             zhi: 'H5制作',
-             tx: require('../assets/images/demands.png'),
-             xuexiao: '上海市对外经贸进修学院',
-             zhuanye: '教育领域/不需要融资/上海'
-           },
-           {
-             title: '张三',
-             ner: '经验不限 / 大专',
-             times: '[21:35发布]',
-             nub: '20k-30k/月',
-             state: '3',
-             jin: '赛事相关经验',
-             she: 'APP设计',
-             zhi: 'H5制作',
-             tx: require('../assets/images/demands.png'),
-             xuexiao: '上海市对外经贸进修学院',
-             zhuanye: '教育领域/不需要融资/上海'
-           }
-         ]
+         titleEn: 'NEW RESUMES'
        },
        //information
        information: {
@@ -219,11 +171,7 @@ export default {
   },
   methods: {
     init() { //初始化
-      let _userInfo = util.getStore('userInfo') || null;
-      this.userInfo = _userInfo;
-      if(!_userInfo) {
-        this.getData();
-      }
+      this.userInfo = util.getStore('userInfo') || null;
     },
     onSearch(value) { //搜索
       console.log(value)
@@ -244,11 +192,6 @@ export default {
           path: '/login'
         })
       }
-    },
-    getData() {
-      ajax.get('jobs/home').then(res => {
-        this.demands.list = res.data || [];
-      })
     }
   }
 };

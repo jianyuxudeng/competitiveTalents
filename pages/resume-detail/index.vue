@@ -5,27 +5,27 @@
         <div class="resume_left">
           <div class="centent">
             <!-- 个人信息 -->
-            <div class="info" id="info">
+            <div class="info">
               <a-row type="flex" justify="space-between" align="top">
                 <dl>
                   <dt><img src="../../assets/images/tx.png" alt=""></dt>
                   <dd>
-                    <div class="name">日了夜</div>
+                    <div class="name">{{userDetail.username}}</div>
                     <p>上海银来投资集团 / 设计师</p>
                     <p>7年工作经验 / 大专 / 30岁</p>
                     <div class="tel">
-                      <div>
+                      <div v-if="userDetail.phone">
                         <a-icon type="tablet" />
-                        <span>15121857732</span>
+                        <span>{{userDetail.phone}}</span>
                       </div>
-                      <div>
+                      <div v-if="userDetail.email">
                         <a-icon type="mail" />
-                        <span>8437589153@qq.com</span>
+                        <span>{{userDetail.email}}</span>
                       </div>
                     </div>
                   </dd>
                 </dl>
-                <a @click="edit('info')">
+                <a @click="edit('info')" v-if="isEdit">
                   <em><img src="../../assets/images/edit.png" alt=""></em>
                   <span>编辑</span>
                 </a>
@@ -275,6 +275,7 @@
 <script>
 import "./index.less";
 import ajax from '../../plugins/api';
+import util from '../../plugins/utils/util';
 
 export default {
   name: "resume_detail",
@@ -302,17 +303,21 @@ export default {
           {name: '社交主页', url: 'social_url'},
           {name: '图片作品', url: 'picture'}
         ],
-        userDetail: null,
-        desVideo: null
+        userDetail: {},
+        desVideo: null,
+        user_id: null
       }
   },
   mounted() {
-    this.getData();
-  },
-  created() {
-    this.isEdit = this.$route.query.isEdit || true;
+    this.init();
   },
   methods: {
+    init() {
+      let userInfo = util.getStore('userInfo');
+      this.isEdit = this.$route.query.isEdit || true;
+      this.user_id = this.$route.query.user_id || userInfo.id;
+      this.getData();
+    },
     goItem(index) { //导航
       this.active = index;
     },
@@ -335,13 +340,12 @@ export default {
       this[name] = null;
     },
     getData() { //获取数据
-      ajax.get('user/resume/detail', {user_id: 5}).then(res => {
+      ajax.get('user/resume/detail', {user_id: this.user_id}).then(res => {
         let _data = res.data;
         if(_data) {
           this.userDetail = _data.userDetail[0] || null,
           this.desVideo = _data.desVideo[0] || null
         }
-        console.log(res)
       })
     }
   }

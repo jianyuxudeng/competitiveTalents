@@ -20,9 +20,18 @@
                   ></a-input>
               </a-form-item>
               <a-form-item label="居住地">
-                  <a-select size="large">
-                      <a-select-option value="">111</a-select-option>
-                  </a-select>
+                  <a-cascader 
+                      size="large" 
+                      :fieldNames="{label: 'name', value: 'id', children: 'item'}" 
+                      :options="citys"
+                      @change="onCascader"
+                  >
+                      <template slot="displayRender" slot-scope="{labels}">
+                          <span v-for="(label, index) in labels" :key="index">
+                              <span v-if="index == 1">{{label}}</span>
+                          </span>
+                      </template>
+                  </a-cascader>
               </a-form-item>
               <a-form-item label="职位">
                   <a-select 
@@ -41,10 +50,13 @@
           </a-form>
           <div class="table_title">
               <a-button type="primary">查看简历</a-button>
-              <a-checkbox>合并多投</a-checkbox>
-              <a-checkbox>有照片</a-checkbox>
-              <a-select placeholder="简历状态筛选">
-                  <a-select-option value="">1111</a-select-option>
+              <a-checkbox @change="isContact">合并多投</a-checkbox>
+              <a-checkbox @change="isHasSvatar">有照片</a-checkbox>
+              <a-select placeholder="简历状态筛选" @change="handleRead">
+                  <a-select-option value="">全部</a-select-option>
+                  <a-select-option :value="0">未查看</a-select-option>
+                  <a-select-option :value="1">已查看</a-select-option>
+                  <a-select-option :value="2">不合适</a-select-option>
               </a-select>
               <p>
                   <span>共{{total}}条</span>
@@ -71,6 +83,7 @@
 import "./index.less";
 import ajax from '../../plugins/api';
 import util from '../../plugins/utils/util';
+import area from '../../plugins/utils/area';
 
 export default {
   name: "mailbox",
@@ -100,28 +113,101 @@ export default {
               company_id: '',
               job_id: '',
               keywords: null,
+              order_careers: 1,
               pageNumber: 1,
               pageSize: 10
           },
-          jobs: []
+          jobs: [],
+          citys: []
       }
   },
   mounted() {
+      this.init();
       this.getData();
       this.jobsData();
   },
   methods: {
       format: util.format,
-      callbackTab(key) {},
+      init() {
+          area.map(ele => {
+              this.citys.push({
+                  id: ele.id,
+                  name: ele.name,
+                  item: ele.items
+              });
+          });
+      },
+      callbackTab(index) {
+          let obj = {};
+          switch (index) {
+              case '1':
+                  obj = Object.assign(obj, {
+                      order_careers: 1,
+                      is_collect: null,
+                      order_time: null,
+                      is_interview: null
+                  });
+                  break;
+              case '2':
+                  obj = Object.assign(obj, {
+                      order_careers: null,
+                      is_collect: 1,
+                      order_time: null,
+                      is_interview: null
+                  });
+                  break;
+              case '3':
+                  obj = Object.assign(obj, {
+                      order_careers: null,
+                      is_collect: null,
+                      order_time: 1,
+                      is_interview: null
+                  });
+                  break;
+              case '4':
+                  obj = Object.assign(obj, {
+                      order_careers: null,
+                      is_collect: null,
+                      order_time: null,
+                      is_interview: 1
+                  });
+                  break;
+              default:
+                  break;
+          };
+          this.params = Object.assign(this.params, obj);
+          this.getData();
+      },
+      onCascader(value) {
+          this.params = Object.assign(this.params, {
+              cityId: value[value.length - 1]
+          });
+      },
+      isHasSvatar(e) { //有照片
+          this.params = Object.assign(this.params, {
+              hasSvatar: e.target.checked ? 1 : null
+          });
+          this.getData();
+      },
+      handleRead(value) { //简历状态
+          this.params = Object.assign(this.params, {is_read: value});
+          this.getData();
+      },
+      isContact(e) {
+          this.params = Object.assign(this.params, {
+              is_contact: e.target.checked ? 1 : null
+          });
+          this.getData();
+      },
       handleItem(record, index) { //点击列表里的每一行
           return {
               on: {
                   click: () => {
-                      //console.log(record, index)
                       this.$router.push({
                           path: 'resume-detail',
                           query: {
-                              isEdit: false
+                              isEdit: false,
+                              user_id: record.user_id
                           }
                       })
                   }

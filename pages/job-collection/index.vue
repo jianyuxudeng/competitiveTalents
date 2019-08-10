@@ -88,6 +88,8 @@
 
 <script>
 import "./index.less";
+import ajax from '../../plugins/api';
+import util from '../../plugins/utils/util';
 
 export default {
   name: "job-collection",
@@ -112,6 +114,7 @@ export default {
       }
   },
   mounted() {
+      this.devData();
   },
   methods: {
       handleCancel() { //关闭弹窗
@@ -119,6 +122,10 @@ export default {
       },
       handleModel() { //显示弹窗
           this.isModalShow = true;
+      },
+      devData() {
+          let userInfo = util.getStore('userInfo');
+          ajax.get('user/collectionPosition/list', {user_id: userInfo.id}).then(res => {})
       }
   }
 };

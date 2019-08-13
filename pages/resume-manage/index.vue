@@ -6,7 +6,7 @@
                 <!-- title -->
                 <div class="head_title">
                     <span>职位管理</span>
-                    <a-button type="primary"><span>+</span>发布新职位</a-button>
+                    <a-button type="primary" @click="add"><span>+</span>发布新职位</a-button>
                 </div>
                 <!-- search -->
                 <div class="search">
@@ -18,7 +18,7 @@
                                 :label-col="{span: 9}"
                                 :wrapper-col="{span: 12}"
                             >
-                                <a-input v-decorator="['department']" placeholder="全部部门"></a-input>
+                                <a-input v-decorator="['depatment']" placeholder="全部部门"></a-input>
                             </a-form-item>
                             <a-form-item
                                 label="关键字"
@@ -26,7 +26,7 @@
                                 :label-col="{span: 5}"
                                 :wrapper-col="{span: 14}"
                             >
-                                <a-input v-decorator="['keyword']" placeholder="职位名称/发布地址"></a-input>
+                                <a-input v-decorator="['keywords']" placeholder="职位名称/发布地址"></a-input>
                             </a-form-item>
                         </div>
                         <div class="search_btn">
@@ -46,7 +46,7 @@
                     </a-form>
                 </div>
                 <!-- 职位筛选tab -->
-                <div class="nav">
+                <!-- <div class="nav">
                     <div class="nav_tab">
                         <a v-for="(item, index) in tabs" :key="index" :class="{active: active==index}" @click="tabItem(index)">
                             <p>{{item.text}}</p>
@@ -60,31 +60,31 @@
                             :key="index"
                         >每页{{item}}条</a-select-option>
                     </a-select>
-                </div>
+                </div> -->
             </div>
             <!-- table表格 -->
             <div class="table">
                 <a-table 
                     :columns="columns" 
                     :dataSource="rows" 
-                    :rowSelection="rowSelection" 
                     :pagination="pagination"
+                    :rowKey="record => record.id"
+                    @change="handleTableChange"
                 >
-                    <a-icon slot="filterIcon" type='down' />
                     <template slot="name" slot-scope="text, record">
                         <span @click="() => handleItem(record)">{{text}}</span>
                     </template>
                     <template slot="operation" slot-scope="text, record">
                         <div class="operation">
                             <span @click="() => placement(record)">职位置顶</span>
-                            <span>职位刷新</span>
-                            <span>职位推荐</span>
+                            <!-- <span>职位刷新</span>
+                            <span>职位推荐</span> -->
                         </div>
                     </template>
-                    <template slot="operationBtn">
+                    <template slot="operationBtn" slot-scope="text, record">
                         <div class="operation_btn">
-                            <span>修改职位</span>
-                            <span>下线职位</span>
+                            <span @click="() => modify(record)">修改职位</span>
+                            <span @click="() => offline(record)">下线职位</span>
                         </div>
                     </template>
                 </a-table>
@@ -95,6 +95,8 @@
 
 <script>
 import "./index.less";
+import ajax from '../../plugins/api';
+import util from '../../plugins/utils/util';
 export default {
   name: "resume-manage",
   data() {
@@ -114,22 +116,11 @@ export default {
                 dataIndex: 'name',
                 scopedSlots: { customRender: 'name' }
             },
-            {
-                title: '发布日期', 
-                dataIndex: 'stateTime',
-                scopedSlots: {
-                    filterIcon: 'filterIcon'
-                },
-                filters: [
-                    {text: '111111', value: '1'},
-                    {text: '222222', value: '2'},
-                    {text: '333333', value: '3'}
-                ]
-            },
-            {title: '截至日期', dataIndex: 'endTime'},
-            {title: '所属部门', dataIndex: 'department'},
-            {title: '发布地点', dataIndex: 'place'},
-            {title: '投递', dataIndex: 'delivery'},
+            {title: '发布日期', dataIndex: 'sendTime'},
+            {title: '截至日期', dataIndex: 'deadTime'},
+            {title: '所属部门', dataIndex: 'depatment'},
+            {title: '发布地点', dataIndex: 'regionName'},
+            {title: '投递', dataIndex: 'resumes'},
             {
                 title: '操作', 
                 dataIndex: 'operation', 
@@ -145,39 +136,11 @@ export default {
                 scopedSlots: { customRender: 'operationBtn' }
             }
         ],
-        rows: [ //列表数据
-            {
-                key: 1, 
-                name: '电竞内容后期制作', 
-                stateTime: '2019-06-26', 
-                endTime: '2019-07-26', 
-                department: '上海电竞委员活动有限公司', 
-                place: '上海', 
-                delivery: '54'
-            },
-            {
-                key: 2, 
-                name: '电竞内容后期制作', 
-                stateTime: '2019-06-26', 
-                endTime: '2019-07-26', 
-                department: '上海电竞委员活动有限公司', 
-                place: '上海', 
-                delivery: '54'
-            },
-            {
-                key: 3, 
-                name: '电竞内容后期制作', 
-                stateTime: '2019-06-26', 
-                endTime: '2019-07-26', 
-                department: '上海电竞委员活动有限公司', 
-                place: '上海', 
-                delivery: '54'
-            }
-        ],
+        rows: [], //列表数据
         rowSelection: {}, //select选项
         pagination: { //自定义分页
-            //total: 0, //数据总数
-            pageSize: 20, // 默认每页显示数量
+            total: 0, //数据总数
+            pageSize: 10, // 默认每页显示数量
             pageSizeOptions: ['10', '20', '50', '100'], // 每页数量选项
             hideOnSinglePage: true, //只有一页时是否隐藏分页器
             showQuickJumper: true, //是否可以快速跳转至某页
@@ -193,24 +156,34 @@ export default {
                 return originalElement;
             }
         },
-        selectActive: null
+        params: {
+            depatment: null,
+            keywords: null,
+            pageSize: 10,
+            pageNumber: 1
+        }
     };
   },
   async asyncData() {
    
   },
-  created() {
-  
-  },
   mounted() {
-     //this.pagination = Object.assign(this.pagination, {total: this.rows.length});
-  },
-  watch: {
-   
+      this.init();
   },
   methods: {
+      init() { //初始化数据
+          this.devData();
+      },
       showSizeChange(val) { //选择每页条数后重新渲染数据
           this.pagination = Object.assign(this.pagination, {pageSize: Number(val)});
+          this.params = Object.assign(this.params, {pageSize: Number(val)});
+          this.init();
+      },
+      handleTableChange(pagination, filters, sorter) {
+          this.params = Object.assign(this.params, {
+              pageNumber: pagination.current
+          });
+          this.init();
       },
       //重置搜索
       handleReset() {
@@ -221,7 +194,8 @@ export default {
           e.preventDefault();
           this.form.validateFields((error, value) => {
               if(!error) {
-                  console.log(value)
+                  this.params = Object.assign(this.params, value);
+                  this.init();
               }
           })
       },
@@ -231,14 +205,64 @@ export default {
       },
       //点击tabel里的每一项
       handleItem(record) {
-          //console.log(record)
           this.$router.push({
-              path: 'job-detail'
+              path: 'job-detail',
+              query: {
+                  id: record.careers_id
+              }
           })
       },
       //置顶
       placement(record) {
-          console.log(record)
+          let _obj = {
+              id: record.careers_id,
+              top: true
+          };
+          this.handleModify(_obj);
+      },
+      //下线
+      offline(record) {
+          let _obj = {
+              id: record.careers_id,
+              is_on: 0
+          };
+          this.handleModify(_obj);
+      },
+      handleModify(obj={}) { //置顶，下线职位
+          ajax.put('jobs', obj).then(res => {
+              if(res.retcode == 0) {
+                  this.init();
+              }
+          });
+      },
+      add() { //添加新职位
+          this.$router.push({
+              path: 'job-release'
+          })
+      },
+      modify(record) { //修改职位
+          this.$router.push({
+              path: 'job-release',
+              query: {
+                  id: record.careers_id
+              }
+          })
+      },
+      //获取数据
+      devData() {
+          let _params = this.params;
+          ajax.get('jobs', _params).then(res => {
+              if(res.retcode == 0) {
+                  this.rows = res.data.list || [];
+                  this.rows.map(item => {
+                      if(item.sendTime) item.sendTime = util.format(item.sendTime);
+                      if(item.deadTime) item.deadTime = util.format(item.deadTime);
+                      if(item.region) item.regionName = JSON.parse(item.region).cityName || null;
+                      return item;
+                  });
+                  this.pagination = Object.assign(this.pagination, {total: res.data.total});
+              }
+          });
       }
   }
 };

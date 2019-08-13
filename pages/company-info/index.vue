@@ -21,7 +21,10 @@
                 :maxLength="10"
                 v-decorator="[
                   'name',
-                  {rules: [{ required: true, message: '请输入公司名称' }]}
+                  {
+                    initialValue: params.name,
+                    rules: [{ required: true, message: '请输入公司名称' }]
+                  }
                 ]"
               ></a-input>
             </a-form-item>
@@ -38,7 +41,10 @@
                 :maxLength="10"
                 v-decorator="[
                   'abbreviation',
-                  {rules: [{ required: false, message: '' }]}
+                  {
+                    initialValue: params.abbreviation,
+                    rules: [{ required: false, message: '' }]
+                  }
                 ]"
               ></a-input>
             </a-form-item>
@@ -56,12 +62,16 @@
                 v-decorator="[
                   'type',
                   {
-                    initialValue: '1',
+                    initialValue: params.type,
                     rules: [{ required: true, message: '请选择公司类型' }]
                   }
                 ]"
               >
-                <a-select-option value="1">上市公司</a-select-option>
+                <a-select-option
+                    v-for="item in capitalizes"
+                    :key="item.id"
+                    :value="item.id"
+                >{{item.labelName}}</a-select-option>
               </a-select>
             </a-form-item>
             <!-- 公司规模 -->
@@ -76,14 +86,18 @@
               <a-select 
                 size="large"
                 v-decorator="[
-                  'scale',
+                  'size',
                   {
-                    initialValue: '1',
+                    initialValue: params.size,
                     rules: [{ required: true, message: '请选择公司规模' }]
                   }
                 ]"
               >
-                <a-select-option value="1">50-150人</a-select-option>
+                <a-select-option
+                    v-for="item in companySizes"
+                    :key="item.id"
+                    :value="item.id + ''"
+                >{{item.labelName}}</a-select-option>
               </a-select>
             </a-form-item>
             <!-- 所在地区 -->
@@ -99,27 +113,40 @@
                 <a-select 
                   size="large"
                   v-decorator="[
-                    'province',
+                    'region',
                     {
-                      initialValue: '1',
+                      initialValue: provincesId,
                       rules: [{ required: true, message: '请选择省份' }]
                     }
                   ]"
+                  @change="province"
                 >
-                  <a-select-option value="1">上海</a-select-option>
+                  <a-select-option
+                      v-for="item in provinces"
+                      :key="item.id"
+                      :value="item.id"
+                  >{{item.name}}</a-select-option>
                 </a-select>
                 <a-select 
                   size="large" 
                   class="mar"
-                  defaultValue="1"
+                  v-model="city"
+                  @change="onCity"
                 >
-                  <a-select-option value="1">上海</a-select-option>
+                  <a-select-option
+                      v-for="item in citys"
+                      :key="item.id"
+                  >{{item.name}}</a-select-option>
                 </a-select>
                 <a-select
                   size="large"
-                  defaultValue="1"
+                  v-model="area"
+                  @change="onArea"
                 >
-                  <a-select-option value="1">虹口区</a-select-option>
+                  <a-select-option
+                      v-for="item in areas"
+                      :key="item.id"
+                  >{{item.name}}</a-select-option>
                 </a-select>
               </div>
             </a-form-item>
@@ -135,8 +162,11 @@
                 size="large"
                 :maxLength="30"
                 v-decorator="[
-                  'webpackAddress',
-                  {rules: [{ required: false, message: '' }]}
+                  'website',
+                  {
+                    initialValue: params.website,
+                    rules: [{ required: false, message: '' }]
+                  }
                 ]"
               ></a-input>
             </a-form-item>
@@ -155,7 +185,7 @@
                 v-decorator="[
                   'address',
                   {
-                    initialValue: '上海市青浦区绝俘路258弄60号（朗诵金融大厦）5层',
+                    initialValue: params.address,
                     rules: [{ required: true, message: '请输入公司地址' }]
                   }
                 ]"
@@ -173,8 +203,11 @@
                 size="large"
                 :maxLength="20"
                 v-decorator="[
-                  'mailbox',
-                  {rules: [{ required: false, message: '' }]}
+                  'email',
+                  {
+                    initialValue: params.email,
+                    rules: [{ required: false, message: '' }]
+                  }
                 ]"
               ></a-input>
             </a-form-item>
@@ -194,8 +227,11 @@
                 :autosize="{ minRows: 6, maxRows: 10 }"
                 :maxLength="100"
                 v-decorator="[
-                  'synopsis',
-                  {rules: [{ required: true, message: '请输入公司简介' }]}
+                  'des',
+                  {
+                    initialValue: params.des,
+                    rules: [{ required: true, message: '请输入公司简介' }]
+                  }
                 ]"
               ></a-textarea>
               <p>0/100文字</p>
@@ -208,11 +244,13 @@
             >
               <div class="item_flex item_logo">
                 <a-upload name="file" 
-                  :multiple="false" 
+                  :multiple="true" 
                   listType="picture-card"
                   :fileList="logoFileList"
-                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                  v-decorator="['logeImg', {
+                  :action="upLoadUrl"
+                  :supportServerRender="true"
+                  :withCredentials="true"
+                  v-decorator="['logo', {
                     valuePropName: 'logoFileList',
                     getValueFromEvent: normFile
                   }]"
@@ -233,8 +271,8 @@
                   :multiple="true" 
                   listType="picture-card"
                   :fileList="companyFileList"
-                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                  v-decorator="['companyImg', {
+                  :action="upLoadUrl"
+                  v-decorator="['imgList', {
                     valuePropName: 'companyFileList',
                     getValueFromEvent: normFile
                   }]"
@@ -262,6 +300,9 @@
 
 <script>
 import "./index.less";
+import ajax from '../../plugins/api';
+import util from '../../plugins/utils/util';
+import area from '../../plugins/utils/area';
 
 export default {
   name: "company-info",
@@ -282,12 +323,30 @@ export default {
           wrapperCol: {span: 16}
         },
         logoFileList: [], //logo图片列表
-        companyFileList: [] //公司图片列表
+        companyFileList: [], //公司图片列表
+        capitalizes: [],
+        companySizes: [],
+        params: {},
+        upLoadUrl: null,
+        provinces: [],
+        provincesId: null,
+        citys: [],
+        areas: [],
+        city: null,
+        area: null,
+        region: {}
       }
   },
   mounted() {
+    this.init();
+    this.labelData();
+    this.devData();
   },
   methods: {
+    init() {
+      this.upLoadUrl = util.upLoadUrl;
+      this.provinces = area;
+    },
     //提交时上传图片处理
     normFile(e) {
       if (Array.isArray(e)) {
@@ -301,7 +360,7 @@ export default {
       newList = newList.slice(-1);
       newList = newList.map((v) => {
         if (v.response) {
-          v.url = v.response.url;
+          v.url = v.response.data.imageList;
         }
         return v;
       });
@@ -313,20 +372,112 @@ export default {
       newList = newList.slice(-6);
       newList = newList.map((v) => {
         if (v.response) {
+          console.log(v.response)
           v.url = v.response.url;
         }
         return v;
       });
       this.companyFileList = newList;
     },
+    province(value) {
+      this.provinces.map(item => {
+        if(item.id == value) {
+          this.citys = item.items;
+          this.city = item.items[0].id;
+          this.areas = item.items[0].items;
+          this.area = item.items[0].items[0].id;
+          this.region = Object.assign({}, {
+              provincesId: item.id, 
+              provincesName: item.name,
+              cityId: item.items[0].id,
+              cityName: item.items[0].name,
+              area: item.items[0].items[0].id,
+              areaName: item.items[0].items[0].name
+          });
+        }
+      });
+    },
+    onCity(value) {
+      this.citys.map(item => {
+        if(item.id == value) {
+          this.areas = item.items;
+          this.area = item.items[0].id;
+          this.region = Object.assign(this.region, {
+              cityId: item.id, 
+              cityName: item.name,
+              area: item.items[0].id,
+              areaName: item.items[0].name
+          });
+        }
+      })
+    },
+    onArea(value) {
+      this.areas.map(item => {
+          if(item.id == value) {
+              this.region = Object.assign(this.region, {area: item.id, areaName: item.name});
+          }
+      })
+    },
     //提交表单
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
-          console.log(values);
+          let userInfo = util.getStore('userInfo');
+          let _imgList = [];
+          let _logo = '';
+          this.companyFileList.map(item => {
+            _imgList.push(item.url);
+          });
+          this.logoFileList.map(item => {
+            _logo = item.url[0];
+          });
+          let params = Object.assign({}, values, {
+            region: JSON.stringify(this.region),
+            id: this.params.id,
+            user_id: userInfo.id,
+            logo: _logo
+            //imgList: _imgList
+          });
+          ajax.post('company', params).then(res => {
+            if(res.retcode == 0) {
+              this.$message.success(res.msg);
+              this.devData();
+            }
+          })
         }
       });
+    },
+    labelData() {
+      ajax.get('label').then(res => {
+        if(res.retcode == 0) {
+          this.capitalizes = res.data.capitalizes || [];
+          this.companySizes = res.data.companySizes || [];
+        }
+      })
+    },
+    devData() {
+      let userInfo = util.getStore('userInfo');
+      ajax.get('company', {user_id: userInfo.id}).then(res => {
+        if(res.retcode == 0) {
+          this.params = res.data[0] || {};
+          if(this.params.region) {
+            let _region = JSON.parse(this.params.region);
+            if(_region.provincesId) {
+              this.provincesId = _region.provincesId;
+              this.province(_region.provincesId);
+            };
+            if(_region.cityId) {
+              this.city = _region.cityId;
+              this.onCity(_region.cityId);
+            };
+            if(_region.area) {
+              this.area = _region.area;
+              this.onArea(_region.area);
+            };
+          }
+        }
+      })
     }
   }
 };

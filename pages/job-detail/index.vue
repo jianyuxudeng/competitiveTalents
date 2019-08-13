@@ -5,21 +5,19 @@
         <a-row type="flex" justify="space-between" align="middle">
           <a-col>
             <dl>
-              <dt>急聘</dt>
+              <dt v-if="params.is_worry == 1">急聘</dt>
               <dd>
-                <div class="title">赛事运营策划</div>
+                <div class="title">{{params.careersName}}</div>
                 <div class="jinyan">
-                  <span>20k-30k/月</span>
-                  经验5年以上 / 本科 / 上海 / 全职
+                  <span>{{params.jobPrice}}/月</span>
+                  {{params.workExperience}} / {{params.educational}} / {{params.region}} / 全职
                 </div>
                 <div class="btn">
-                  <span>赛事相关职位</span>
-                  <span>APP设计</span>
-                  <span>H5制作</span>
+                  <span v-for="(item, index) in params.skills" :key="index">{{item}}</span>
                 </div>
                 <p>
                   <a-icon type="clock-circle" />
-                  <span>发布时间 2019-08-35   15:20</span>
+                  <span>发布时间 {{params.sendTime}}</span>
                 </p>
               </dd>
             </dl>
@@ -43,15 +41,13 @@
             <dl>
               <dt>岗位职责</dt>
               <dd>
-                <p>1、负责配合广告销售业务拓展，制定行业及客户网络营销策略与典型方案；</p>
-                <p>2、挖掘媒体资源，实现内容商业化开发；</p>
+                <p>{{params.duties}}</p>
               </dd>
             </dl>
             <dl>
               <dt>任职要求</dt>
               <dd>
-                <p>1、负责配合广告销售业务拓展，制定行业及客户网络营销策略与典型方案；</p>
-                <p>2、挖掘媒体资源，实现内容商业化开发；</p>
+                <p>{{params.request}}</p>
               </dd>
             </dl>
             <div class="title">
@@ -62,7 +58,7 @@
             <dl>
               <dt>工作地址</dt>
               <dd>
-                <p>上海市青浦区绝俘路258弄60号（朗诵金融大厦）5层</p>
+                <p>{{params.address}}</p>
               </dd>
             </dl>
           </div>
@@ -78,11 +74,11 @@
               </p>
               <p>
                 <a-icon type="pay-circle" theme="filled" />
-                <span>上市公司</span>
+                <span>{{params.capitalize}}</span>
               </p>
               <p>
                 <em><img src="../../assets/images/user.png" alt=""></em>
-                <span>2000人以上</span>
+                <span>{{params.companySize}}</span>
               </p>
               <p>
                 <em><img src="../../assets/images/esports.png" alt=""></em>
@@ -98,6 +94,8 @@
 
 <script>
 import "./index.less";
+import ajax from '../../plugins/api';
+import util from '../../plugins/utils/util';
 
 export default {
   name: "job_detail",
@@ -110,11 +108,69 @@ export default {
     Interest: () => import('../../components/atom/Interest')
   },
   data() {
-      return{}
+      return{
+        params: {},
+        labels: {}
+      }
   },
   mounted() {
+    this.labelDev();
   },
   methods: {
+      labelDev() {
+          ajax.get('label').then(res => {
+              if(res.retcode == 0) {
+                  this.labels = res.data || {};
+                  this.devData();
+              }
+          });
+      },
+      devData() {
+          let userInfo = util.getStore('userInfo');
+          let _id = this.$route.query.id;
+          ajax.get('jobs/detail', {
+              user_id: userInfo.id,
+              job_id: _id
+          }).then(res => {
+            if(res.retcode == 0) {
+              this.params = res.data.jobDetali[0] || {};
+              if(this.params.region) {
+                this.params = Object.assign(this.params, {region: JSON.parse(this.params.region).cityName});
+              };
+              if(this.params.skills) {
+                this.params = Object.assign(this.params, {
+                  skills: this.params.skills.split(',')
+                })
+              };
+              if(this.params.sendTime) this.params.sendTime = util.format(this.params.sendTime);
+              this.labels.workExpress.map(item => {
+                if(item.id == this.params.workExperience) {
+                  this.params = Object.assign(this.params, {workExperience: item.labelName});
+                }
+              });
+              this.labels.educationals.map(item => {
+                if(item.id == this.params.educational) {
+                  this.params = Object.assign(this.params, {educational: item.labelName});
+                }
+              });
+              this.labels.jobTypes.map(item => {
+                if(item.id == this.params.type) {
+                  this.params = Object.assign(this.params, {type: item.labelName});
+                }
+              });
+              this.labels.companySizes.map(item => {
+                if(item.id == this.params.companySize) {
+                  this.params = Object.assign(this.params, {companySize: item.labelName});
+                }
+              });
+              this.labels.capitalizes.map(item => {
+                if(item.id == this.params.capitalize) {
+                  this.params = Object.assign(this.params, {capitalize: item.labelName});
+                }
+              })
+            }
+          })
+      }
   }
 };
 </script>

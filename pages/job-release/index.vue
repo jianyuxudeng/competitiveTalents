@@ -3,9 +3,15 @@
       <div class="nav-bg"></div>
       <a-form :form="form" @submit="handleSubmit">
           <div class="centent">
-              <a-tabs defaultActiveKey="1" @change="callback">
-                  <a-tab-pane tab="社会职位" key="1"></a-tab-pane>
-                  <a-tab-pane tab="实习职位" key="2"></a-tab-pane>
+              <a-tabs
+                  :defaultActiveKey="active"
+                  @change="callback"
+              >
+                  <a-tab-pane
+                      v-for="item in labels.careers"
+                      :key="item.id"
+                      :tab="item.labelName"
+                  ></a-tab-pane>
               </a-tabs>
               <div class="list">
                   <a-form-item class="left" label="职位名称">
@@ -15,7 +21,10 @@
                           size="large" 
                           v-decorator="[
                               'careers_id',
-                              {rules: [{ required: true, message: '请选择职位' }]}
+                              {
+                                  initialValue: careerIds,
+                                  rules: [{ required: true, message: '请选择职位' }]
+                              }
                           ]"
                       />
                   </a-form-item>
@@ -23,7 +32,10 @@
                       <a-radio-group
                           v-decorator="[
                               'type',
-                              {rules: [{ required: true, message: '请选择工作性质' }]}
+                              {
+                                  initialValue: params.type,
+                                  rules: [{ required: true, message: '请选择工作性质' }]
+                              }
                           ]"
                       >
                           <a-radio :value="item.id" v-for="item in labels.jobTypes" :key="item.id">{{item.labelName}}</a-radio>
@@ -39,7 +51,10 @@
                               @change="handleProvinces"
                               v-decorator="[
                                   'region',
-                                  {rules: [{ required: true, message: '请选择工作地区' }]}
+                                  {
+                                      initialValue: provincesId,
+                                      rules: [{ required: true, message: '请选择工作地区' }]
+                                  }
                               ]"
                           >
                               <a-select-option
@@ -71,23 +86,26 @@
                               class="w114"
                               v-decorator="[
                                   'careerPrice',
-                                  {rules: [{ required: true, message: '请选择薪资类型' }]}
+                                  {
+                                      initialValue: params.careerPrice,
+                                      rules: [{ required: true, message: '请选择薪资类型' }]
+                                  }
                               ]"
                           >
                               <a-select-option
                                   v-for="item in labels.careerPrices"
                                   :key="item.id"
-                                  :value="item.labelName"
+                                  :value="item.id"
                               >{{item.labelName}}</a-select-option>
                           </a-select>
-                          <a-select size="large" class="w184" @change="handleJobPrice" v-if="isTrue">
+                          <a-select size="large" class="w184" v-model="params.jobPrice" @change="handleJobPrice" v-if="isTrue">
                               <a-select-option
                                   v-for="item in labels.jobPrices"
                                   :key="item.id"
                                   :value="item.labelName"
                               >{{item.labelName}}</a-select-option>
                           </a-select>
-                          <a-input size="large" class="w184" v-model="jobPrice" v-else></a-input>
+                          <a-input size="large" class="w184" v-model="params.jobPrice" v-else></a-input>
                           <a 
                               @click="() => {
                                   isTrue = false;
@@ -103,7 +121,10 @@
                           size="large"
                           v-decorator="[
                               'address',
-                              {rules: [{ required: true, message: '请输入工作地址' }]}
+                              {
+                                  initialValue: params.address,
+                                  rules: [{ required: true, message: '请输入工作地址' }]
+                              }
                           ]"
                       ></a-input>
                   </a-form-item>
@@ -113,7 +134,10 @@
                           placeholder="输入职位关键词，提高被搜索概率"
                           v-decorator="[
                               'keywords',
-                              {rules: [{ required: true, message: '请输入关键词' }]}
+                              {
+                                  initialValue: params.keywords,
+                                  rules: [{ required: true, message: '请输入关键词' }]
+                              }
                           ]"
                       ></a-input>
                   </a-form-item>
@@ -124,9 +148,13 @@
                           size="large"
                           mode="multiple"
                           :tokenSeparators="[',']"
+                          @change="handleSkills"
                           v-decorator="[
                               'skills',
-                              {rules: [{ required: true, message: '请选择技能要求' }]}
+                              {
+                                  initialValue: params.skills,
+                                  rules: [{ required: true, message: '请选择技能要求' }]
+                              }
                           ]"
                       >
                           <a-select-option
@@ -142,7 +170,10 @@
                           placeholder="输入职位部门"
                           v-decorator="[
                               'depatment',
-                              {rules: [{ required: true, message: '请输入所属部门' }]}
+                              {
+                                  initialValue: params.depatment,
+                                  rules: [{ required: true, message: '请输入所属部门' }]
+                              }
                           ]"
                       ></a-input>
                   </a-form-item>
@@ -153,7 +184,10 @@
                           size="large"
                           v-decorator="[
                               'des',
-                              {rules: [{ required: true, message: '请输入职位描述' }]}
+                              {
+                                  initialValue: params.des,
+                                  rules: [{ required: true, message: '请输入职位描述' }]
+                              }
                           ]"
                       />
                   </a-form-item>
@@ -165,7 +199,10 @@
                           :autosize="{minRows: 6}" 
                           v-decorator="[
                               'duties',
-                              {rules: [{ required: true, message: '请输入职位职责' }]}
+                              {
+                                  initialValue: params.duties,
+                                  rules: [{ required: true, message: '请输入职位职责' }]
+                              }
                           ]"
                       />
                       <p>0/1000文字</p>
@@ -178,7 +215,10 @@
                           :autosize="{minRows: 6}" 
                           v-decorator="[
                               'request',
-                              {rules: [{ required: true, message: '请输入职位要求' }]}
+                              {
+                                  initialValue: params.request,
+                                  rules: [{ required: true, message: '请输入职位要求' }]
+                              }
                           ]"
                       />
                       <p>0/1000文字</p>
@@ -210,6 +250,7 @@ export default {
           careers: [],
           labels: [],
           provincesList: [],
+          provincesId: null,
           cityList: [],
           city: null,
           areaList: [],
@@ -217,7 +258,9 @@ export default {
           region: {},
           jobPrice: null,
           isTrue: true,
-          active: 1 //默认类型 1，社会职务   2，实习职位
+          active: null,
+          params: {},
+          careerIds: []
       }
   },
   mounted() {
@@ -226,10 +269,19 @@ export default {
   methods: {
       init() { //初始化
           this.provincesList = area;
+          let _id = this.$route.query.id;
           this.getCareers();
+          if(_id) {
+              this.devData(_id);
+          }
       },
       callback(key) { //类型切换
           this.active = key;
+      },
+      handleSkills(value) {
+          if(value.length > 3) {
+              value.length = 3;
+          }
       },
       handleProvinces(value) { //省市联动
           area.map(item => {
@@ -283,10 +335,12 @@ export default {
                       user_id: userInfo.id,
                       region: JSON.stringify(this.region),
                       jobPrice: this.jobPrice,
-                      skills: `${values.skills}`
+                      skills: `${values.skills}`,
+                      careers_type: this.active
                   });
-                  ajax.post('jobs', params).then(res => {});
-                  console.log(params)
+                  ajax.post('jobs', params).then(res => {
+                      if(res.retcode == 0) this.$message.success(res.msg);
+                  });
               }
           });
       },
@@ -295,8 +349,71 @@ export default {
               this.careers = res.data || [];
           });
           ajax.get('label').then(res => {
-              this.labels = res.data || {}
+              this.labels = res.data || {};
+              this.active = res.data.careers[0].id;
+          });
+      },
+      devData(id) {
+          let userInfo = util.getStore('userInfo');
+          ajax.get('jobs/detail', {
+              user_id: userInfo.id,
+              job_id: id
+          }).then(res => {
+              if(res.retcode == 0) {
+                  this.params = res.data.jobDetali[0] || {};
+                  if(this.params.type) this.params.type = Number(this.params.type);
+                  if(this.params.careerPrice) this.params.careerPrice = Number(this.params.careerPrice);
+                  if(this.params.skills) this.params.skills = this.params.skills.split(',');
+                  if(this.params.careers_id) {
+                      let careerIds = this.findParentById(this.careers, this.params.careers_id, 'id', 'children');
+                      this.careerIds = [...careerIds, this.params.careers_id];
+                  }
+                  if(this.params.region) {
+                      let _region = JSON.parse(this.params.region);
+                      if(_region.provincesId) {
+                          this.provincesId = Number(_region.provincesId);
+                          this.handleProvinces(_region.provincesId);
+                      };
+                      if(_region.cityId) {
+                          this.city = Number(_region.cityId);
+                          this.handleCity(_region.cityId);
+                      };
+                      if(_region.area) {
+                          this.area = Number(_region.area);
+                          this.handleArea(_region.area);
+                      };
+                      this.params.region = _region;
+                  }
+              }
           })
+      },
+      //通过子集值查询父级值
+      findParentById(arr, path, type, pArr, needInfo) { //arr:要匹配的数组，path:要匹配的值， type:根据什么字段匹配， pArr:子集数组属性名， needInfo:自定义返回值
+          let parentIds = [], index = 0, names = [],
+              hasParentId = function loop(arr, index) {
+                  return arr.some(item => {
+                      if(item[type] == path) {
+                          parentIds = parentIds.slice(0, index);
+                          names = names.splice(0, index);
+                          return true;
+                      }else if(Array.isArray(item[pArr])) {
+                          parentIds[index] = item[type];
+                          names[index] = item;
+                          return loop(item[pArr], index+1);
+                      };
+                      return false;
+                  })
+              }(arr, index);
+          if(needInfo) {
+              return hasParentId ? {
+                  parentIds,
+                  names
+              } : {
+                  parentIds: [],
+                  names: []
+              };
+          };
+          return hasParentId ? parentIds : [];
       }
   }
 };

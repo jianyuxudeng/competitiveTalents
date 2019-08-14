@@ -98,7 +98,7 @@ export default {
       handleState(arr=[]) {
           if(arr.length > 0) {
               arr.map(item => {
-                item.skills = item.skills.split(',') || [];
+                if(item.skills) item.skills = item.skills.split(',') || [];
                 switch (item.labelName || item.job_type_name) {
                     case '全职':
                         item.className = 'blue';

@@ -10,21 +10,21 @@
                         </a-row>
                     </div>
                     <div class="list">
-                        <div class="item" v-for="item in 3" :key="item">
+                        <div class="item" v-for="(item, index) in rows" :key="index">
                             <dl>
-                                <dt><img src="../../assets/images/positions_img.png" alt=""></dt>
+                                <dt><img :src="item.logo" alt=""></dt>
                                 <dd>
-                                    <h4>高校电竞讲师 <span>16k-20k/月</span></h4>
-                                    <p>腾讯电竞</p>
-                                    <span>电子竞技/上市公司/上海/全日制外包</span>
+                                    <h4>{{item.careersName}} <span>{{item.jobPrice}}/月</span></h4>
+                                    <p>{{item.companyName}}</p>
+                                    <span>{{item.trade}}/{{item.capitalize}}/{{item.region.cityName}}/{{item.type}}</span>
                                 </dd>
                             </dl>
                             <div class="btn">
-                                <p>发布时间 <span>2019-08-35 15:20</span></p>
+                                <p>发布时间 <span>{{item.sendTime}}</span></p>
                                 <div>
-                                    <a>取消收藏</a>
+                                    <a @click="collectionPosition(item)">取消收藏</a>
                                     <em></em>
-                                    <a @click="handleModel">投简历</a>
+                                    <a @click="handleModel(item)">投简历</a>
                                     <!-- <span>已下线</span> -->
                                 </div>
                             </div>
@@ -62,7 +62,13 @@
                                 </a-row>
                             </a-col>
                         </a-row>
-                        <a-row type="flex" justify="space-between" align="middle">
+                        <a-row 
+                            type="flex" 
+                            justify="space-between" 
+                            align="middle"
+                            v-for="item in modelRow"
+                            :key="item.id"
+                        >
                             <a-col>
                                 <a-radio :style="radioStyle" :value="2">
                                     附件简历
@@ -110,22 +116,61 @@ export default {
               height: '.3rem',
               lineHeight: '.3rem',
               fontSize: '.16rem'
-          }
+          },
+          labels: {},
+          rows: [],
+          modelRow: []
       }
   },
   mounted() {
-      this.devData();
+      this.labelDev();
   },
   methods: {
       handleCancel() { //关闭弹窗
           this.isModalShow = false;
       },
-      handleModel() { //显示弹窗
-          this.isModalShow = true;
+      handleModel(e) { //显示弹窗
+          ajax.get('user/annexResumes/list', {
+              user_id: e.user_id
+          }).then(res => {
+              if(res.retcode == 0) {
+                  this.modelRow = res.data || [];
+                  this.isModalShow = true;
+              }
+          })
+      },
+      collectionPosition(e) {
+          ajax.delete('user/collectionPosition', {
+              user_id: e.user_id,
+              position_id: e.careers_id
+          }).then(res => {
+              if(res.retcode == 0) {
+                  this.devData();
+              }
+          })
+      },
+      labelDev() {
+          ajax.get('label').then(res => {
+              if(res.retcode == 0) {
+                  this.labels = res.data || {};
+                  this.devData();
+              }
+          })
       },
       devData() {
           let userInfo = util.getStore('userInfo');
-          ajax.get('user/collectionPosition/list', {user_id: userInfo.id}).then(res => {})
+          ajax.get('user/collectionPosition/list', {user_id: userInfo.id}).then(res => {
+              if(res.retcode == 0) {
+                  this.rows = res.data || [];
+                  this.rows.map(item => {
+                      item.capitalize = item.capitalize ? this.labels.capitalizes.find(i => i.id == item.capitalize).labelName : null;
+                      item.region = item.region ? JSON.parse(item.region) : null;
+                      item.type = item.type ? this.labels.jobTypes.find(i => i.id == item.type).labelName : null;
+                      item.trade = item.trade ? this.labels.trades.find(i => i.id == item.trade).labelName : null;
+                      item.sendTime = util.format(item.sendTime);
+                  })
+              }
+          })
       }
   }
 };

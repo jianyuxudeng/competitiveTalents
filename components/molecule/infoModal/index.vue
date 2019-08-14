@@ -21,7 +21,10 @@
                         <a-input
                           v-decorator="[
                             'username',
-                            {rules: [{ required: false }]}
+                            {
+                                initialValue: modelData.username,
+                                rules: [{ required: false }]
+                            }
                           ]"
                          />
                     </a-form-item>
@@ -31,18 +34,7 @@
                         :label-col="labelCol"
                         :wrapper-col="wrapperCol"
                     >
-                        <a-select 
-                          class="w48"
-                          v-decorator="[
-                            'birth',
-                            {rules: [{ required: false }]}
-                          ]"
-                        >
-                            <a-select-option value="1987">1987年</a-select-option>
-                        </a-select>
-                        <a-select class="w48">
-                            <a-select-option :value="item" v-for="item in 12" :key="item">{{item < 10 ? '0' + item : item}}</a-select-option>
-                        </a-select>
+                        <a-date-picker :defaultValue="moment(modelData.birth, dateFormat)" @change="handleBirth" />
                     </a-form-item>
                     <a-form-item
                         label="性别"
@@ -54,7 +46,7 @@
                           v-decorator="[
                             'sex',
                             {
-                                initialValue: '1',
+                                initialValue: modelData.sex + '',
                                 rules: [{ required: false }]
                             }
                           ]"
@@ -69,14 +61,17 @@
                         :label-col="labelCol"
                         :wrapper-col="wrapperCol"
                     >
-                        <a-select
-                          v-decorator="[
-                            'city',
-                            {rules: [{ required: false }]}
-                          ]"
+                        <a-cascader
+                          :fieldNames="{label: 'name', value: 'id', children: 'item'}"
+                          :options="areas"
+                          @change="onCascader"
                         >
-                            <a-select-option value="1987">1987年</a-select-option>
-                        </a-select>
+                            <template slot="displayRender" slot-scope="{labels}">
+                                <span v-for="(label, index) in labels" :key="index">
+                                    <span v-if="index == 1">{{label}}</span>
+                                </span>
+                            </template>
+                        </a-cascader>
                     </a-form-item>
                     <a-form-item
                         label="手机号码"
@@ -87,7 +82,10 @@
                         <a-input
                           v-decorator="[
                             'phone',
-                            {rules: [{ required: false }]}
+                            {
+                                initialValue: modelData.phone,
+                                rules: [{ required: false }]
+                            }
                           ]"
                          />
                     </a-form-item>
@@ -101,7 +99,7 @@
                           v-decorator="[
                             'indenty',
                             {
-                                initialValue: '0',
+                                initialValue: modelData.indenty + '',
                                 rules: [{ required: false }]
                             }
                           ]"
@@ -116,14 +114,7 @@
                         :label-col="labelCol"
                         :wrapper-col="wrapperCol"
                     >
-                        <a-select
-                          v-decorator="[
-                            'workTime',
-                            {rules: [{ required: false }]}
-                          ]"
-                        >
-                            <a-select-option value="1987">1987年</a-select-option>
-                        </a-select>
+                        <a-date-picker :defaultValue="moment(modelData.workTime, dateFormat)" @change="handleWorkTime" />
                     </a-form-item>
                     <a-form-item label="1" :label-col="labelCol" class="btn">
                         <a-button type="primary" html-type="submit">保存</a-button>
@@ -137,8 +128,10 @@
 
 <script>
 import "./index.less";
+import moment from 'moment';
 import ajax from '../../../plugins/api';
 import util from '../../../plugins/utils/util';
+import area from '../../../plugins/utils/area';
 
 export default {
   name: "Modal",
@@ -150,20 +143,64 @@ export default {
   },
   data() {
       return{
+          dateFormat: 'YYYY-MM-DD',
           modelData: null,
           labelCol: {span: 3},
           wrapperCol: {span: 21},
-          form: this.$form.createForm(this)
+          form: this.$form.createForm(this),
+          labels: {},
+          areas: [],
+          city: null,
+          birth: null,
+          workTime: null,
+          citys: {}
       }
   },
   watch: {
       modelEdit() {
           this.modelData = this.modelEdit;
+          if(this.modelData && this.modelData.city) {
+              this.citys = JSON.parse(this.modelData.city);
+          };
       }
   },
   mounted() {
+      this.labelDev();
+      this.init();
   },
   methods: {
+      moment,
+      init() {
+          area.map(item => { //获取地址列表
+              this.areas.push({
+                  id: item.id,
+                  name: item.name,
+                  item: item.items
+              })
+          })
+      },
+      handleBirth(date, dateString) { //生日
+          this.birth = dateString;
+      },
+      handleWorkTime(date, dateString) { //工作时间
+          this.workTime = dateString;
+      },
+      onCascader(value) { //地址
+          let _city = Object.assign({}, {
+              id: value[1]
+          });
+          this.areas.map(item => {
+              if(item.id == value[0]) {
+                  item.item.map(i => {
+                      if(i.id == value[1]) {
+                          this.city = Object.assign(_city, {
+                              name: i.name
+                          })
+                      }
+                  })
+              }
+          })
+      },
       handleCancel() { //关闭弹窗
           this.modelData = null;
           this.$emit('cancelModel', 'infoModel');
@@ -174,16 +211,26 @@ export default {
               if (!err) {
                   let userInfo = util.getStore('userInfo');
                   let _data = Object.assign(values, {
-                      user_id: userInfo.id
+                      user_id: userInfo.id,
+                      city: JSON.stringify(this.city),
+                      birth: this.birth,
+                      workTime: this.workTime
                   });
                   ajax.post('user/detail', _data).then(res => {
                       if(res.retcode == 0) {
                           this.modelData = null;
-                          this.$emit('cancelModel', 'infoModel');
+                          this.$emit('okModel', 'infoModel');
                       }
                   })
               }
           });
+      },
+      labelDev() {
+          ajax.get('label').then(res => {
+              if(res.retcode == 0) {
+                  this.labels = res.data || {};
+              }
+          })
       }
   }
 };

@@ -1,5 +1,6 @@
 export default {
     upLoadUrl: 'http://api.es-career.com/api/upload',
+    videoUrl: 'http://api.es-career.com/api/user/video',
     uploadType: {
         excel: '.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel',
         image: 'image/*',

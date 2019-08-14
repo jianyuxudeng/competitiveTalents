@@ -75,6 +75,7 @@
 <script>
 import Vue from "vue";
 import "./index.less";
+import ajax from '../plugins/api';
 import util from '../plugins/utils/util';
 
 export default {
@@ -149,16 +150,8 @@ export default {
        information: {
          title: '行业资讯',
          titleEn: 'INDUSTRY INFORMATION',
-         dynamic: [
-           {text: '学习电子竞技行业新知识，关注电学习电子竞技行业新知识，关注电学习电子竞技行业新知识，关注电学习电子竞技行业新知识，关注电', times: '2019-06-27'},
-           {text: '学习电子竞技行业新知识，关注电.......', times: '2019-06-27'},
-           {text: '学习电子竞技行业新知识，关注电.......', times: '2019-06-27'}
-         ],
-         answers: [
-           {text: '学习电子竞技行业新知识，关注电.......', times: '2019-06-27'},
-           {text: '学习电子竞技行业新知识，关注电.......', times: '2019-06-27'},
-           {text: '学习电子竞技行业新知识，关注电.......', times: '2019-06-27'}
-         ]
+         dynamic: [],
+         answers: []
        },
        userInfo: null
      }
@@ -172,6 +165,8 @@ export default {
   methods: {
     init() { //初始化
       this.userInfo = util.getStore('userInfo') || null;
+      this.activeData();
+      this.answerData();
     },
     onSearch(value) { //搜索
       console.log(value)
@@ -192,6 +187,26 @@ export default {
           path: '/login'
         })
       }
+    },
+    activeData() { //获取新闻动态数据
+      ajax.get('news/active').then(res => {
+        if(res.retcode == 0) {
+          res.data.map(item => {
+            item.create_time = util.format(item.create_time);
+          });
+          this.information.dynamic = res.data || [];
+        }
+      })
+    },
+    answerData() { //获取新闻问题数据
+      ajax.get('news/answer').then(res => {
+        if(res.retcode == 0) {
+          res.data.map(item => {
+            item.create_time = util.format(item.create_time);
+          });
+          this.information.answers = res.data || [];
+        }
+      })
     }
   }
 };

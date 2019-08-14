@@ -9,8 +9,8 @@
           :dataSource="list"
       >
           <a-list-item slot="renderItem" slot-scope="item, index" @click="informationItem(index)">
-              <a-list-item-meta :description="item.text"></a-list-item-meta>
-              <span>{{item.times}}</span>
+              <a-list-item-meta :description="item.title"></a-list-item-meta>
+              <span>{{item.create_time}}</span>
           </a-list-item>
       </a-list>
   </section>

@@ -22,12 +22,12 @@
               </dd>
             </dl>
           </a-col>
-          <a-col>
-            <a-button class="back" size="large">
+          <a-col v-if="userInfo.type == 2">
+            <a-button class="back" size="large" @click="collectionPosition">
               <a-icon type="star" />
               <span>收藏</span>
             </a-button>
-            <a-button type="primary" size="large">投递简历</a-button>
+            <a-button type="primary" size="large" :disabled="!sendAgain" @click="sendResumes">投递简历</a-button>
           </a-col>
         </a-row>
       </div>
@@ -54,7 +54,7 @@
               <em><img src="../../assets/images/introduce.png" alt=""></em>
               <span>公司介绍</span>
             </div>
-            <div class="introduce">竞域（上海）教育科技有限公司于2018年09月29日成立。法定代表人张尔承,公司经营范围包括：教育科技领域内的技术开发、技术转让、技术咨询、技术服务，设计、制作、代理、发布各类广告，体育赛事活动策划</div>
+            <div class="introduce">{{params.canpanyDes}}</div>
             <dl>
               <dt>工作地址</dt>
               <dd>
@@ -65,12 +65,12 @@
           <div class="right">
             <div class="one">
               <dl>
-                <dt><img src="../../assets/images/positions_img.png" alt=""></dt>
-                <dd>腾讯电竞</dd>
+                <dt><img :src="params.logo" alt=""></dt>
+                <dd>{{params.companyName}}</dd>
               </dl>
               <p>
                 <a-icon type="appstore" theme="filled" />
-                <span>电子竞技</span>
+                <span>{{params.trade}}</span>
               </p>
               <p>
                 <a-icon type="pay-circle" theme="filled" />
@@ -82,7 +82,7 @@
               </p>
               <p>
                 <em><img src="../../assets/images/esports.png" alt=""></em>
-                <span>esports.qq.com</span>
+                <span>{{params.website}}</span>
               </p>
             </div>
             <Interest></Interest>
@@ -110,14 +110,38 @@ export default {
   data() {
       return{
         params: {},
-        labels: {}
+        labels: {},
+        sendAgain: false,
+        userInfo: {}
       }
   },
   mounted() {
     this.labelDev();
   },
   methods: {
+      collectionPosition() { //收藏职位
+        let userInfo = util.getStore('userInfo');
+        let _id = this.$route.query.id;
+        ajax.post('user/collectionPosition', {
+          user_id: userInfo.id,
+          position_id: _id
+        }).then(res => {
+          if(res.retcode == 0) {
+            this.$message.success(res.msg);
+          }
+        })
+      },
+      sendResumes() {
+        let userInfo = util.getStore('userInfo');
+        let _id = this.$route.query.id;
+        ajax.post('user/sendResumes', {
+          user_id: userInfo.id,
+          job_id: _id
+        }).then(res => {})
+      },
       labelDev() {
+          let userInfo = util.getStore('userInfo');
+          this.userInfo = userInfo;
           ajax.get('label').then(res => {
               if(res.retcode == 0) {
                   this.labels = res.data || {};
@@ -134,6 +158,7 @@ export default {
           }).then(res => {
             if(res.retcode == 0) {
               this.params = res.data.jobDetali[0] || {};
+              this.sendAgain = res.data.sendAgain || false;
               if(this.params.region) {
                 this.params = Object.assign(this.params, {region: JSON.parse(this.params.region).cityName});
               };
@@ -166,6 +191,11 @@ export default {
               this.labels.capitalizes.map(item => {
                 if(item.id == this.params.capitalize) {
                   this.params = Object.assign(this.params, {capitalize: item.labelName});
+                }
+              });
+              this.labels.trades.map(item => {
+                if(item.id = this.params.trade) {
+                  this.params = Object.assign(this.params, {trade: item.labelName});
                 }
               })
             }

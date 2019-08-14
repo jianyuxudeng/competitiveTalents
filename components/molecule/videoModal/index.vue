@@ -39,7 +39,7 @@ export default {
           labelCol: {span: 3},
           wrapperCol: {span: 21},
           form: this.$form.createForm(this),
-          fileUrl: util.upLoadUrl
+          fileUrl: util.videoUrl
       }
   },
   watch: {

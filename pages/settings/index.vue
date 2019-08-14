@@ -15,13 +15,13 @@
                   </a-row>
                   <p>绑定后，你可以同时使用一下方式登录</p>
                 </div>
-                <div class="cent">
+                <!-- <div class="cent">
                   <p v-for="item in accounts" :key="item.type" :class="{active: item.isBinding}">
                     <a-icon :type="item.type" />
                     <span v-if="item.isBinding">已绑定{{item.typeName}}帐号： {{item.name}}</span>
                     <a>{{item.isBinding ? '解除绑定' : '绑定' + item.typeName + '帐号'}}</a>
                   </p>
-                </div>
+                </div> -->
               </div>
             </a-tab-pane>
             <!-- 隐私设置 -->

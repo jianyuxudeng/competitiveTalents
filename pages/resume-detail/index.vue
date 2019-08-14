@@ -62,7 +62,7 @@
                 <span>工作经历</span>
                 <a>
                   <em><a-icon type="plus-square" /></em>
-                  <span>添加</span>
+                  <span @click="add('job-experience')">添加</span>
                 </a>
               </div>
               <div class="job_experience">
@@ -79,7 +79,7 @@
                       <!-- <p>2016.06-至今</p> -->
                       <a>
                         <em><img src="../../assets/images/edit.png" alt=""></em>
-                        <span>编辑</span>
+                        <span @click="edit('job-experience')">编辑</span>
                       </a>
                       <a>
                         <em><a-icon type="close-square" /></em>
@@ -267,8 +267,9 @@
           </div>
         </div>
       </a-row>
-      <infoModal :modelEdit="infoModel" @cancelModel="cancelModel"></infoModal>
+      <infoModal :modelEdit="infoModel" @cancelModel="cancelModel" @okModel="okModel"></infoModal>
       <videoModal :modelEdit="videoModel" @cancelModel="cancelModel"></videoModal>
+      <jobExperienceModal :modelEdit="jobExperienceModal" @cancelModel="cancelModel"></jobExperienceModal>
   </section>
 </template>
 
@@ -286,7 +287,8 @@ export default {
   },
   components: {
     infoModal: () => import('../../components/molecule/infoModal'),
-    videoModal: () => import('../../components/molecule/videoModal')
+    videoModal: () => import('../../components/molecule/videoModal'),
+    jobExperienceModal: () => import('../../components/molecule/job-experience')
   },
   data() {
       return{
@@ -294,6 +296,7 @@ export default {
         active: null,
         infoModel: null,
         videoModel: null,
+        jobExperienceModal: null,
         navs: [
           {name: '基本信息', url: 'info'},
           {name: '可视化描述', url: 'video'},
@@ -305,6 +308,7 @@ export default {
         ],
         userDetail: {},
         desVideo: null,
+        experience: {},
         user_id: null
       }
   },
@@ -321,6 +325,19 @@ export default {
     goItem(index) { //导航
       this.active = index;
     },
+    add(name) { //添加
+      switch (name) {
+        case 'job-experience':
+          this.jobExperienceModal = Object.assign({}, {
+            title: '',
+            isEdit: false
+          });
+          break;
+      
+        default:
+          break;
+      }
+    },
     edit(name) { //编辑
       switch (name) {
         case 'info':
@@ -329,9 +346,16 @@ export default {
           });
           break;
         case 'video':
-          this.videoModel = Object.assign(this.userDetail, {
+          this.videoModel = Object.assign(this.desVideo, {
             title: '上传可视化描述视频'
           });
+          break;
+        case 'job-experience':
+          this.jobExperienceModal = Object.assign(this.experience, {
+            title: '',
+            isEdit: true
+          });
+          break;
         default:
           break;
       };
@@ -339,12 +363,17 @@ export default {
     cancelModel(name) { //点击弹窗关闭按钮时，清空弹窗数据
       this[name] = null;
     },
+    okModel(name) {
+      this[name] = null;
+      this.getData();
+    },
     getData() { //获取数据
       ajax.get('user/resume/detail', {user_id: this.user_id}).then(res => {
         let _data = res.data;
         if(_data) {
-          this.userDetail = _data.userDetail[0] || null,
-          this.desVideo = _data.desVideo[0] || null
+          this.userDetail = _data.userDetail[0] || null;
+          this.desVideo = _data.desVideo[0] || null;
+          this.experience = _data.experience || null
         }
       })
     }

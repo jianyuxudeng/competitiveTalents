@@ -8,7 +8,7 @@
                 <div class="head">
                   <a-row type="flex" justify="start">
                     <a-col :span="2">帐号</a-col>
-                    <a-col :span="5">13854218755</a-col>
+                    <a-col :span="5">{{userInfo.username}}</a-col>
                     <a-col :span="4">
                       <a>更换手机号</a>
                     </a-col>
@@ -63,9 +63,9 @@
                     <div class="privacy_input">
                       <a-input-search placeholder="请输入想屏蔽的公司全程、简称" @search="onSearch" enterButton="搜索公司" size="large" />
                     </div>
-                    <div class="privacy_del">
-                      <span>上海银来投资集团</span>
-                      <a>删除</a>
+                    <div class="privacy_del" v-for="item in hideCompany" :key="item.id">
+                      <span>{{item.name}}</span>
+                      <a @click="del(item)">删除</a>
                     </div>
                   </dd>
                 </dl>
@@ -76,7 +76,7 @@
               <div class="new_password">
                 <a-row type="flex" justify="start">
                   <a-col :span="6">登录帐号</a-col>
-                  <a-col :span="10">13846631163</a-col>
+                  <a-col :span="10">{{userInfo.username}}</a-col>
                 </a-row>
                 <a-form :form="form" @submit="handleSubmit">
                   <a-form-item>
@@ -109,6 +109,8 @@
 
 <script>
 import "./index.less";
+import util from '../../plugins/utils/util';
+import ajax from '../../plugins/api';
 export default {
   name: "settings",
   data() {
@@ -119,7 +121,9 @@ export default {
         {type: 'weibo', typeName: '新浪微博', name: '', isBinding: false},
         {type: 'wechat', typeName: '微信', name: 'dilireba', isBinding: true}
       ],
-      radioValue: null
+      radioValue: null,
+      userInfo: {},
+      hideCompany: []
     };
   },
   async asyncData() {
@@ -129,27 +133,47 @@ export default {
   
   },
   mounted() {
-   
+    this.init();
   },
   watch: {
    
   },
   methods: {
+    init() {
+      this.userInfo = util.getStore('userInfo');
+      this.devHideCompany();
+    },
     onChange(e) { //单选 1: 真名 2: 匿名
       console.log('radio checked', e.target.value)
     },
     onSearch(value) { //搜索想屏蔽的公司
       console.log(value)
     },
+    del(e) {
+      ajax.post('user/hideCompany', {
+        user_id: this.userInfo.id,
+        company_id: e.company_id,
+        is_hide: 1
+      }).then(res => {
+        if(res.retcode == 0) this.devHideCompany();
+      })
+    },
     handleSubmit(e) { //修改密码提交
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
-          console.log('Received values of form: ', values);
+          ajax.put('rePassword', {
+            ...values,
+            username: this.userInfo.username
+          }).then(res => {})
         }
       });
+    },
+    devHideCompany() {
+      ajax.get('user/hideCompany/list', {user_id: this.userInfo.id}).then(res => {
+        if(res.retcode == 0) this.hideCompany = res.data || [];
+      })
     }
-  },
-  components: {}
+  }
 };
 </script>

@@ -4,13 +4,13 @@
             :title="modelData.title"
             :confirmLoading="false"
             :visible="true"
-            class="videoModel"
+            class="annexResumes_model"
             @cancel="handleCancel"
         >
             <div class="file_centent">
                 <a-upload
                     :multiple="true" 
-                    :fileList="videoFileList"
+                    :fileList="annexResumesFileList"
                     :action="upLoadUrl"
                     :supportServerRender="true"
                     :withCredentials="true"
@@ -19,9 +19,9 @@
                     <a-button type="primary">选择上传文件</a-button>
                 </a-upload>
             </div>
-            <p>支持mp4、avi格式文件</p>
-            <p>文件大小需小于20M</p>
-            <p class="yellow">注：视频尽可能简短，清晰度72dpi或者以上（不得带有不良内容）</p>
+            <p>支持word、pdf、ppt、txt、wps格式文件</p>
+            <p>文件大小需小于10M</p>
+            <p class="yellow">注：若从其他网站下载的word简历，请讲文件另存为.docx格式后上传</p>
             <div slot="footer">
                 <a-button type="primary" @click="addVideo">确定上传</a-button>
             </div>
@@ -49,14 +49,14 @@ export default {
           wrapperCol: {span: 21},
           form: this.$form.createForm(this),
           upLoadUrl: util.upLoadUrl,
-          videoFileList: []
+          annexResumesFileList: []
       }
   },
   watch: {
       modelEdit() {
           this.modelData = this.modelEdit;
           if(this.modelData) {
-              if(this.modelData.video_link) this.videoFileList = [this.modelData.video_link];
+              if(this.modelData.video_link) this.annexResumesFileList = [this.modelData.video_link];
           }
       }
   },
@@ -65,8 +65,8 @@ export default {
   methods: {
       handleCancel() { //关闭弹窗
           this.modelData = null;
-          this.videoFileList = [];
-          this.$emit('cancelModel', 'videoModel');
+          this.annexResumesFileList = [];
+          this.$emit('cancelModel', 'annexResumesModal');
       },
       handleChange({ file, fileList }) {
           let newList = [...fileList];
@@ -77,19 +77,19 @@ export default {
               }
               return v;
           });
-          this.videoFileList = newList;
+          this.annexResumesFileList = newList;
       },
       addVideo() {
-          if(this.videoFileList.length > 0 && this.videoFileList[0].status == 'done') {
+          if(this.annexResumesFileList.length > 0 && this.annexResumesFileList[0].status == 'done') {
               let userInfo = util.getStore('userInfo');
-              ajax.post('user/video', {
+              ajax.post('user/annexResumes', {
                   user_id: userInfo.id,
-                  video_link: this.videoFileList[0].url[0]
-              }).then(item => {
+                  video_link: this.annexResumesFileList[0].url[0]
+              }).then(res => {
                   if(res.retcode == 0) {
                       this.modelData = null;
-                      this.videoFileList = [];
-                      this.$emit('okModel', 'videoModel');
+                      this.annexResumesFileList = [];
+                      this.$emit('okModel', 'annexResumesModal');
                   }
               })
           }

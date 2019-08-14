@@ -4,26 +4,25 @@
             :title="modelData.title"
             :confirmLoading="false"
             :visible="true"
-            class="videoModel"
+            class="collection_model"
             @cancel="handleCancel"
         >
             <div class="file_centent">
                 <a-upload
                     :multiple="true" 
-                    :fileList="videoFileList"
+                    :fileList="collectionFileList"
                     :action="upLoadUrl"
                     :supportServerRender="true"
                     :withCredentials="true"
                     @change="handleChange"
                 >
-                    <a-button type="primary">选择上传文件</a-button>
+                    <a-button type="primary">选择上传作品</a-button>
                 </a-upload>
             </div>
-            <p>支持mp4、avi格式文件</p>
-            <p>文件大小需小于20M</p>
-            <p class="yellow">注：视频尽可能简短，清晰度72dpi或者以上（不得带有不良内容）</p>
+            <p>支持png、jpg、jpge、gif格式文件</p>
+            <p>文件大小需小于10M</p>
             <div slot="footer">
-                <a-button type="primary" @click="addVideo">确定上传</a-button>
+                <a-button type="primary" @click="addCollection">确定上传</a-button>
             </div>
         </a-modal>
     </section>
@@ -49,15 +48,12 @@ export default {
           wrapperCol: {span: 21},
           form: this.$form.createForm(this),
           upLoadUrl: util.upLoadUrl,
-          videoFileList: []
+          collectionFileList: []
       }
   },
   watch: {
       modelEdit() {
           this.modelData = this.modelEdit;
-          if(this.modelData) {
-              if(this.modelData.video_link) this.videoFileList = [this.modelData.video_link];
-          }
       }
   },
   mounted() {
@@ -65,8 +61,8 @@ export default {
   methods: {
       handleCancel() { //关闭弹窗
           this.modelData = null;
-          this.videoFileList = [];
-          this.$emit('cancelModel', 'videoModel');
+          this.collectionFileList = [];
+          this.$emit('cancelModel', 'collectionModal');
       },
       handleChange({ file, fileList }) {
           let newList = [...fileList];
@@ -77,20 +73,18 @@ export default {
               }
               return v;
           });
-          this.videoFileList = newList;
+          this.collectionFileList = newList;
       },
-      addVideo() {
-          if(this.videoFileList.length > 0 && this.videoFileList[0].status == 'done') {
+      addCollection() {
+          if(this.collectionFileList.length > 0 && this.collectionFileList[0].status == 'done') {
               let userInfo = util.getStore('userInfo');
-              ajax.post('user/video', {
+              ajax.post('user/collection', {
                   user_id: userInfo.id,
-                  video_link: this.videoFileList[0].url[0]
-              }).then(item => {
-                  if(res.retcode == 0) {
-                      this.modelData = null;
-                      this.videoFileList = [];
-                      this.$emit('okModel', 'videoModel');
-                  }
+                  collection_link: this.collectionFileList[0].url[0]
+              }).then(res => {
+                  this.modelData = null;
+                  this.collectionFileList = [];
+                  this.$emit('okModel', 'collectionModal');
               })
           }
       }

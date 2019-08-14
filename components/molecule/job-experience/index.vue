@@ -35,11 +35,12 @@
                         :wrapper-col="wrapperCol"
                     >
                         <a-checkbox
-                            :checked="modelData.is_show == 1 ? true : false"
+                            :checked="is_show"
+                            @change="is_show = !is_show"
                             v-decorator="[
                                 'is_show',
                                 {
-                                    initialValue: modelData.is_show == 1 ? true : false,
+                                    initialValue: is_show,
                                     rules: [{ required: false }]
                                 }
                             ]"
@@ -127,8 +128,8 @@
                         :label-col="labelCol"
                         :wrapper-col="wrapperCol"
                     >
-                        <a-date-picker :defaultValue="moment(modelData.come_time, dateFormat)" @change="comeTime" />
-                        <a-date-picker :defaultValue="moment(modelData.leave_time, dateFormat)" @change="leaveTime" />
+                        <a-date-picker :defaultValue="moment(come_time, dateFormat)" @change="comeTime" />
+                        <a-date-picker :defaultValue="moment(leave_time, dateFormat)" @change="leaveTime" />
                     </a-form-item>
                     <a-form-item
                         label="技能标签"
@@ -143,7 +144,7 @@
                              v-decorator="[
                                 'skills',
                                 {
-                                    initialValue: modelData.skills ? modelData.skills.split(',') : null,
+                                    initialValue: modelData.skills ? modelData.skills.split(',') : [],
                                     rules: [{ required: false }]
                                 }
                              ]"
@@ -206,15 +207,21 @@ export default {
           labels: {},
           come_time: null,
           leave_time: null,
-          skillsId: []
+          skillsId: [],
+          is_show: false
       }
   },
   watch: {
       modelEdit() {
           this.modelData = this.modelEdit;
-          if(this.modelEdit.come_time) this.come_time = util.formatDate(this.modelEdit.come_time);
-          if(this.modelEdit.leave_time) this.leave_time = util.formatDate(this.modelEdit.leave_time);
-          if(this.modelEdit.skills_ids) this.skillsId = this.modelEdit.skills_ids.split(',');
+          this.come_time = util.formatDate(new Date());
+          this.leave_time = util.formatDate(new Date());
+          if(this.modelEdit) {
+              if(this.modelEdit.come_time) this.come_time = util.formatDate(this.modelEdit.come_time);
+              if(this.modelEdit.leave_time) this.leave_time = util.formatDate(this.modelEdit.leave_time);
+              if(this.modelEdit.skills_ids) this.skillsId = this.modelEdit.skills_ids.split(',');
+              if(this.modelEdit.is_show) this.is_show = this.modelEdit.is_show == 1;
+          }
       }
   },
   mounted() {
@@ -244,6 +251,10 @@ export default {
       },
       handleCancel() { //关闭弹窗
           this.modelData = null;
+          this.come_time = null;
+          this.leave_time = null;
+          this.skillsId = [];
+          this.is_show = false;
           this.$emit('cancelModel', 'jobExperienceModel');
       },
       handleSubmit (e) { //提交
@@ -258,12 +269,17 @@ export default {
                       leave_time: this.leave_time,
                       is_show: values.is_show ? 1 : 0,
                       skills_ids: this.skillsId.join(','),
-                      user_id: userInfo.id
+                      user_id: userInfo.id,
+                      id: this.modelEdit.id || null
                   });
                   if(this.modelData.isEdit) {
                       ajax.put('user/experience', params).then(res => {
                           if(res.retcode == 0) {
                               this.modelData = null;
+                              this.come_time = null;
+                              this.leave_time = null;
+                              this.skillsId = [];
+                              this.is_show = false;
                               this.$emit('okModel', 'jobExperienceModel');
                           }
                       })
@@ -271,6 +287,10 @@ export default {
                       ajax.post('user/experience', params).then(res => {
                           if(res.retcode == 0) {
                               this.modelData = null;
+                              this.come_time = null;
+                              this.leave_time = null;
+                              this.skillsId = [];
+                              this.is_show = false;
                               this.$emit('okModel', 'jobExperienceModel');
                           }
                       })

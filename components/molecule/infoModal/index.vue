@@ -64,6 +64,7 @@
                         <a-cascader
                           :fieldNames="{label: 'name', value: 'id', children: 'item'}"
                           :options="areas"
+                          :defaultValue="cityArr"
                           @change="onCascader"
                         >
                             <template slot="displayRender" slot-scope="{labels}">
@@ -153,7 +154,8 @@ export default {
           city: null,
           birth: null,
           workTime: null,
-          citys: {}
+          citys: {},
+          cityArr: []
       }
   },
   watch: {
@@ -161,6 +163,8 @@ export default {
           this.modelData = this.modelEdit;
           if(this.modelData && this.modelData.city) {
               this.citys = JSON.parse(this.modelData.city);
+              let cityArr = this.findParentById(this.areas, this.citys.id, 'id', 'item');
+              this.cityArr = [...cityArr, this.citys.id];
           };
       }
   },
@@ -177,7 +181,7 @@ export default {
                   name: item.name,
                   item: item.items
               })
-          })
+          });
       },
       handleBirth(date, dateString) { //生日
           this.birth = dateString;
@@ -231,6 +235,34 @@ export default {
                   this.labels = res.data || {};
               }
           })
+      },
+      //通过子集值查询父级值
+      findParentById(arr, path, type, pArr, needInfo) { //arr:要匹配的数组，path:要匹配的值， type:根据什么字段匹配， pArr:子集数组属性名， needInfo:自定义返回值
+          let parentIds = [], index = 0, names = [],
+              hasParentId = function loop(arr, index) {
+                  return arr.some(item => {
+                      if(item[type] == path) {
+                          parentIds = parentIds.slice(0, index);
+                          names = names.splice(0, index);
+                          return true;
+                      }else if(Array.isArray(item[pArr])) {
+                          parentIds[index] = item[type];
+                          names[index] = item;
+                          return loop(item[pArr], index+1);
+                      };
+                      return false;
+                  })
+              }(arr, index);
+          if(needInfo) {
+              return hasParentId ? {
+                  parentIds,
+                  names
+              } : {
+                  parentIds: [],
+                  names: []
+              };
+          };
+          return hasParentId ? parentIds : [];
       }
   }
 };

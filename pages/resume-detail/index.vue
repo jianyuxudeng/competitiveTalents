@@ -66,7 +66,7 @@
                 </a>
               </div>
               <div class="job_experience">
-                <div class="item">
+                <div class="item" v-for="item in experience" :key="item.id">
                   <div class="item_info">
                     <dl>
                       <dt><img src="../../assets/images/company_img.png" alt=""></dt>
@@ -79,7 +79,7 @@
                       <!-- <p>2016.06-至今</p> -->
                       <a>
                         <em><img src="../../assets/images/edit.png" alt=""></em>
-                        <span @click="edit('job-experience')">编辑</span>
+                        <span @click="edit('job-experience', item)">编辑</span>
                       </a>
                       <a>
                         <em><a-icon type="close-square" /></em>
@@ -269,7 +269,7 @@
       </a-row>
       <infoModal :modelEdit="infoModel" @cancelModel="cancelModel" @okModel="okModel"></infoModal>
       <videoModal :modelEdit="videoModel" @cancelModel="cancelModel"></videoModal>
-      <jobExperienceModal :modelEdit="jobExperienceModal" @cancelModel="cancelModel"></jobExperienceModal>
+      <jobExperienceModal :modelEdit="jobExperienceModal" @cancelModel="cancelModel" @okModel="okModel"></jobExperienceModal>
   </section>
 </template>
 
@@ -307,8 +307,8 @@ export default {
           {name: '图片作品', url: 'picture'}
         ],
         userDetail: {},
-        desVideo: null,
-        experience: {},
+        desVideo: {},
+        experience: [],
         user_id: null
       }
   },
@@ -338,7 +338,7 @@ export default {
           break;
       }
     },
-    edit(name) { //编辑
+    edit(name, e) { //编辑
       switch (name) {
         case 'info':
           this.infoModel = Object.assign(this.userDetail, {
@@ -351,7 +351,7 @@ export default {
           });
           break;
         case 'job-experience':
-          this.jobExperienceModal = Object.assign(this.experience, {
+          this.jobExperienceModal = Object.assign(e, {
             title: '',
             isEdit: true
           });
@@ -361,19 +361,19 @@ export default {
       };
     },
     cancelModel(name) { //点击弹窗关闭按钮时，清空弹窗数据
-      this[name] = null;
+      this[name] = {};
     },
     okModel(name) {
-      this[name] = null;
+      this[name] = {};
       this.getData();
     },
     getData() { //获取数据
       ajax.get('user/resume/detail', {user_id: this.user_id}).then(res => {
         let _data = res.data;
         if(_data) {
-          this.userDetail = _data.userDetail[0] || null;
-          this.desVideo = _data.desVideo[0] || null;
-          this.experience = _data.experience || null
+          this.userDetail = _data.userDetail[0] || {};
+          this.desVideo = _data.desVideo[0] || {};
+          this.experience = _data.experience || [];
         }
       })
     }

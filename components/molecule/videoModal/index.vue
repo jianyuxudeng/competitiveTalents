@@ -8,7 +8,14 @@
             @cancel="handleCancel"
         >
             <div class="file_centent">
-                <a-upload name="file" :multiple="true" :action="fileUrl" @change="handleChange">
+                <a-upload
+                    :multiple="true" 
+                    :fileList="logoFileList"
+                    :action="upLoadUrl"
+                    :supportServerRender="true"
+                    :withCredentials="true"
+                    @change="handleChange"
+                >
                     <a-button type="primary">选择上传文件</a-button>
                 </a-upload>
             </div>
@@ -39,7 +46,8 @@ export default {
           labelCol: {span: 3},
           wrapperCol: {span: 21},
           form: this.$form.createForm(this),
-          fileUrl: util.videoUrl
+          upLoadUrl: util.upLoadUrl,
+          logoFileList: []
       }
   },
   watch: {
@@ -54,10 +62,17 @@ export default {
           this.modelData = null;
           this.$emit('cancelModel', 'videoModel');
       },
-      handleChange(info) { //上传
-          if (info.file.status === 'done') {
-              console.log(info.file)
-          }
+      handleChange({ file, fileList }) {
+          let newList = [...fileList];
+          newList = newList.slice(-1);
+          newList = newList.map((v) => {
+              if (v.response) {
+                  v.url = v.response.data.imageList;
+              }
+              return v;
+          });
+          this.logoFileList = newList;
+          console.log(newList)
       }
   }
 };

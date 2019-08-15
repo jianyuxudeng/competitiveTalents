@@ -360,7 +360,7 @@ export default {
               job_id: id
           }).then(res => {
               if(res.retcode == 0) {
-                  this.params = res.data.jobDetali[0] || {};
+                  this.params = res.data.jobDetail[0] || {};
                   if(this.params.type) this.params.type = Number(this.params.type);
                   if(this.params.careerPrice) this.params.careerPrice = Number(this.params.careerPrice);
                   if(this.params.skills) this.params.skills = this.params.skills.split(',');

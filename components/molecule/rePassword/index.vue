@@ -48,6 +48,7 @@
             <a-form-item v-if="active == '3'">
                 <a-input 
                 placeholder="请输入新的密码"
+                type='password'
                 v-decorator="[
                     'password',
                     {
@@ -62,6 +63,7 @@
             <a-form-item v-if="active == '3'">
                 <a-input 
                 placeholder="请再次输入新的密码"
+                type='password'
                 v-decorator="[
                     'rePassword',
                     {

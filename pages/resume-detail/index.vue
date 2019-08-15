@@ -35,7 +35,7 @@
             <div id="video">
               <div class="title">
                 <span>可视化描述</span>
-                <a @click="add('video')">
+                <a v-if="isEdit" @click="add('video')">
                   <em><a-icon type="plus-square" /></em>
                   <span>添加</span>
                 </a>
@@ -48,7 +48,7 @@
                     您的浏览器不支持 HTML5 video 标签。
                   </video>
                 </div>
-                <div class="btn">
+                <div v-if="isEdit" class="btn">
                   <a>
                     <em><img src="../../assets/images/edit.png" alt=""></em>
                     <span @click="edit('video')">编辑</span>
@@ -64,7 +64,7 @@
             <div id="job_experience">
               <div class="title">
                 <span>工作经历</span>
-                <a>
+                <a v-if="isEdit">
                   <em><a-icon type="plus-square" /></em>
                   <span @click="add('job-experience')">添加</span>
                 </a>
@@ -85,11 +85,11 @@
                         -
                         {{item.leave_time ? formatMouth(item.leave_time) : item.leave_time}}
                       </p>
-                      <a>
+                      <a v-if="isEdit">
                         <em><img src="../../assets/images/edit.png" alt=""></em>
                         <span @click="edit('job-experience', item)">编辑</span>
                       </a>
-                      <a>
+                      <a v-if="isEdit">
                         <em><a-icon type="close-square" /></em>
                         <span @click="del('experience', item.id)">删除</span>
                       </a>
@@ -106,7 +106,7 @@
             <div id="projectExpress">
               <div class="title">
                 <span>项目经历</span>
-                <a @click="add('projectExpress')">
+                <a v-if="isEdit" @click="add('projectExpress')">
                   <em><a-icon type="plus-square" /></em>
                   <span>添加</span>
                 </a>
@@ -121,11 +121,11 @@
                         -
                         {{item.end_time ? formatMouth(item.end_time) : item.end_time}}
                       </p>
-                      <a>
+                      <a v-if="isEdit">
                         <em><img src="../../assets/images/edit.png" alt=""></em>
                         <span @click="edit('projectExpress', item)">编辑</span>
                       </a>
-                      <a>
+                      <a v-if="isEdit">
                         <em><a-icon type="close-square" /></em>
                         <span @click="del('projectExpress', item.id)">删除</span>
                       </a>
@@ -140,7 +140,7 @@
             <div id="education">
               <div class="title">
                 <span>教育经历</span>
-                <a @click="add('education')">
+                <a v-if="isEdit" @click="add('education')">
                   <em><a-icon type="plus-square" /></em>
                   <span>添加</span>
                 </a>
@@ -159,11 +159,11 @@
                     -
                     {{item.end_time ? formatMouth(item.end_time) : item.end_time}}
                   </p>
-                  <a>
+                  <a v-if="isEdit">
                     <em><img src="../../assets/images/edit.png" alt=""></em>
                     <span @click="edit('education', item)">编辑</span>
                   </a>
-                  <a>
+                  <a v-if="isEdit">
                     <em><a-icon type="close-square" /></em>
                     <span @click="del('education', item.id)">删除</span>
                   </a>
@@ -174,7 +174,7 @@
             <div id="social">
               <div class="title">
                 <span>社交主页</span>
-                <a @click="add('social')">
+                <a v-if="isEdit" @click="add('social')">
                   <em><a-icon type="plus-square" /></em>
                   <span>添加</span>
                 </a>
@@ -184,7 +184,7 @@
                   <dt><img src="../../assets/images/social.png" alt=""></dt>
                   <dd>{{item.social_link}}</dd>
                 </dl>
-                <div class="item_btn">
+                <div v-if="isEdit" class="item_btn">
                   <a @click="edit('social', item)">
                     <em><img src="../../assets/images/edit.png" alt=""></em>
                     <span>编辑</span>
@@ -200,7 +200,7 @@
             <div id="collection">
               <div class="title">
                 <span>图片作品</span>
-                <a @click="add('collection')">
+                <a v-if="isEdit" @click="add('collection')">
                   <em><a-icon type="plus-square" /></em>
                   <span>添加</span>
                 </a>
@@ -208,7 +208,7 @@
               <div class="picture">
                 <div v-for="item in collection" :key="item.id">
                   <img :src="item.collection_link" alt="">
-                  <a @click="del('collection', item.id)"><a-icon type="delete" /></a>
+                  <a v-if="isEdit" @click="del('collection', item.id)"><a-icon type="delete" /></a>
                 </div>
               </div>
             </div>
@@ -231,7 +231,7 @@
             <div class="title">
               <p>求职意向</p>
               <div>
-                <a @click="edit('objective', objective)">
+                <a v-if="isEdit" @click="edit('objective', objective)">
                   <em><img src="../../assets/images/edit.png" alt=""></em>
                   <span>编辑</span>
                 </a>
@@ -258,14 +258,14 @@
           <div class="enclosure">
             <div class="title">
               <p>附件简历</p>
-              <a @click="add('annexResumes')">
+              <a v-if="isEdit" @click="add('annexResumes')">
                 <em><a-icon type="plus-square" /></em>
                 <span>添加</span>
               </a>
             </div>
             <p v-for="item in annexResumes" :key="item.id">
               <span>{{item.resume_link}}</span>
-              <a @click="del('annexResumes', item.id)"><a-icon type="delete" /></a>
+              <a v-if="isEdit" @click="del('annexResumes', item.id)"><a-icon type="delete" /></a>
             </p>
           </div>
           <!-- 简历完整度 -->
@@ -285,9 +285,9 @@
               <a :href="'#' + item.url" :style="{width: active == index ? 'auto' : '100%'}">{{item.name}}</a>
               <div v-if="active == index">
                 <div v-if="item.url == 'info'">
-                  <a @click.stop="edit('info')">编辑</a>
+                  <a v-if="isEdit" @click.stop="edit('info')">编辑</a>
                 </div>
-                <div v-else>
+                <div v-if="isEdit" v-else>
                   <a @click="add(item.url)">添加</a>
                   <a @click="del(item.url)">删除</a>
                 </div>
@@ -332,7 +332,7 @@ export default {
   },
   data() {
       return{
-        isEdit: true,
+        isEdit: false,
         active: null,
         infoModel: null,
         videoModel: null,
@@ -372,7 +372,8 @@ export default {
     formatMouth: util.formatMouth,
     init() {
       let userInfo = util.getStore('userInfo');
-      this.isEdit = this.$route.query.isEdit || true;
+      this.isEdit = userInfo.id == this.$route.query.user_id;
+      console.log(this.isEdit,userInfo,this.$route.query.user_id)
       this.user_id = this.$route.query.user_id || userInfo.id;
       this.getData();
     },

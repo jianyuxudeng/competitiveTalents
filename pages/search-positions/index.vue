@@ -166,6 +166,7 @@ import "./index.less";
 import ajax from '../../plugins/api';
 import util from '../../plugins/utils/util';
 import area from '../../plugins/utils/area';
+import moment from 'moment';
 
 export default {
   name: "search-positions",
@@ -349,7 +350,7 @@ export default {
               this.rows = res.data.list || [];
               this.rows.forEach(item => {
                   item.skills = item.skills.split(',') || [];
-                  item.sendTime = util.format(item.sendTime);
+                  item.sendTime = item.sendTime&&moment(item.sendTime).format('YYYY-MM-DD HH:mm') //util.format(item.sendTime);
                   return item;
               });
               this.total = res.data.total;

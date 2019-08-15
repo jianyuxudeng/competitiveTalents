@@ -172,7 +172,11 @@ export default {
       console.log(value)
     },
     onMore() { //点击MORE按钮
-      console.log(111)
+      if(!this.userInfo || this.userInfo.type == 2) {
+        this.$router.push({
+          path: 'search-positions'
+        })
+      }
     },
     handleInfoEnterprise(e) {
       if(this.userInfo) {

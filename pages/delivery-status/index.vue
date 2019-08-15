@@ -15,20 +15,20 @@
               <div class="nav">
                   <a v-for="(item, index) in navs" :key="index" :class="{active: active == index}" @click="handleNav(index)">{{item}}</a>
               </div>
-              <a-collapse>
+              <a-collapse v-for="item in list" :key="item.id">
                   <a-collapse-panel key="1">
                       <template slot="header">
                           <div class="status_item">
                               <a-row type="flex" justify="space-between" align="bottom">
                                   <a-col class="left">
-                                      <h4>高校电竞讲师<span>6k-12k/月</span></h4>
-                                      <p>腾讯电竞 [ 上海 ]</p>
+                                      <h4>{{item.careersName}}<span>{{item.jobPrice}}/月</span></h4>
+                                      <p>{{item.companyName}}</p>
                                       <p><span>使用简历：</span>在线简历</p>
                                   </a-col>
                                   <a-col class="right">
-                                      <p>019-08-35  15:20</p>
+                                      <p>{{item.send_time ? format(item.send_time) : item.send_time}}</p>
                                       <div>
-                                          投递成功
+                                          {{active == 0 ? '投递成功' : '被查看'}}
                                           <a-icon type="caret-down" />
                                       </div>
                                   </a-col>
@@ -36,39 +36,30 @@
                           </div>
                       </template>
                       <div class="steps">
-                          <dl v-for="(item, index) in steps" :key="index">
-                              <dt :class="{active: curre == index}">{{index + 1}}</dt>
-                              <dd>{{item}}</dd>
+                          <dl v-for="(i, index) in item.steps" :key="index">
+                              <dt :class="{active: item.isIndex == index}">{{index + 1}}</dt>
+                              <dd>{{i}}</dd>
                           </dl>
                       </div>
                       <a-timeline>
-                          <a-timeline-item color="#515ffd">
+                          <a-timeline-item color="#515ffd" v-if="item.is_interview == 1">
                               <p>2019-08-35  15:20</p>
                               <dl>
-                                  <!-- <dt><img src="../../assets/images/positions_img.png" alt=""></dt> -->
                                   <dd>
                                       <h4>简历被标记为邀面试</h4>
                                       <h6>非常荣幸收到您的简历，经过我们评估，您与该位职位符合度很高。我们会在稍后与您电话联系， 邀请您来我司进行面试，请您保持电话畅通。 </h6>
-                                      <h6>----腾讯电竞</h6>
+                                      <h6>----{{item.companyName}}</h6>
                                   </dd>
                               </dl>
                           </a-timeline-item>
                           <a-timeline-item color="#969696">
                               <p>2019-08-35  15:20</p>
                               <dl>
-                                  <!-- <dt><img src="../../assets/images/positions_img.png" alt=""></dt> -->
+                                  <dt><img :src="item.logo" alt=""></dt>
                                   <dd>
-                                      <div>腾讯电竞</div>
-                                      <div>已成功接收你的简历</div>
-                                  </dd>
-                              </dl>
-                          </a-timeline-item>
-                          <a-timeline-item color="#969696">
-                              <p>2019-08-35  15:20</p>
-                              <dl>
-                                  <dd>
-                                      <div>腾讯电竞</div>
-                                      <div>已成功接收你的简历</div>
+                                      <div>{{item.companyName}}</div>
+                                      <div v-if="item.is_read == '0'">已成功接收你的简历</div>
+                                      <div v-if="item.is_read == '1'">查看了你的简历</div>
                                   </dd>
                               </dl>
                           </a-timeline-item>
@@ -85,6 +76,8 @@
 
 <script>
 import "./index.less";
+import ajax from '../../plugins/api';
+import util from '../../plugins/utils/util';
 
 export default {
   name: "delivery-status",
@@ -101,20 +94,82 @@ export default {
       return{
           navs: ['投递成功', '被查看', '邀请面试', '不合适'],
           active: 0,
-          steps: ['投递成功', '简历被查看', '邀面试'],
-          curre: 0
+          rows: [],
+          list: []
       }
   },
   mounted() {
+      this.devData();
   },
   methods: {
+      format: util.format,
       handleNav(index) {
           this.active = index;
-          if(index > 2) {
-              this.curre = 2;
-          }else{
-              this.curre = index;
+          let _list = [];
+          switch (index) {
+              case 0:
+                  this.rows.map(item => {
+                      item.steps = ['投递成功', '简历被查看', '邀面试'];
+                      item.isIndex = 0;
+                      if(item.is_read == '0') {
+                          _list.push(item);
+                      }
+                  });
+                  this.list = _list;
+                  break;
+              case 1:
+                  this.rows.map(item => {
+                      item.steps = ['投递成功', '简历被查看', '邀面试'];
+                      item.isIndex = 1;
+                      if(item.is_read == '1') {
+                          _list.push(item);
+                      }
+                  });
+                  this.list = _list;
+                  break;
+              case 2:
+                  this.rows.map(item => {
+                      item.steps = ['投递成功', '简历被查看', '邀面试'];
+                      item.isIndex = 2;
+                      if(item.is_interview == '1') {
+                          _list.push(item);
+                      }
+                  });
+                  this.list = _list;
+                  break;
+              case 3:
+                  this.rows.map(item => {
+                      item.steps = ['投递成功', '简历被查看', '不合适'];
+                      item.isIndex = 2;
+                      if(item.is_read == '2') {
+                          _list.push(item);
+                      }
+                  });
+                  this.list = _list;
+                  break;
+              default:
+                  break;
           }
+      },
+      devData() {
+          let userInfo = util.getStore('userInfo');
+          this.row = [];
+          ajax.get('user/resumes/list', {
+              user_id: userInfo.id
+          }).then(res => {
+              if(res.retcode == 0) {
+                  this.rows = res.data || [];
+                  let _list = [];
+                  this.rows.map(item => {
+                      item.steps = ['投递成功', '简历被查看', '邀面试'];
+                      item.isIndex = 0;
+                      if(item.is_read == '0') {
+                          _list.push(item);
+                      }
+                  });
+                  this.list = _list;
+              }
+          })
       }
   }
 };

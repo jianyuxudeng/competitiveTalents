@@ -27,7 +27,7 @@
               <a-icon type="star" />
               <span>收藏</span>
             </a-button>
-            <a-button type="primary" size="large" :disabled="!sendAgain" @click="sendResumes">投递简历</a-button>
+            <a-button type="primary" size="large" :disabled="!sendAgain" @click="handleModel">投递简历</a-button>
           </a-col>
         </a-row>
       </div>
@@ -89,6 +89,59 @@
           </div>
         </a-row>
       </div>
+      <a-modal
+            title="投递简历"
+            :confirmLoading="false"
+            :visible="isModalShow"
+            class="jobDModal"
+            @cancel="handleCancel"
+        >
+            <div class="w100">
+                <p>请选择你要投递的简历</p>
+                <div class="radio">
+                    <a-radio-group v-model="value" class="w100">
+                        <a-row type="flex" justify="space-between" align="middle">
+                            <a-col>
+                                <a-radio :style="radioStyle" :value="0">
+                                    在线简历
+                                    <span class="blue">迪丽热巴的简历</span>
+                                </a-radio>
+                            </a-col>
+                            <a-col>
+                                <a-row type="flex" justify="end" align="middle">
+                                    <a>预览</a>
+                                    <em></em>
+                                    <a>修改</a>
+                                </a-row>
+                            </a-col>
+                        </a-row>
+                        <a-row 
+                            type="flex" 
+                            justify="space-between" 
+                            align="middle"
+                            v-for="item in modelRow"
+                            :key="item.id"
+                        >
+                            <a-col>
+                                <a-radio :style="radioStyle" :value="1">
+                                    附件简历
+                                    <span class="blue">迪丽热巴的简历.wrod</span>
+                                </a-radio>
+                            </a-col>
+                            <a-col>
+                                <a-row type="flex" justify="end" align="middle">
+                                    <a>下载</a>
+                                </a-row>
+                            </a-col>
+                        </a-row>
+                    </a-radio-group>
+                </div>
+                <p>上传附件简历</p>
+            </div>
+            <div slot="footer">
+                <a-button type="primary" @click="handleresume">确认投递简历</a-button>
+            </div>
+        </a-modal>
   </section>
 </template>
 
@@ -112,7 +165,16 @@ export default {
         params: {},
         labels: {},
         sendAgain: false,
-        userInfo: {}
+        isModalShow: false,
+        modelRow: [],
+        value: null,
+        userInfo: {},
+        radioStyle: {
+            display: 'block',
+            height: '.3rem',
+            lineHeight: '.3rem',
+            fontSize: '.16rem'
+        }
       }
   },
   mounted() {
@@ -131,13 +193,34 @@ export default {
           }
         })
       },
-      sendResumes() {
+      handleCancel() { //关闭弹窗
+          this.isModalShow = false;
+      },
+      handleModel(e) { //显示弹窗
+          let userInfo = util.getStore('userInfo');
+          ajax.get('user/annexResumes/list', {
+              user_id: userInfo.id
+          }).then(res => {
+              if(res.retcode == 0) {
+                  this.ModelRow = res.data || [];
+                  this.isModalShow = true;
+              }
+          })
+      },
+      handleresume() {
         let userInfo = util.getStore('userInfo');
         let _id = this.$route.query.id;
         ajax.post('user/sendResumes', {
-          user_id: userInfo.id,
-          job_id: _id
-        }).then(res => {})
+              user_id: userInfo.id,
+              job_id: this.params.id,
+              company_id: this.params.user_id,
+              resumes_type: this.value
+        }).then(res => {
+              if(res.retcode == 0) {
+                  this.isModalShow = false;
+                  this.devData();
+              }
+        })
       },
       labelDev() {
           let userInfo = util.getStore('userInfo');

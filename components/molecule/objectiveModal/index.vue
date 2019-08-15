@@ -18,17 +18,18 @@
                         :label-col="labelCol"
                         :wrapper-col="wrapperCol"
                     >
-                        <a-select
-                          v-decorator="[
-                            'expected_position',
-                            {
-                                initialValue: modelData.expected_position,
-                                rules: [{ required: false }]
-                            }
-                          ]"
+                        <a-cascader
+                          :fieldNames="{label: 'name', value: 'id', children: 'children'}"
+                          :options="careers"
+                          :defaultValue="careersArr"
+                          @change="onCareersArr"
                         >
-                            <a-select-option v-for="item in 10" :key="item" :value="item">{{item}}</a-select-option>
-                        </a-select>
+                            <template slot="displayRender" slot-scope="{labels}">
+                                <span v-for="(label, index) in labels" :key="index">
+                                    <span v-if="index == (labels.length - 1)">{{label}}</span>
+                                </span>
+                            </template>
+                        </a-cascader>
                     </a-form-item>
                     <a-form-item
                         label="职位类型"
@@ -37,15 +38,16 @@
                         :wrapper-col="wrapperCol"
                     >
                         <a-select
+                          @change="handleJobTypeName"
                           v-decorator="[
                             'job_type',
                             {
-                                initialValue: modelData.job_type,
+                                initialValue: modelData.job_type ? modelData.job_type*1 : modelData.job_type,
                                 rules: [{ required: false }]
                             }
                           ]"
                         >
-                            <a-select-option v-for="item in 10" :key="item" :value="item">{{item}}</a-select-option>
+                            <a-select-option v-for="item in careers" :key="item.id" :value="item.id">{{item.name}}</a-select-option>
                         </a-select>
                     </a-form-item>
                     <a-form-item
@@ -54,6 +56,18 @@
                         :label-col="labelCol"
                         :wrapper-col="wrapperCol"
                     >
+                        <a-cascader
+                          :fieldNames="{label: 'name', value: 'id', children: 'item'}"
+                          :options="areas"
+                          :defaultValue="cityArr"
+                          @change="onCascader"
+                        >
+                            <template slot="displayRender" slot-scope="{labels}">
+                                <span v-for="(label, index) in labels" :key="index">
+                                    <span v-if="index == 1">{{label}}</span>
+                                </span>
+                            </template>
+                        </a-cascader>
                     </a-form-item>
                     <a-form-item
                         label="期望薪资"
@@ -119,6 +133,7 @@
 import "./index.less";
 import ajax from '../../../plugins/api';
 import util from '../../../plugins/utils/util';
+import area from '../../../plugins/utils/area';
 
 export default {
   name: "Modal",
@@ -134,18 +149,90 @@ export default {
           labelCol: {span: 3},
           wrapperCol: {span: 21},
           form: this.$form.createForm(this),
-          labels: {}
+          labels: {},
+          areas: [],
+          city: null,
+          citys: {},
+          cityArr: [],
+          careers: [],
+          careersArr: [],
+          params: {}
       }
   },
   watch: {
       modelEdit() {
           this.modelData = this.modelEdit;
+          if(this.modelData && this.modelData.city && this.modelData.city != 'null') {
+              this.city = JSON.parse(this.modelData.city);
+              this.citys = JSON.parse(this.modelData.city);
+              let cityArr = this.findParentById(this.areas, this.citys.id, 'id', 'item');
+              this.cityArr = [...cityArr, this.citys.id];
+          };
+          if(this.modelData && this.modelData.expected_position) {
+              let expected_position = Number(this.modelData.expected_position);
+              let careersArr = this.findParentById(this.careers, expected_position, 'id', 'children');
+              this.careersArr = [...careersArr, expected_position];
+          };
+          if(this.modelData && this.modelData.expected_position_name) {
+              this.params = Object.assign(this.params, {expected_position_name: this.modelData.expected_position_name});
+          };
       }
   },
   mounted() {
+      this.init();
       this.labelDev();
+      this.careersDev();
   },
   methods: {
+      init() {
+          area.map(item => { //获取地址列表
+              this.areas.push({
+                  id: item.id,
+                  name: item.name,
+                  item: item.items
+              })
+          });
+      },
+      onCascader(value) { //地址
+          let _city = Object.assign({}, {
+              id: value[1]
+          });
+          this.areas.map(item => {
+              if(item.id == value[0]) {
+                  item.item.map(i => {
+                      if(i.id == value[1]) {
+                          this.city = Object.assign(_city, {
+                              name: i.name
+                          })
+                      }
+                  })
+              }
+          })
+      },
+      onCareersArr(value) {
+          let _expected_position = value[value.length - 1];
+          let _this = this;
+          function getName(obj, id){
+              obj.map(item=>{
+                  if(item.id == id){
+                      _this.params = Object.assign(_this.params, {
+                          expected_position: _expected_position,
+                          expected_position_name: item.name
+                      });
+                  }else{
+                      if(item.children) getName(item.children, id);
+                  };
+              });
+          };
+          getName(this.careers, _expected_position);
+      },
+      handleJobTypeName(value) {
+          this.careers.map(item => {
+              if(item.id == value) {
+                  this.params = Object.assign(this.params, {job_type_name: item.name});
+              }
+          })
+      },
       handleCancel() { //关闭弹窗
           this.modelData = null;
           this.$emit('cancelModel', 'objectiveModal');
@@ -157,12 +244,11 @@ export default {
                   let userInfo = util.getStore('userInfo');
                   let params = Object.assign({}, {
                       ...values,
-                      begin_time: this.begin_time,
-                      end_time: this.end_time,
+                      ...this.params,
                       user_id: userInfo.id,
-                      id: this.modelEdit.id || null
+                      city: JSON.stringify(this.city)
                   });
-                  ajax.put('user/objective', params).then(res => {
+                  ajax.post('user/objective', params).then(res => {
                       if(res.retcode == 0) {
                           this.modelData = null;
                           this.$emit('okModel', 'objectiveModal');
@@ -177,6 +263,41 @@ export default {
                   this.labels = res.data || {};
               }
           })
+      },
+      careersDev() {
+          ajax.get('careers').then(res => {
+              if(res.retcode == 0) {
+                  this.careers = res.data || [];
+              }
+          })
+      },
+      //通过子集值查询父级值
+      findParentById(arr, path, type, pArr, needInfo) { //arr:要匹配的数组，path:要匹配的值， type:根据什么字段匹配， pArr:子集数组属性名， needInfo:自定义返回值
+          let parentIds = [], index = 0, names = [],
+              hasParentId = function loop(arr, index) {
+                  return arr.some(item => {
+                      if(item[type] == path) {
+                          parentIds = parentIds.slice(0, index);
+                          names = names.splice(0, index);
+                          return true;
+                      }else if(Array.isArray(item[pArr])) {
+                          parentIds[index] = item[type];
+                          names[index] = item;
+                          return loop(item[pArr], index+1);
+                      };
+                      return false;
+                  })
+              }(arr, index);
+          if(needInfo) {
+              return hasParentId ? {
+                  parentIds,
+                  names
+              } : {
+                  parentIds: [],
+                  names: []
+              };
+          };
+          return hasParentId ? parentIds : [];
       }
   }
 };

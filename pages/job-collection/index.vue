@@ -49,7 +49,7 @@
                     <a-radio-group v-model="value" class="w100">
                         <a-row type="flex" justify="space-between" align="middle">
                             <a-col>
-                                <a-radio :style="radioStyle" :value="1">
+                                <a-radio :style="radioStyle" :value="0">
                                     在线简历
                                     <span class="blue">迪丽热巴的简历</span>
                                 </a-radio>
@@ -70,7 +70,7 @@
                             :key="item.id"
                         >
                             <a-col>
-                                <a-radio :style="radioStyle" :value="2">
+                                <a-radio :style="radioStyle" :value="1">
                                     附件简历
                                     <span class="blue">迪丽热巴的简历.wrod</span>
                                 </a-radio>
@@ -86,7 +86,7 @@
                 <p>上传附件简历</p>
             </div>
             <div slot="footer">
-                <a-button type="primary">确认投递简历</a-button>
+                <a-button type="primary" @click="handleresume">确认投递简历</a-button>
             </div>
         </a-modal>
     </section>
@@ -110,7 +110,7 @@ export default {
   data() {
       return{
           isModalShow: false,
-          value: 1,
+          value: null,
           radioStyle: {
               display: 'block',
               height: '.3rem',
@@ -119,23 +119,41 @@ export default {
           },
           labels: {},
           rows: [],
-          modelRow: []
+          modelRow: [],
+          userInfo: {}
       }
   },
   mounted() {
       this.labelDev();
+      this.init();
   },
   methods: {
+      init() {
+          this.userInfo = util.getStore('userInfo');
+      },
       handleCancel() { //关闭弹窗
           this.isModalShow = false;
       },
       handleModel(e) { //显示弹窗
           ajax.get('user/annexResumes/list', {
-              user_id: e.user_id
+              user_id: this.userInfo.id
           }).then(res => {
               if(res.retcode == 0) {
-                  this.modelRow = res.data || [];
+                  this.ModelRow = res.data || [];
                   this.isModalShow = true;
+              }
+          })
+      },
+      handleresume() {
+          ajax.post('user/sendResumes', {
+              user_id: this.userInfo.id,
+              job_id: this.pamars.id,
+              company_id: this.pamars.user_id,
+              resumes_type: this.value
+          }).then(res => {
+              if(res.retcode == 0) {
+                  this.isModalShow = false;
+                  this.devData();
               }
           })
       },

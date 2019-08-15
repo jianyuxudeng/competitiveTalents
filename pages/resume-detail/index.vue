@@ -213,12 +213,16 @@
               </div>
             </div>
           </div>
-          <div class="foot">
+          <div class="foot" v-if="isEdit">
             <a>
               <a-icon type="download" />
               <span>把这份简历保存到本地</span>
             </a>
             <p>简历更新时间 2019-07-06 17:48</p>
+          </div>
+          <div class="foot" v-else>
+            <a-button type="primary">邀请面试</a-button>
+            <a-button>不适合</a-button>
           </div>
         </div>
         <div class="resume_right">
@@ -227,7 +231,7 @@
             <div class="title">
               <p>求职意向</p>
               <div>
-                <a @click="edit('objective')">
+                <a @click="edit('objective', objective)">
                   <em><img src="../../assets/images/edit.png" alt=""></em>
                   <span>编辑</span>
                 </a>
@@ -235,23 +239,19 @@
             </div>
             <p>
               <em><img src="../../assets/images/position.png" alt=""></em>
-              <span>平面设计师/主管</span>
-            </p>
-            <p>
-              <em><img src="../../assets/images/isFull.png" alt=""></em>
-              <span>全职</span>
+              <span>{{objective.expected_position_name}}/{{objective.job_type_name}}</span>
             </p>
             <p>
               <em><img src="../../assets/images/address.png" alt=""></em>
-              <span>上海</span>
+              <span>{{objective.city && objective.city != 'null' ? JSON.parse(objective.city).name : objective.city}}</span>
             </p>
             <p>
               <em><img src="../../assets/images/money.png" alt=""></em>
-              <span>14k-18k/月</span>
+              <span>{{objective.expected_salary}}/月</span>
             </p>
             <p>
               <em><img src="../../assets/images/time.png" alt=""></em>
-              <span>积极找工作 / 2周以内</span>
+              <span>{{objective.now_status}} / {{objective.work_time}}</span>
             </p>
           </div>
           <!-- 附件简历 -->
@@ -317,7 +317,6 @@ export default {
   name: "resume_detail",
   async asyncData(){
      return{
-
      }
   },
   components: {
@@ -360,7 +359,7 @@ export default {
         education: [],
         social: [],
         collection: [],
-        objective: [],
+        objective: {},
         annexResumes: [],
         user_id: null,
         process: 0,
@@ -466,7 +465,7 @@ export default {
           });
           break;
         case 'objective':
-          this.objectiveModal = Object.assign({}, {
+          this.objectiveModal = Object.assign(e, {
             title: '',
             isEdit: true
           });
@@ -501,6 +500,7 @@ export default {
           this.education = _data.education || [];
           this.social = _data.social || [];
           this.collection = _data.collection || [];
+          this.objective = _data.objective[0] || {};
           this.process = parseFloat(_data.process) || 0;
           this.experience.map(item => {
             if(item.skills) item.skillsName = item.skills.split(',');

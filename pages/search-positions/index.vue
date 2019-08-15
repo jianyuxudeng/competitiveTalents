@@ -99,7 +99,7 @@
                   </div>
               </div>
               <div class="rows">
-                  <div class="rows_li" v-for="item in rows" :key="item.id">
+                  <div class="rows_li" v-for="item in rows" :key="item.id" @click="goJobDetail(item)">
                     <div class="head">
                         <span v-if="item.is_worry == 1">急<br />聘</span>
                         <div class="rows_left">
@@ -248,6 +248,14 @@ export default {
               this.$message.warning('上传文件格式不正确！');
           };
           return isZip;
+      },
+      goJobDetail(e) {
+          this.$router.push({
+              path: 'job-detail',
+              query: {
+                  id: e.id
+              }
+          })
       },
       onSearch(value) { //关键字筛选
           this.params = Object.assign(this.params, {keywords: value});

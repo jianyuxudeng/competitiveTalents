@@ -90,12 +90,12 @@ export default {
               },
               {
                 name: '职位管理',
-                code: 'search-positions'
-              },
-              {
-                name: '简历搜索',
                 code: 'resume-manage'
               },
+              // {
+              //   name: '简历搜索',
+              //   code: 'resume-manage'
+              // },
               {
                 name: '收件箱',
                 code: 'mailbox'

@@ -30,7 +30,7 @@
                 <dl>
                   <dt>
                     <span>隐藏简历</span>
-                    <a-checkbox>开启隐藏</a-checkbox>
+                    <a-checkbox @change="hideChange" :checked="is_hide">开启隐藏</a-checkbox>
                   </dt>
                   <dd>
                     <p>隐藏后，您的简历将不会推荐给HR，也无法被搜索到，只有你投递到公司才可以查看你的简历</p>
@@ -42,12 +42,12 @@
                   </dt>
                   <dd>
                     <p>选中你敏展示后,HR无法看到你的真是头像和姓名</p>
-                    <a-radio-group @change="onChange" v-model="radioValue">
-                      <a-radio :value="1">
+                    <a-radio-group @change="onChange" v-model="anonymous">
+                      <a-radio value="0">
                         <img src="../../assets/images/tx.png" />
-                        <span>迪丽热巴(真名展示)</span>
+                        <span>{{userParams.name}}(真名展示)</span>
                       </a-radio>
-                      <a-radio :value="2">
+                      <a-radio value="1">
                         <img src="../../assets/images/tx.png" />
                         <span>迪丽女士(匿名展示)</span>
                       </a-radio>
@@ -121,9 +121,11 @@ export default {
         {type: 'weibo', typeName: '新浪微博', name: '', isBinding: false},
         {type: 'wechat', typeName: '微信', name: 'dilireba', isBinding: true}
       ],
-      radioValue: null,
       userInfo: {},
-      hideCompany: []
+      hideCompany: [],
+      userParams: {},
+      anonymous: null,
+      is_hide: false
     };
   },
   async asyncData() {
@@ -142,12 +144,36 @@ export default {
     init() {
       this.userInfo = util.getStore('userInfo');
       this.devHideCompany();
+      this.devInfo();
     },
     onChange(e) { //单选 1: 真名 2: 匿名
-      console.log('radio checked', e.target.value)
+      ajax.post('user/detail', {
+        user_id: this.userInfo.id,
+        anonymous: e.target.value
+      }).then(res => {
+        if(res.retcode == 0) this.$message.success(res.msg);
+      })
+    },
+    hideChange(e) {
+      this.is_hide = !this.is_hide;
+      ajax.post('user/detail', {
+        user_id: this.userInfo.id,
+        is_hide: e.target.checked ? 1 : 0
+      }).then(res => {
+        if(res.retcode == 0) this.$message.success(res.msg);
+      })
     },
     onSearch(value) { //搜索想屏蔽的公司
-      console.log(value)
+      ajax.get('company/search', {
+        keywords: value
+      }).then(res => {
+        if(res.retcode == 0) {
+          this.hideCompany = res.data || [];
+          this.hideCompany.map(item => {
+            item.company_id = item.user_id;
+          })
+        };
+      })
     },
     del(e) {
       ajax.post('user/hideCompany', {
@@ -155,7 +181,10 @@ export default {
         company_id: e.company_id,
         is_hide: 1
       }).then(res => {
-        if(res.retcode == 0) this.devHideCompany();
+        if(res.retcode == 0) {
+          this.devHideCompany();
+          this.$message.success(res.msg);
+        };
       })
     },
     handleSubmit(e) { //修改密码提交
@@ -164,14 +193,27 @@ export default {
         if (!err) {
           ajax.put('rePassword', {
             ...values,
-            username: this.userInfo.username
-          }).then(res => {})
+            username: this.userInfo.username,
+            user_id: this.userInfo.id,
+            type: this.userInfo.type
+          }).then(res => {
+            if(res.retcode == 0) this.$message.success(res.msg);
+          })
         }
       });
     },
     devHideCompany() {
       ajax.get('user/hideCompany/list', {user_id: this.userInfo.id}).then(res => {
         if(res.retcode == 0) this.hideCompany = res.data || [];
+      })
+    },
+    devInfo() {
+      ajax.get('user/' + this.userInfo.id).then(res => {
+        if(res.retcode == 0) {
+          this.userParams = res.data || {};
+          if(res.data.userInfo[0].anonymous) this.anonymous = res.data.userInfo[0].anonymous + '';
+          if(res.data.userInfo[0].is_hide) this.is_hide = res.data.userInfo[0].is_hide == 1 ? true : false;
+        };
       })
     }
   }

@@ -240,10 +240,20 @@ export default {
       })
     },
     goIndustryDetail(e) {
-      this.$router.push({
-        path: 'industry-detail',
-        query: {
-          obj: e
+      ajax.get('news/detail', {
+          link: e.link
+      }).then(res => {
+        if(res.retcode == 0) {
+          if(res.data[0].is_out == 1) {
+            window.open(res.data[0].out_link);
+          }else{
+            this.$router.push({
+              path: 'industry-detail',
+              query: {
+                content: res.data[0].content
+              }
+            })
+          }
         }
       })
     }

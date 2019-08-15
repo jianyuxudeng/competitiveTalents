@@ -1,7 +1,7 @@
 <template>
   <section class="industry_detail">
       <div>
-          <div v-html="detail"></div>
+          <div v-html="content"></div>
       </div>
   </section>
 </template>
@@ -17,7 +17,7 @@ export default {
   },
   data() {
       return{
-          detail: null
+          content: null
       }
   },
   watch: {
@@ -25,6 +25,9 @@ export default {
   mounted() {
   },
   methods: {
+      init() {
+          this.content = this.$route.query.content;
+      }
   }
 };
 </script>

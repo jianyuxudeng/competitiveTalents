@@ -53,7 +53,7 @@
         :titleEn="userInfo ? recommend.titleEn : demands.titleEn"
       ></Title>
       <div class="demands_conten">
-        <Demands :userInfo="userInfo"></Demands>
+        <Demands :userInfo="userInfo" @goJobDetail="goJobDetail"></Demands>
       </div>
       <div class="btn"><a @click="onMore">MORE +</a></div>
     </div>
@@ -170,6 +170,18 @@ export default {
     },
     onSearch(value) { //搜索
       console.log(value)
+    },
+    goJobDetail(e) {
+      if(this.userInfo && this.userInfo.type == 3) {
+
+      }else{
+        this.$router.push({
+          path: 'job-detail',
+          query: {
+            id: e.id
+          }
+        })
+      }
     },
     onMore() { //点击MORE按钮
       if(!this.userInfo || this.userInfo.type == 2) {

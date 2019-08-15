@@ -1,7 +1,7 @@
 <template>
   <section class="demands_page">
       <ul>
-          <li v-for="(item, index) in listCope" :key="index" @click="onClick(index)">
+          <li v-for="(item, index) in listCope" :key="index" @click="onClick(item)">
               <div class="demands_top">
                   <div class="demands_text size" v-if="userInfo && userInfo.type == 3">
                       <div>
@@ -92,8 +92,8 @@ export default {
               this.getData();
           };
       },
-      onClick(index) { //点击每个item
-          console.log(index)
+      onClick(e) { //点击每个item
+          this.$emit('goJobDetail', e);
       },
       handleState(arr=[]) {
           if(arr.length > 0) {

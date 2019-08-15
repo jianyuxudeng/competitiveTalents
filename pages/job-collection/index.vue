@@ -160,7 +160,7 @@ export default {
       collectionPosition(e) {
           ajax.delete('user/collectionPosition', {
               user_id: e.user_id,
-              position_id: e.careers_id
+              position_id: e.id
           }).then(res => {
               if(res.retcode == 0) {
                   this.devData();

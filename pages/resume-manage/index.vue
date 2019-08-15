@@ -208,14 +208,14 @@ export default {
           this.$router.push({
               path: 'job-detail',
               query: {
-                  id: record.careers_id
+                  id: record.id
               }
           })
       },
       //置顶
       placement(record) {
           let _obj = {
-              id: record.careers_id,
+              id: record.id,
               top: true
           };
           this.handleModify(_obj);
@@ -223,7 +223,7 @@ export default {
       //下线
       offline(record) {
           let _obj = {
-              id: record.careers_id,
+              id: record.id,
               is_on: 0
           };
           this.handleModify(_obj);
@@ -244,7 +244,7 @@ export default {
           this.$router.push({
               path: 'job-release',
               query: {
-                  id: record.careers_id
+                  id: record.id
               }
           })
       },

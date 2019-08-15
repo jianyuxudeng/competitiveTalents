@@ -1,4 +1,5 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
 module.exports = {
     server: {
         port: 3004, // default: 3000
@@ -20,6 +21,13 @@ module.exports = {
         ],
         link: [
             { rel: 'icon', type: 'image/x-icon', href: '/logo.jpg' }
+        ],
+        script: [
+            { src: '/jquery.min.js' },
+            // { src: '/fileSaver.js' },
+            // { src: '/jquery.exportword.js' }
+            { src: '/html2canvas.min.js' }
+            
         ]
     },
     /*
@@ -41,7 +49,8 @@ module.exports = {
      */
     build: {
         // plugins: [
-        //     new MiniCssExtractPlugin({ filename: "[name]/css/[name].[chunkhash:8].css" }),
+        //     // new MiniCssExtractPlugin({ filename: "[name]/css/[name].[chunkhash:8].css" }),
+                
         // ],
         postcss: {
             preset: {

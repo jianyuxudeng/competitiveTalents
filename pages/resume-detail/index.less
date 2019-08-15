@@ -219,9 +219,12 @@
         }
         .foot{
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             margin: .1rem auto;
+            &.flexCenter{
+                justify-content: center;
+            }
             >button{
                 margin: 0 0.3rem;
             }
@@ -315,5 +318,15 @@
                 }
             }
         }
+    }
+    
+}
+.resumesImg{
+    min-width: 92%;
+    .ant-modal-footer{
+        display: none;
+    }
+    img{
+        margin-top: 0.3rem;
     }
 }

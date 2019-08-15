@@ -207,6 +207,7 @@ export default {
                           path: 'resume-detail',
                           query: {
                             //   isEdit: false,
+                              id: record.id,
                               user_id: record.user_id
                           }
                       })

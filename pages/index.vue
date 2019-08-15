@@ -184,7 +184,12 @@ export default {
     },
     goJobDetail(e) {
       if(this.userInfo && this.userInfo.type == 3) {
-
+        this.$router.push({
+          path: 'resume-detail',
+          query: {
+            user_id: e.user_id
+          }
+        })
       }else{
         if(!this.userInfo) {
           this.$router.push({
@@ -204,6 +209,10 @@ export default {
       if(!this.userInfo || this.userInfo.type == 2) {
         this.$router.push({
           path: 'search-positions'
+        })
+      }else{
+        this.$router.push({
+          path: 'search-resume'
         })
       }
     },

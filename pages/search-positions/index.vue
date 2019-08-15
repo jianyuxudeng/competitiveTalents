@@ -154,7 +154,7 @@
           </div>
           <div class="right">
               <div><img src="../../assets/images/positions_1.jpg" alt=""></div>
-              <div><img src="../../assets/images/positions_2.jpg" alt=""></div>
+              <div><router-link to='/resume-detail'><img src="../../assets/images/positions_2.jpg" alt=""></router-link></div>
               <div><img src="../../assets/images/positions_3.jpg" alt=""></div>
           </div>
       </div>
@@ -349,7 +349,7 @@ export default {
           }).then(res => {
               this.rows = res.data.list || [];
               this.rows.forEach(item => {
-                  item.skills = item.skills.split(',') || [];
+                  item.skills = item.skills?item.skills.split(',') : [];
                   item.sendTime = item.sendTime&&moment(item.sendTime).format('YYYY-MM-DD HH:mm') //util.format(item.sendTime);
                   return item;
               });

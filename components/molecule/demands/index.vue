@@ -30,7 +30,7 @@
                       <span>工作经历：{{item.workTime}}年</span>
                   </div>
                   <div class="demands_btn">
-                      <span :class="item.className">{{item.labelName || item.job_type_name}}</span>
+                      <span :class="item.className">{{item.typeName || item.job_type_name}}</span>
                       <span v-for="(i, index) in item.skills" :key="index">{{i}}</span>
                   </div>
               </div>
@@ -99,7 +99,7 @@ export default {
           if(arr.length > 0) {
               arr.map(item => {
                 if(item.skills) item.skills = item.skills.split(',') || [];
-                switch (item.labelName || item.job_type_name) {
+                switch (item.typeName || item.job_type_name) {
                     case '全职':
                         item.className = 'blue';
                         break;

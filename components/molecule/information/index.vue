@@ -8,7 +8,7 @@
           itemLayout="horizontal"
           :dataSource="list"
       >
-          <a-list-item slot="renderItem" slot-scope="item, index" @click="informationItem(index)">
+          <a-list-item slot="renderItem" slot-scope="item" @click="informationItem(item)">
               <a-list-item-meta :description="item.title"></a-list-item-meta>
               <span>{{item.create_time}}</span>
           </a-list-item>
@@ -33,8 +33,8 @@ export default {
   mounted() {
   },
   methods: {
-      informationItem(index) {
-          console.log(index)
+      informationItem(item) {
+          this.$emit('goIndustryDetail', item)
       }
   }
 };

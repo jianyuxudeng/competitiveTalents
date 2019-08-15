@@ -21,7 +21,7 @@
       </a-carousel>
     </div>
     <!-- freeker -->
-    <div class="services freeker" v-if="!userInfo || userInfo.type == 2">
+    <div class="services freeker" v-if="!userInfo || userInfo.type == 2" @click="handelFreeker">
       <Title :title="freeker.title" :titleEn="freeker.titleEn"></Title>
       <div class="freeker_search">
         <a-input-search
@@ -40,7 +40,7 @@
       </div>
     </div>
     <!-- enterprise -->
-    <div class="services enterprise" v-if="!userInfo">
+    <div class="services enterprise" v-if="!userInfo" @click="handelFreeker">
       <Title :title="enterprise.title" :titleEn="enterprise.titleEn"></Title>
       <div class="enterprise_conten">
         <Services className="enterprise" :list="enterprise.list" @servicesItem="handleEnterprise"></Services>
@@ -62,10 +62,10 @@
       <Title :title="information.title" :titleEn="information.titleEn"></Title>
       <ul>
         <li>
-          <Information :list="information.dynamic" title="行业动态"></Information>
+          <Information :list="information.dynamic" title="行业动态" @goIndustryDetail="goIndustryDetail"></Information>
         </li>
         <li>
-          <Information :list="information.answers" title="行业问答"></Information>
+          <Information :list="information.answers" title="行业问答" @goIndustryDetail="goIndustryDetail"></Information>
         </li>
       </ul>
     </div>
@@ -120,9 +120,9 @@ export default {
          title: '企业电竞服务',
          titleEn: 'ENTERPRISE SERVIVES',
          list: [
-           {img: require('../assets/images/enterprise1.png'), text: '职位发布'},
-           {img: require('../assets/images/release.png'), text: '职位管理'},
-           {img: require('../assets/images/inbox.png'), text: '收件箱'},
+           {img: require('../assets/images/enterprise1.png'), text: '职位发布', key: 'job-release'},
+           {img: require('../assets/images/release.png'), text: '职位管理', key: 'resume-manage'},
+           {img: require('../assets/images/inbox.png'), text: '收件箱', key: 'mailbox'},
          ]
        },
        //enterprise
@@ -168,6 +168,17 @@ export default {
       this.activeData();
       this.answerData();
     },
+    handelFreeker() {
+      if(!this.userInfo) {
+        this.$router.push({
+          path: '/login'
+        })
+      }else{
+        this.$router.push({
+          path: 'search-positions'
+        })
+      };
+    },
     onSearch(value) { //搜索
       console.log(value)
     },
@@ -175,12 +186,18 @@ export default {
       if(this.userInfo && this.userInfo.type == 3) {
 
       }else{
-        this.$router.push({
-          path: 'job-detail',
-          query: {
-            id: e.id
-          }
-        })
+        if(!this.userInfo) {
+          this.$router.push({
+            path: 'search-positions'
+          })
+        }else{
+          this.$router.push({
+            path: 'job-detail',
+            query: {
+              id: e.id
+            }
+          })
+        }
       }
     },
     onMore() { //点击MORE按钮
@@ -191,11 +208,9 @@ export default {
       }
     },
     handleInfoEnterprise(e) {
-      if(this.userInfo) {
-        this.$router.push({
-          path: '/login'
-        })
-      }
+      this.$router.push({
+        path: e.key
+      })
     },
     handleEnterprise(e) {
       if(this.userInfo) {
@@ -208,7 +223,7 @@ export default {
       ajax.get('news/active').then(res => {
         if(res.retcode == 0) {
           res.data.map(item => {
-            item.create_time = util.format(item.create_time);
+            item.create_time = util.formatDate(item.create_time);
           });
           this.information.dynamic = res.data || [];
         }
@@ -218,9 +233,17 @@ export default {
       ajax.get('news/answer').then(res => {
         if(res.retcode == 0) {
           res.data.map(item => {
-            item.create_time = util.format(item.create_time);
+            item.create_time = util.formatDate(item.create_time);
           });
           this.information.answers = res.data || [];
+        }
+      })
+    },
+    goIndustryDetail(e) {
+      this.$router.push({
+        path: 'industry-detail',
+        query: {
+          obj: e
         }
       })
     }

@@ -24,6 +24,7 @@
             <a-form-item v-if="!isPhone">
                 <a-input 
                 placeholder="请输入密码"
+                type='password'
                 v-decorator="[
                     'password',
                     {

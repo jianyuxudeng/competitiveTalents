@@ -24,6 +24,7 @@
             <a-form-item>
                 <a-input 
                 placeholder="请输入密码"
+                type='password'
                 v-decorator="[
                     'password',
                     {
@@ -38,6 +39,7 @@
             <a-form-item>
                 <a-input 
                 placeholder="请再次输入密码"
+                type='password'
                 v-decorator="[
                     'rePassword',
                     {

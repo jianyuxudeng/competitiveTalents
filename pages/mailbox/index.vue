@@ -206,7 +206,7 @@ export default {
                       this.$router.push({
                           path: 'resume-detail',
                           query: {
-                              isEdit: false,
+                            //   isEdit: false,
                               user_id: record.user_id
                           }
                       })

@@ -1,5 +1,5 @@
 <template>
-  <section class="resume_detail">
+  <section id="resume_detail" class="resume_detail">
       <div class="nav-bg"></div>
       <a-row type="flex" justify="space-between" class="resume">
         <div class="resume_left">
@@ -213,16 +213,18 @@
               </div>
             </div>
           </div>
-          <div class="foot" v-if="isEdit">
-            <a>
+          <div class="foot">
+            <a @click="download">
               <a-icon type="download" />
               <span>把这份简历保存到本地</span>
             </a>
             <p>简历更新时间 2019-07-06 17:48</p>
           </div>
-          <div class="foot" v-else>
-            <a-button type="primary">邀请面试</a-button>
-            <a-button>不适合</a-button>
+          <div class="foot flexCenter" v-if="!isEdit">
+            <a-button v-if="!sendStatus.is_interview&&sendStatus.is_read!=2" @click="addMace" type="primary">邀请面试</a-button>
+            <a-button v-if="sendStatus.is_interview&&sendStatus.is_read!=2" disabled type="primary">已邀请</a-button>
+            <a-button v-if="sendStatus.is_read!=2" @click="notNeed">不适合</a-button>
+            <span v-if="sendStatus.is_read==2">不适合</span>
           </div>
         </div>
         <div class="resume_right">
@@ -243,7 +245,7 @@
             </p>
             <p>
               <em><img src="../../assets/images/address.png" alt=""></em>
-              <span>{{objective.city && objective.city != 'null' ? JSON.parse(objective.city).name : objective.city}}</span>
+              <span>{{objective.city && objective.city != 'null' ? JSON.parse(objective.city).cityName : objective.cityName}}</span>
             </p>
             <p>
               <em><img src="../../assets/images/money.png" alt=""></em>
@@ -272,7 +274,7 @@
           <div class="completeness">
             <div class="title">
               <p>简历完整度： {{process}}%</p>
-              <a>
+              <a @click="showResumes">
                 <em><a-icon type="search" /></em>
                 <span>简历预览</span>
               </a>
@@ -287,9 +289,9 @@
                 <div v-if="item.url == 'info'">
                   <a v-if="isEdit" @click.stop="edit('info')">编辑</a>
                 </div>
-                <div v-if="isEdit" v-else>
-                  <a @click="add(item.url)">添加</a>
-                  <a @click="del(item.url)">删除</a>
+                <div v-else>
+                  <a v-if="isEdit" @click="add(item.url)">添加</a>
+                  <a v-if="isEdit" @click="del(item.url)">删除</a>
                 </div>
               </div>
             </div>
@@ -305,6 +307,14 @@
       <collectionModal :modelEdit="collectionModal" @cancelModel="cancelModel" @okModel="okModel"></collectionModal>
       <objectiveModal :modelEdit="objectiveModal" @cancelModel="cancelModel" @okModel="okModel"></objectiveModal>
       <annexResumesModal :modelEdit="annexResumesModal" @cancelModel="cancelModel" @okModel="okModel"></annexResumesModal>
+      <a-modal
+            :confirmLoading="false"
+            :visible="showResumesVis"
+            class='resumesImg'
+            @cancel="handleCancel"
+      >
+        <img v-if="resumesImg" :src="resumesImg" />
+      </a-modal>
   </section>
 </template>
 
@@ -357,12 +367,15 @@ export default {
         experience: [],
         projectExpress: [],
         education: [],
+        sendStatus:{},
         social: [],
         collection: [],
         objective: {},
         annexResumes: [],
         user_id: null,
         process: 0,
+        showResumesVis:false,
+        resumesImg:null
       }
   },
   mounted() {
@@ -372,13 +385,89 @@ export default {
     formatMouth: util.formatMouth,
     init() {
       let userInfo = util.getStore('userInfo');
-      this.isEdit = userInfo.id == this.$route.query.user_id;
-      console.log(this.isEdit,userInfo,this.$route.query.user_id)
+      this.isEdit = userInfo.id == this.$route.query.user_id && userInfo.type==2;
+      if(!this.$route.query.user_id && userInfo.type==2){
+         this.isEdit = true;
+      }
       this.user_id = this.$route.query.user_id || userInfo.id;
       this.getData();
     },
     goItem(index) { //导航
       this.active = index;
+    },
+    addMace(){
+      ajax.put('company/resumes',{
+        id:this.$route.query.id,
+        is_interview:1
+      }).then(res => {
+        if(res.retcode == 0) {
+          this.getData();
+        }
+      })
+    },
+    notNeed(){
+        ajax.put('company/resumes',{
+          id:this.$route.query.id,
+          is_read:2
+        }).then(res => {
+          if(res.retcode == 0) {
+            this.getData();
+          }
+        })
+    },
+    handleCancel(){
+      this.showResumesVis =false;
+    },
+    showResumes(){
+        let canvas2 = document.createElement("canvas");
+        let w = parseInt(document.querySelector("#resume_detail").clientWidth);
+        let h = parseInt(document.querySelector("#resume_detail").clientHeight);
+        //将canvas画布放大若干倍，然后盛放在较小的容器内，就显得不模糊了
+        canvas2.width = w * 2;
+        canvas2.height = h * 2;
+        canvas2.style.width = w + "px";
+        canvas2.style.height = h + "px";
+        //可以按照自己的需求，对context的参数修改,translate指的是偏移量   
+        let context = canvas2.getContext("2d");
+        context.scale(2,2);
+        html2canvas(document.querySelector("#resume_detail"),{
+          taintTest: false,
+          allowTaint:true,
+          userCORS: true,
+          canvas:canvas2,
+          y:0,
+          x:0
+        }).then(canvas => {
+             this.resumesImg = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+             this.showResumesVis =true;
+        });
+    },
+    download(){
+        // $("#resume_detail").wordExport();
+        let canvas2 = document.createElement("canvas");
+        let w = parseInt(document.querySelector("#resume_detail").clientWidth);
+        let h = parseInt(document.querySelector("#resume_detail").clientHeight);
+        //将canvas画布放大若干倍，然后盛放在较小的容器内，就显得不模糊了
+        canvas2.width = w * 2;
+        canvas2.height = h * 2;
+        canvas2.style.width = w + "px";
+        canvas2.style.height = h + "px";
+        //可以按照自己的需求，对context的参数修改,translate指的是偏移量   
+        let context = canvas2.getContext("2d");
+        context.scale(2,2);
+        html2canvas(document.querySelector("#resume_detail"),{
+          taintTest: false,
+          allowTaint:true,
+          userCORS: true,
+          canvas:canvas2,
+          y:0,
+          x:0
+        }).then(canvas => {
+              const imgUri = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+              const a = document.createElement('a');
+              a.href = imgUri;
+              a.click();
+        });
     },
     add(name) { //添加
       switch (name) {
@@ -491,7 +580,13 @@ export default {
       this.getData();
     },
     getData() { //获取数据
-      ajax.get('user/resume/detail', {user_id: this.user_id}).then(res => {
+      let query={
+        user_id: this.user_id
+      }
+      if(this.$route.query.id){
+        query.id = this.$route.query.id;
+      }
+      ajax.get('user/resume/detail', query).then(res => {
         let _data = res.data;
         if(_data) {
           this.userDetail = _data.userDetail[0] || {};
@@ -506,6 +601,15 @@ export default {
           this.experience.map(item => {
             if(item.skills) item.skillsName = item.skills.split(',');
           });
+          if(_data.sendStatus){
+          this.sendStatus = _data.sendStatus[0]||{};
+            if(this.sendStatus.is_read==0){
+              ajax.put('company/resumes',{
+                id:this.$route.query.id,
+                is_read:1
+              })
+            }
+          }
         }
       })
     },

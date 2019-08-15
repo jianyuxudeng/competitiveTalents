@@ -22,10 +22,11 @@
               </dd>
             </dl>
           </a-col>
-          <a-col v-if="userInfo.type == 2">
-            <a-button class="back" size="large" @click="collectionPosition">
+          <a-col >
+            <a-button class="back" size="large" @click="(collectionPosition(!params.collect))">
               <a-icon type="star" />
-              <span>收藏</span>
+              <span v-if="!params.collect">收藏</span>
+              <span v-else>取消收藏</span>
             </a-button>
             <a-button type="primary" size="large" :disabled="!sendAgain" @click="handleModel">投递简历</a-button>
           </a-col>
@@ -164,7 +165,7 @@ export default {
       return{
         params: {},
         labels: {},
-        sendAgain: false,
+        sendAgain: true,
         isModalShow: false,
         modelRow: [],
         value: null,
@@ -181,23 +182,44 @@ export default {
     this.labelDev();
   },
   methods: {
-      collectionPosition() { //收藏职位
+      collectionPosition(collect) { //收藏职位
         let userInfo = util.getStore('userInfo');
+        if(!userInfo){
+            this.$router.push('/login');
+            return;
+        }
         let _id = this.$route.query.id;
-        ajax.post('user/collectionPosition', {
-          user_id: userInfo.id,
-          position_id: _id
-        }).then(res => {
-          if(res.retcode == 0) {
-            this.$message.success(res.msg);
-          }
-        })
+        if(collect){
+            ajax.post('user/collectionPosition', {
+              user_id: userInfo.id,
+              position_id: _id
+            }).then(res => {
+              if(res.retcode == 0) {
+                this.$message.success(res.msg);
+                this.devData();
+              }
+          })
+        }else{
+            ajax.delete('user/collectionPosition', {
+              user_id: userInfo.id,
+              position_id: _id
+            }).then(res => {
+              if(res.retcode == 0) {
+                this.$message.success(res.msg);
+                this.devData();
+              }
+            })
+        }
       },
       handleCancel() { //关闭弹窗
           this.isModalShow = false;
       },
       handleModel(e) { //显示弹窗
           let userInfo = util.getStore('userInfo');
+          if(!userInfo){
+            this.$router.push('/login');
+            return;
+          }
           ajax.get('user/annexResumes/list', {
               user_id: userInfo.id
           }).then(res => {
@@ -219,6 +241,7 @@ export default {
               if(res.retcode == 0) {
                   this.isModalShow = false;
                   this.devData();
+                  this.$message.success(res.msg);
               }
         })
       },
@@ -234,14 +257,18 @@ export default {
       },
       devData() {
           let userInfo = util.getStore('userInfo');
+          // if(!userInfo){
+          //   return;
+          // }
           let _id = this.$route.query.id;
           ajax.get('jobs/detail', {
-              user_id: userInfo.id,
+              // user_id: userInfo.id,
               job_id: _id
           }).then(res => {
             if(res.retcode == 0) {
-              this.params = res.data.jobDetali[0] || {};
-              this.sendAgain = res.data.sendAgain || false;
+              console.log(res.data)
+              this.params = res.data.jobDetail || {};
+              this.sendAgain = res.data.sendAgain;
               if(this.params.region) {
                 this.params = Object.assign(this.params, {region: JSON.parse(this.params.region).cityName});
               };
@@ -280,7 +307,8 @@ export default {
                 if(item.id = this.params.trade) {
                   this.params = Object.assign(this.params, {trade: item.labelName});
                 }
-              })
+              });
+              console.log( this.params,9999)
             }
           })
       }

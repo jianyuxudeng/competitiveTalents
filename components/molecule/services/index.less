@@ -1,0 +1,49 @@
+.services_page{
+    width: 11.83rem;
+    margin: .4rem auto 0;
+    ul{
+        display: flex;
+        justify-content: space-between;
+        li{
+            width: 2.3rem;
+            height: 2.41rem;
+            display: flex;
+            flex-flow: column;
+            justify-content: space-between;
+            box-shadow: 0 0.1rem 0.1rem #ccc;
+            dl{
+                height: 2.29rem;
+                display: flex;
+                flex-flow: column;
+                justify-content: flex-end;
+                align-items: center;
+                border-radius: .08rem .08rem 0 0;
+                dd{
+                    font-size: .2rem;
+                    color: #ffffff;
+                    margin-top: .4rem;
+                    margin-bottom: .2rem;
+                }
+            }
+            em{
+                height: .04rem;
+            }
+        }
+    }
+    &.freeker{
+        dl{
+            background: #515ffd;
+        }
+        em{
+            background: #515ffd;
+        }
+    }
+    &.enterprise{
+        dl{
+            background: #ffac60;
+        }
+        em{
+            background: #ffac60;
+        }
+    }
+}

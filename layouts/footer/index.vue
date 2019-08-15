@@ -1,5 +1,6 @@
 <template>
   <footer id="footer" ref="footer" :class="exducationFooter">
+    
   </footer>
 </template>
 <script>
@@ -8,7 +9,7 @@ import axios from "axios";
 export default {
   name: "footerBot",
   data() {
-   
+     return {}
   },
   created() {
   },

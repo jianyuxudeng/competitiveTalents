@@ -5,7 +5,7 @@
     "author": "1269106688@qq.com",
     "private": true,
     "scripts": {
-        "dev": "nuxt",
+        "dev": "nuxt --open",
         "build": "nuxt build",
         "start": "nuxt start",
         "server": "cross-env NODE_ENV=production forever server/index.js",
@@ -14,6 +14,7 @@
         "precommit": "npm run lint"
     },
     "dependencies": {
+        "ant-design-vue": "^1.3.10",
         "nuxt": "^2.0.0"
     },
     "devDependencies": {

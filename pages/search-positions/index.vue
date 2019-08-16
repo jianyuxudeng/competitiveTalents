@@ -1,5 +1,5 @@
 <template>
-  <section class="search_positions">
+  <section class="search_positions page_centent">
       <div class="nav-bg"></div>
       <div class="banner">
           <img src="../../assets/images/positions_banner.jpg" alt="">

@@ -50,3 +50,7 @@ input {
     width: 60%;
     padding: 0 0.1rem;
 }
+
+.page_centent{
+    min-height: 100vh;
+}

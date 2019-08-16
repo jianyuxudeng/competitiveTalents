@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section class="page_centent">
         <div class="nav-bg"></div>
         <div class="collection">
             <a-row type="flex" justify="space-between" align="top">

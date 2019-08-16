@@ -1,5 +1,5 @@
 <template>
-  <section class="search_resume">
+  <section class="search_resume page_centent">
       <div class="nav-bg"></div>
       <div class="centent">
           <div class="left">

@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="page_centent">
       <div class="nav-bg"></div>
       <div class="delivery_status">
           <div class="left">

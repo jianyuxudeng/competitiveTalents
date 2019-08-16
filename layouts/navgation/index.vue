@@ -175,7 +175,7 @@ export default {
       })
     },
     gotoLogin() {
-      this.router.push({
+      this.$router.push({
         path: '/login'
       })
     }

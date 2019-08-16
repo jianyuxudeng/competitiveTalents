@@ -6,7 +6,7 @@
           <em><img src="../../assets/images/LOGO.png" alt=""></em>
           <a @click="goHome">首页</a>
           <a>行业资讯</a>
-          <a v-if="!isLogin">企业用户登录</a>
+          <a v-if="!isLogin" @click="gotoLogin">企业用户登录</a>
         </div>
         <!-- nav -->
         <div class="head_nav">
@@ -172,6 +172,11 @@ export default {
         this.$router.push({
           path: '/login'
         })
+      })
+    },
+    gotoLogin() {
+      this.router.push({
+        path: '/login'
       })
     }
   }

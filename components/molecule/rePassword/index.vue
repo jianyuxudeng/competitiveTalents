@@ -40,7 +40,7 @@
                     }
                 ]"
                 >
-                <span slot="suffix" v-if="isCountDown">{{times}}</span>
+                <span slot="suffix" v-if="countDown">{{times}}</span>
                 <a slot="suffix" type="close-circle" @click="emitEmpty" v-else>获取验证码</a>
                 </a-input>
             </a-form-item>
@@ -105,7 +105,6 @@ export default {
         active: '2',
         countDown: null,
         times: null,
-        isCountDown: false,
         isPhone: true, //手机号还是账号登录
         isDisabled: true
       }

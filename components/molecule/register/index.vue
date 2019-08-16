@@ -61,7 +61,7 @@
                     }
                 ]"
                 >
-                <a-button slot="suffix" v-if="isCountDown">{{times}}</a-button>
+                <a-button slot="suffix" v-if="countDown">{{times}}</a-button>
                 <a slot="suffix" type="close-circle" @click="emitEmpty" v-else>获取验证码</a>
                 </a-input>
             </a-form-item>
@@ -94,7 +94,6 @@ export default {
         active: 2,
         countDown: null,
         times: null,
-        isCountDown: false,
         isPhone: true, //手机号还是账号登录
       }
   },
@@ -132,6 +131,7 @@ export default {
             values = Object.assign(values, {type: this.active});
             ajax.post('register', values).then(res => {
                 if(res.retcode == 0) {
+                    this.$message.success(res.msg);
                     this.$emit('handleShow', 1)
                 }else{
                     this.$message.warning(res.msg);

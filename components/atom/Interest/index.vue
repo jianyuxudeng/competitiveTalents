@@ -57,6 +57,7 @@ export default {
           })
       },
       goJobDetail(e) {
+          console.log(e,77777)
           this.$router.push({
               path: 'job-detail',
               query: {

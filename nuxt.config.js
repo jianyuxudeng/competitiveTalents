@@ -8,15 +8,15 @@ module.exports = {
      ** Headers of the page
      */
     head: {
-        title: '竞域教育',
+        title: '电竞人才网',
         meta: [
             { charset: 'utf-8' },
             { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-            { hid: 'description', name: 'description', content: '竞域教育是面向全国高校共建电竞学科专业的综合性教研、师资输出平台，为着眼落实国家战略部署与要求，促进中国电竞人才体系的改进与完善，竞域教育致力于通过“产、学、研、训、赛”的人才培养体系为中国电竞行业输送优质从业人员。' },
+            { hid: 'description', name: 'description', content: '电竞人才网-最高效的电竞求职者平台，为有志于电竞的求职者提供最全最准确最新的招聘信息，搭建电竞圈最佳的人才招募与培养渠道。电竞一手招聘信息尽在电竞人才网。' },
             {
                 hid: 'keywords',
                 name: 'keywords',
-                content: '竞域教育是面向全国高校共建电竞学科专业的综合性教研、师资输出平台，为着眼落实国家战略部署与要求，促进中国电竞人才体系的改进与完善，竞域教育致力于通过“产、学、研、训、赛”的人才培养体系为中国电竞行业输送优质从业人员。'
+                content: '电竞,电竞行业,电竞招聘,招聘网,电竞人才,上海招聘,人才,电竞教育,招聘,招聘电竞,上海电竞,电子竞技'
             }
         ],
         link: [
@@ -48,10 +48,9 @@ module.exports = {
      ** Build configuration
      */
     build: {
-        // plugins: [
-        //     // new MiniCssExtractPlugin({ filename: "[name]/css/[name].[chunkhash:8].css" }),
-                
-        // ],
+        plugins: [
+            new MiniCssExtractPlugin({ filename: "[name]/css/[name].[chunkhash:8].css" }), 
+        ],
         postcss: {
             preset: {
                 autoprefixer: {
@@ -59,53 +58,53 @@ module.exports = {
                 }
             }
         },
-        // extend(config, { isDev, isClient }) {
-        //     if (isDev && isClient) {
-        //         config.module.rules.push({
-        //             enforce: 'pre',
-        //             test: /\.(js|vue)$/,
-        //             loader: 'eslint-loader',
-        //             exclude: /(node_modules)/
-        //         }, {
-        //             test: /\.less$/,
-        //             exclude: /node_modules/,
-        //             use: [
+        extend(config, { isDev, isClient }) {
+            if (isDev && isClient) {
+                config.module.rules.push({
+                    enforce: 'pre',
+                    test: /\.(js|vue)$/,
+                    loader: 'eslint-loader',
+                    exclude: /(node_modules)/
+                }, {
+                    test: /\.less$/,
+                    exclude: /node_modules/,
+                    use: [
 
-        //                 // MiniCssExtractPlugin.loader, {
-        //                 //     loader: "css-loader",
-        //                 //     options: {
-        //                 //         minimize: true
-        //                 //     }
-        //                 // }, 
-        //                 {
-        //                     loader: "css-loader"
-        //                 },
-        //                 {
-        //                     loader: "less-loader"
-        //                 }, {
-        //                     loader: "postcss-loader"
-        //                 }
-        //             ]
-        //         }, {
-        //             test: /\.css$/,
-        //             use: [
-        //                 // MiniCssExtractPlugin.loader, {
-        //                 //     loader: "css-loader",
-        //                 //     options: {
-        //                 //         minimize: true
-        //                 //     }
-        //                 // },
-        //                 {
-        //                     loader: "css-loader"
-        //                 },
-        //                 "postcss-loader"
-        //             ]
-        //         })
-        //     }
-        // },
-        // filenames: {
-        //     css: ({ isDev }) => isDev ? '[name].css' : '[contenthash].css',
-        // },
+                        MiniCssExtractPlugin.loader, {
+                            loader: "css-loader",
+                            options: {
+                                minimize: true
+                            }
+                        }, 
+                        {
+                            loader: "css-loader"
+                        },
+                        {
+                            loader: "less-loader"
+                        }, {
+                            loader: "postcss-loader"
+                        }
+                    ]
+                }, {
+                    test: /\.css$/,
+                    use: [
+                        MiniCssExtractPlugin.loader, {
+                            loader: "css-loader",
+                            options: {
+                                minimize: true
+                            }
+                        },
+                        {
+                            loader: "css-loader"
+                        },
+                        "postcss-loader"
+                    ]
+                })
+            }
+        },
+        filenames: {
+            css: ({ isDev }) => isDev ? '[name].css' : '[contenthash].css',
+        },
     },
 
     router: {

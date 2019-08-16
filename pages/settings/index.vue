@@ -50,7 +50,7 @@
                       </a-radio>
                       <a-radio value="1">
                         <img src="../../assets/images/tx.png" />
-                        <span>迪丽女士(匿名展示)</span>
+                        <span>{{anonymousName}}{{sex == 1 ? '先生' : '女士'}}(匿名展示)</span>
                       </a-radio>
                     </a-radio-group>
                   </dd>
@@ -128,7 +128,9 @@ export default {
       anonymous: null,
       is_hide: false,
       isInput: false,
-      username: null
+      username: null,
+      sex: 1,
+      anonymousName: ''
     };
   },
   async asyncData() {
@@ -228,8 +230,10 @@ export default {
       ajax.get('user/' + this.userInfo.id).then(res => {
         if(res.retcode == 0) {
           this.userParams = res.data || {};
+          if(res.data.userInfo[0].sex) this.sex = res.data.userInfo[0].sex;
           if(res.data.userInfo[0].anonymous) this.anonymous = res.data.userInfo[0].anonymous + '';
           if(res.data.userInfo[0].is_hide) this.is_hide = res.data.userInfo[0].is_hide == 1 ? true : false;
+          this.anonymousName = res.data.username.substr(0, 1);
         };
       })
     }

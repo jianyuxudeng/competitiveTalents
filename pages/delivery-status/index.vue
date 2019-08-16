@@ -42,12 +42,13 @@
                           </dl>
                       </div>
                       <a-timeline>
-                          <a-timeline-item color="#515ffd" v-if="item.is_interview == 1">
+                          <a-timeline-item color="#515ffd" v-if="item.is_interview == 1 && active == 2">
                               <p>2019-08-35  15:20</p>
                               <dl>
                                   <dd>
-                                      <h4>简历被标记为邀面试</h4>
-                                      <h6>非常荣幸收到您的简历，经过我们评估，您与该位职位符合度很高。我们会在稍后与您电话联系， 邀请您来我司进行面试，请您保持电话畅通。 </h6>
+                                      <h4>简历被标记为{{item.is_read == 2 ? '不合适' : '邀面试'}}</h4>
+                                      <h6 v-if="item.is_read == 1">非常荣幸收到您的简历，经过我们评估，您与该位职位符合度很高。我们会在稍后与您电话联系， 邀请您来我司进行面试，请您保持电话畅通。 </h6>
+                                      <h6 v-else>非常荣幸收到您的简历，经过我们评估，您与该位职位不符合。感谢您投递我们公司。 </h6>
                                       <h6>----{{item.companyName}}</h6>
                                   </dd>
                               </dl>

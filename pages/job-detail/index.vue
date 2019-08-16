@@ -178,6 +178,11 @@ export default {
         }
       }
   },
+  watch: {
+    $route() {
+      this.devData();
+    }
+  },
   mounted() {
     this.labelDev();
   },

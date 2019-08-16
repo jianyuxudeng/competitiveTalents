@@ -1,5 +1,5 @@
 <template>
-  <section class="interest">
+  <section class="interest" v-if="userInfo">
       <div class="title">猜您感兴趣</div>
       <dl v-for="item in rows" :key="item.id" @click="goJobDetail(item)">
           <dt><img :src="item.logo" alt=""></dt>
@@ -27,17 +27,24 @@ export default {
   },
   data() {
       return{
-          rows: []
+          rows: [],
+          userInfo: null
       }
   },
   mounted() {
-      this.devGet();
+      this.init();
   },
   methods: {
-      devGet() {
+      init() {
           let userInfo = util.getStore('userInfo');
+          this.userInfo = userInfo;
+          if(userInfo) {
+              this.devGet();
+          }
+      },
+      devGet() {
           ajax.get("jobs/interest", {
-              user_id: userInfo.id
+              user_id: this.userInfo.id
           }).then(res => {
               if(res.retcode == 0) {
                   this.rows = res.data || [];

@@ -25,7 +25,7 @@
                     </div>
                   </dd>
                 </dl>
-                <a @click="edit('info')" v-if="isEdit">
+                <a @click="edit('info')" v-if="isEdit && isShow">
                   <em><img src="../../assets/images/edit.png" alt=""></em>
                   <span>编辑</span>
                 </a>
@@ -35,7 +35,7 @@
             <div id="video">
               <div class="title">
                 <span>可视化描述</span>
-                <a v-if="isEdit" @click="add('video')">
+                <a v-if="isEdit  && isShow" @click="add('video')">
                   <em><a-icon type="plus-square" /></em>
                   <span>添加</span>
                 </a>
@@ -48,7 +48,7 @@
                     您的浏览器不支持 HTML5 video 标签。
                   </video>
                 </div>
-                <div v-if="isEdit" class="btn">
+                <div v-if="isEdit  && isShow" class="btn">
                   <a>
                     <em><img src="../../assets/images/edit.png" alt=""></em>
                     <span @click="edit('video')">编辑</span>
@@ -64,7 +64,7 @@
             <div id="job_experience">
               <div class="title">
                 <span>工作经历</span>
-                <a v-if="isEdit">
+                <a v-if="isEdit  && isShow">
                   <em><a-icon type="plus-square" /></em>
                   <span @click="add('job-experience')">添加</span>
                 </a>
@@ -85,11 +85,11 @@
                         -
                         {{item.leave_time ? formatMouth(item.leave_time) : item.leave_time}}
                       </p>
-                      <a v-if="isEdit">
+                      <a v-if="isEdit  && isShow">
                         <em><img src="../../assets/images/edit.png" alt=""></em>
                         <span @click="edit('job-experience', item)">编辑</span>
                       </a>
-                      <a v-if="isEdit">
+                      <a v-if="isEdit  && isShow">
                         <em><a-icon type="close-square" /></em>
                         <span @click="del('experience', item.id)">删除</span>
                       </a>
@@ -106,7 +106,7 @@
             <div id="projectExpress">
               <div class="title">
                 <span>项目经历</span>
-                <a v-if="isEdit" @click="add('projectExpress')">
+                <a v-if="isEdit  && isShow" @click="add('projectExpress')">
                   <em><a-icon type="plus-square" /></em>
                   <span>添加</span>
                 </a>
@@ -121,11 +121,11 @@
                         -
                         {{item.end_time ? formatMouth(item.end_time) : item.end_time}}
                       </p>
-                      <a v-if="isEdit">
+                      <a v-if="isEdit  && isShow">
                         <em><img src="../../assets/images/edit.png" alt=""></em>
                         <span @click="edit('projectExpress', item)">编辑</span>
                       </a>
-                      <a v-if="isEdit">
+                      <a v-if="isEdit  && isShow">
                         <em><a-icon type="close-square" /></em>
                         <span @click="del('projectExpress', item.id)">删除</span>
                       </a>
@@ -140,7 +140,7 @@
             <div id="education">
               <div class="title">
                 <span>教育经历</span>
-                <a v-if="isEdit" @click="add('education')">
+                <a v-if="isEdit && isShow" @click="add('education')">
                   <em><a-icon type="plus-square" /></em>
                   <span>添加</span>
                 </a>
@@ -159,11 +159,11 @@
                     -
                     {{item.end_time ? formatMouth(item.end_time) : item.end_time}}
                   </p>
-                  <a v-if="isEdit">
+                  <a v-if="isEdit && isShow">
                     <em><img src="../../assets/images/edit.png" alt=""></em>
                     <span @click="edit('education', item)">编辑</span>
                   </a>
-                  <a v-if="isEdit">
+                  <a v-if="isEdit && isShow">
                     <em><a-icon type="close-square" /></em>
                     <span @click="del('education', item.id)">删除</span>
                   </a>
@@ -174,7 +174,7 @@
             <div id="social">
               <div class="title">
                 <span>社交主页</span>
-                <a v-if="isEdit" @click="add('social')">
+                <a v-if="isEdit && isShow" @click="add('social')">
                   <em><a-icon type="plus-square" /></em>
                   <span>添加</span>
                 </a>
@@ -184,7 +184,7 @@
                   <dt><img src="../../assets/images/social.png" alt=""></dt>
                   <dd>{{item.social_link}}</dd>
                 </dl>
-                <div v-if="isEdit" class="item_btn">
+                <div v-if="isEdit && isShow" class="item_btn">
                   <a @click="edit('social', item)">
                     <em><img src="../../assets/images/edit.png" alt=""></em>
                     <span>编辑</span>
@@ -200,7 +200,7 @@
             <div id="collection">
               <div class="title">
                 <span>图片作品</span>
-                <a v-if="isEdit" @click="add('collection')">
+                <a v-if="isEdit && isShow" @click="add('collection')">
                   <em><a-icon type="plus-square" /></em>
                   <span>添加</span>
                 </a>
@@ -208,19 +208,19 @@
               <div class="picture">
                 <div v-for="item in collection" :key="item.id">
                   <img :src="item.collection_link" alt="">
-                  <a v-if="isEdit" @click="del('collection', item.id)"><a-icon type="delete" /></a>
+                  <a v-if="isEdit && isShow" @click="del('collection', item.id)"><a-icon type="delete" /></a>
                 </div>
               </div>
             </div>
           </div>
           <div class="foot">
-            <a @click="download">
+            <a v-if="isShow" @click="download">
               <a-icon type="download" />
               <span>把这份简历保存到本地</span>
             </a>
             <p>简历更新时间 2019-07-06 17:48</p>
           </div>
-          <div class="foot flexCenter" v-if="!isEdit">
+          <div class="foot flexCenter" v-if="!isEdit && isShow">
             <a-button v-if="!sendStatus.is_interview&&sendStatus.is_read!=2" @click="addMace" type="primary">邀请面试</a-button>
             <a-button v-if="sendStatus.is_interview&&sendStatus.is_read!=2" disabled type="primary">已邀请</a-button>
             <a-button v-if="sendStatus.is_read!=2" @click="notNeed">不适合</a-button>
@@ -233,7 +233,7 @@
             <div class="title">
               <p>求职意向</p>
               <div>
-                <a v-if="isEdit" @click="edit('objective', objective)">
+                <a v-if="isEdit && isShow" @click="edit('objective', objective)">
                   <em><img src="../../assets/images/edit.png" alt=""></em>
                   <span>编辑</span>
                 </a>
@@ -260,14 +260,14 @@
           <div class="enclosure">
             <div class="title">
               <p>附件简历</p>
-              <a v-if="isEdit" @click="add('annexResumes')">
+              <a v-if="isEdit && isShow" @click="add('annexResumes')">
                 <em><a-icon type="plus-square" /></em>
                 <span>添加</span>
               </a>
             </div>
             <p v-for="item in annexResumes" :key="item.id">
               <span>{{item.resume_link}}</span>
-              <a v-if="isEdit" @click="del('annexResumes', item.id)"><a-icon type="delete" /></a>
+              <a v-if="isEdit && isShow" @click="del('annexResumes', item.id)"><a-icon type="delete" /></a>
             </p>
           </div>
           <!-- 简历完整度 -->
@@ -287,11 +287,11 @@
               <a :href="'#' + item.url" :style="{width: active == index ? 'auto' : '100%'}">{{item.name}}</a>
               <div v-if="active == index">
                 <div v-if="item.url == 'info'">
-                  <a v-if="isEdit" @click.stop="edit('info')">编辑</a>
+                  <a v-if="isEdit && isShow" @click.stop="edit('info')">编辑</a>
                 </div>
                 <div v-else>
-                  <a v-if="isEdit" @click="add(item.url)">添加</a>
-                  <a v-if="isEdit" @click="del(item.url)">删除</a>
+                  <a v-if="isEdit && isShow" @click="add(item.url)">添加</a>
+                  <a v-if="isEdit && isShow" @click="del(item.url)">删除</a>
                 </div>
               </div>
             </div>
@@ -343,6 +343,7 @@ export default {
   data() {
       return{
         isEdit: false,
+        isShow: true,
         active: null,
         infoModel: null,
         videoModel: null,
@@ -423,6 +424,7 @@ export default {
         let w = parseInt(document.querySelector("#resume_detail").clientWidth);
         let h = parseInt(document.querySelector("#resume_detail").clientHeight);
         //将canvas画布放大若干倍，然后盛放在较小的容器内，就显得不模糊了
+        this.isShow = false;
         canvas2.width = w * 2;
         canvas2.height = h * 2;
         canvas2.style.width = w + "px";
@@ -430,17 +432,21 @@ export default {
         //可以按照自己的需求，对context的参数修改,translate指的是偏移量   
         let context = canvas2.getContext("2d");
         context.scale(2,2);
-        html2canvas(document.querySelector("#resume_detail"),{
-          taintTest: false,
-          allowTaint:true,
-          userCORS: true,
-          canvas:canvas2,
-          y:0,
-          x:0
-        }).then(canvas => {
-             this.resumesImg = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-             this.showResumesVis =true;
-        });
+        setTimeout(()=>{
+          html2canvas(document.querySelector("#resume_detail"),{
+            taintTest: false,
+            allowTaint:true,
+            userCORS: true,
+            canvas:canvas2,
+            y:0,
+            x:0
+          }).then(canvas => {
+              this.resumesImg = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+              this.showResumesVis =true;
+              this.isShow = true;
+          });
+        },30)
+       
     },
     download(){
         // $("#resume_detail").wordExport();
@@ -452,22 +458,26 @@ export default {
         canvas2.height = h * 2;
         canvas2.style.width = w + "px";
         canvas2.style.height = h + "px";
+        this.isShow = false;
         //可以按照自己的需求，对context的参数修改,translate指的是偏移量   
         let context = canvas2.getContext("2d");
         context.scale(2,2);
-        html2canvas(document.querySelector("#resume_detail"),{
-          taintTest: false,
-          allowTaint:true,
-          userCORS: true,
-          canvas:canvas2,
-          y:0,
-          x:0
-        }).then(canvas => {
-              const imgUri = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-              const a = document.createElement('a');
-              a.href = imgUri;
-              a.click();
-        });
+        setTimeout(()=>{
+          html2canvas(document.querySelector("#resume_detail"),{
+            taintTest: false,
+            allowTaint:true,
+            userCORS: true,
+            canvas:canvas2,
+            y:0,
+            x:0
+          }).then(canvas => {
+                const imgUri = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+                const a = document.createElement('a');
+                a.href = imgUri;
+                a.click();
+                this.isShow = true;
+          });
+        },30)
     },
     add(name) { //添加
       switch (name) {

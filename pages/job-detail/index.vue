@@ -1,5 +1,5 @@
 <template>
-  <section class="job_detail">
+  <section class="job_detail page_centent">
       <div class="nav-bg"></div>
       <div class="detail_head">
         <a-row type="flex" justify="space-between" align="middle">

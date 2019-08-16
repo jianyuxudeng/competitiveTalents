@@ -1,6 +1,7 @@
 <template>
-  <section class="industry_detail">
-      <div>
+  <section class="industry_detail page_centent">
+      <div class="nav-bg"></div>
+      <div class="centent">
           <div v-html="content"></div>
       </div>
   </section>

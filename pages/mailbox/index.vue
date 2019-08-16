@@ -1,5 +1,5 @@
 <template>
-  <section class="mailbox">
+  <section class="mailbox page_centent">
       <div class="nav-bg"></div>
       <div class="centent">
           <a-tabs defaultActiveKey="1" @change="callbackTab">

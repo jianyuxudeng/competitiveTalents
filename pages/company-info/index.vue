@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="page_centent">
     <div class="nav-bg"></div>
     <div class="company_info">
       <a-form :form="form" @submit="handleSubmit">

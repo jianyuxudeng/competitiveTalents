@@ -1,16 +1,17 @@
 <template>
-    <section class="settings">
+    <section class="settings page_centent">
         <div class="nav-bg"></div>
         <a-tabs defaultActiveKey="1" tabPosition="left">
             <!-- 账号绑定 -->
             <a-tab-pane tab="账号绑定" key="1">
               <div class="account">
                 <div class="head">
-                  <a-row type="flex" justify="start">
+                  <a-row type="flex" justify="start" align="middle">
                     <a-col :span="2">帐号</a-col>
-                    <a-col :span="5">{{userInfo.username}}</a-col>
+                    <a-col :span="16" v-if="isInput"><a-input v-model="username" /></a-col>
+                    <a-col :span="5" v-else>{{userInfo.username}}</a-col>
                     <a-col :span="4">
-                      <a>更换手机号</a>
+                      <a @click="handleInput">{{isInput ? '确认' : '更换手机号'}}</a>
                     </a-col>
                   </a-row>
                   <p>绑定后，你可以同时使用一下方式登录</p>
@@ -125,7 +126,9 @@ export default {
       hideCompany: [],
       userParams: {},
       anonymous: null,
-      is_hide: false
+      is_hide: false,
+      isInput: false,
+      username: null
     };
   },
   async asyncData() {
@@ -145,6 +148,20 @@ export default {
       this.userInfo = util.getStore('userInfo');
       this.devHideCompany();
       this.devInfo();
+    },
+    handleInput() { //更换手机号
+      this.isInput = true;
+      if(this.isInput && this.username) {
+        ajax.put('user/updatePhone', {
+          user_id: this.userInfo.id,
+          username: this.username
+        }).then(res => {
+          if(res.retcode == 0) {
+            this.isInput = false;
+            this.username = null;
+          }
+        })
+      }
     },
     onChange(e) { //单选 1: 真名 2: 匿名
       ajax.post('user/detail', {

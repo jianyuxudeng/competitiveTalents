@@ -1,5 +1,5 @@
 <template>
-  <section class="job_release">
+  <section class="job_release page_centent">
       <div class="nav-bg"></div>
       <a-form :form="form" @submit="handleSubmit">
           <div class="centent">

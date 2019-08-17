@@ -34,7 +34,7 @@
                         :label-col="labelCol"
                         :wrapper-col="wrapperCol"
                     >
-                        <a-date-picker :defaultValue="moment(modelData.birth, dateFormat)" @change="handleBirth" />
+                        <a-date-picker :defaultValue="modelData.birth&&moment(modelData.birth, dateFormat)" @change="handleBirth" />
                     </a-form-item>
                     <a-form-item
                         label="性别"
@@ -66,6 +66,7 @@
                           :options="areas"
                           :defaultValue="cityArr"
                           @change="onCascader"
+                          placeholder="请选择城市"
                         >
                             <template slot="displayRender" slot-scope="{labels}">
                                 <span v-for="(label, index) in labels" :key="index">
@@ -115,7 +116,7 @@
                         :label-col="labelCol"
                         :wrapper-col="wrapperCol"
                     >
-                        <a-date-picker :defaultValue="moment(modelData.workTime, dateFormat)" @change="handleWorkTime" />
+                        <a-date-picker :defaultValue="modelData.workTime&&moment(modelData.workTime, dateFormat)" @change="handleWorkTime" />
                     </a-form-item>
                     <a-form-item label="1" :label-col="labelCol" class="btn">
                         <a-button type="primary" html-type="submit">保存</a-button>
@@ -163,8 +164,8 @@ export default {
           this.modelData = this.modelEdit;
           if(this.modelData && this.modelData.city) {
               this.citys = JSON.parse(this.modelData.city);
-              let cityArr = this.findParentById(this.areas, this.citys.id, 'id', 'item');
-              this.cityArr = [...cityArr, this.citys.id];
+              let cityArr = this.citys?this.findParentById(this.areas, this.citys.id, 'id', 'item'):[];
+              this.cityArr = this.citys?[...cityArr, this.citys.id]:[];
           };
       }
   },
@@ -217,9 +218,13 @@ export default {
                   let _data = Object.assign(values, {
                       user_id: userInfo.id,
                       city: JSON.stringify(this.city),
-                      birth: this.birth,
-                      workTime: this.workTime
                   });
+                  if(this.workTime){
+                      _data.workTime = this.workTime;
+                  }
+                  if(this.birth){
+                      _data.birth = this.birth;
+                  }
                   ajax.post('user/detail', _data).then(res => {
                       if(res.retcode == 0) {
                           this.modelData = null;
@@ -241,7 +246,7 @@ export default {
           let parentIds = [], index = 0, names = [],
               hasParentId = function loop(arr, index) {
                   return arr.some(item => {
-                      if(item[type] == path) {
+                      if(item[type] == path && item.sort) {
                           parentIds = parentIds.slice(0, index);
                           names = names.splice(0, index);
                           return true;

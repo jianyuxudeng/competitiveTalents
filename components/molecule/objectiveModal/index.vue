@@ -165,7 +165,7 @@ export default {
           if(this.modelData && this.modelData.city && this.modelData.city != 'null') {
               this.city = JSON.parse(this.modelData.city);
               this.citys = JSON.parse(this.modelData.city);
-              let cityArr = this.findParentById(this.areas, this.citys.id, 'id', 'item');
+              let cityArr = this.findParentById(this.areas, this.citys.id, 'id', 'item',false,true);
               this.cityArr = [...cityArr, this.citys.id];
           };
           if(this.modelData && this.modelData.expected_position) {
@@ -272,19 +272,32 @@ export default {
           })
       },
       //通过子集值查询父级值
-      findParentById(arr, path, type, pArr, needInfo) { //arr:要匹配的数组，path:要匹配的值， type:根据什么字段匹配， pArr:子集数组属性名， needInfo:自定义返回值
+      findParentById(arr, path, type, pArr, needInfo,needsrot) { //arr:要匹配的数组，path:要匹配的值， type:根据什么字段匹配， pArr:子集数组属性名， needInfo:自定义返回值
           let parentIds = [], index = 0, names = [],
               hasParentId = function loop(arr, index) {
                   return arr.some(item => {
-                      if(item[type] == path) {
-                          parentIds = parentIds.slice(0, index);
-                          names = names.splice(0, index);
-                          return true;
-                      }else if(Array.isArray(item[pArr])) {
-                          parentIds[index] = item[type];
-                          names[index] = item;
-                          return loop(item[pArr], index+1);
-                      };
+                      if(needsrot){
+                            if(item[type] == path && item.sort) {
+                                parentIds = parentIds.slice(0, index);
+                                names = names.splice(0, index);
+                                return true;
+                            }else if(Array.isArray(item[pArr])) {
+                                parentIds[index] = item[type];
+                                names[index] = item;
+                                return loop(item[pArr], index+1);
+                            };
+                      }else{
+                            if(item[type] == path) {
+                                parentIds = parentIds.slice(0, index);
+                                names = names.splice(0, index);
+                                return true;
+                            }else if(Array.isArray(item[pArr])) {
+                                parentIds[index] = item[type];
+                                names[index] = item;
+                                return loop(item[pArr], index+1);
+                            };
+                      }
+                     
                       return false;
                   })
               }(arr, index);

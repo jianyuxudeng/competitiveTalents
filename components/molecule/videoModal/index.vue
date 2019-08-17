@@ -85,7 +85,7 @@ export default {
               ajax.post('user/video', {
                   user_id: userInfo.id,
                   video_link: this.videoFileList[0].url[0]
-              }).then(item => {
+              }).then(res => {
                   if(res.retcode == 0) {
                       this.modelData = null;
                       this.videoFileList = [];

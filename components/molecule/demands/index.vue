@@ -26,7 +26,7 @@
                       </div>
                   </div>
                   <div class="resume_text" v-if="userInfo && userInfo.type == 3">
-                      <span>求职期望：{{JSON.parse(item.city).cityName}}</span>
+                      <span>求职期望：{{item.city&&JSON.parse(item.city).cityName}}</span>
                       <span>工作经历：{{item.workTime}}年</span>
                   </div>
                   <div class="demands_btn">
@@ -46,7 +46,7 @@
                           /
                           {{item.capitalize ? labels.capitalizes.find(i => i.id == item.capitalize).labelName : null}}
                           /
-                          {{JSON.parse(item.companyRegion).cityName}}
+                          {{item.companyRegion&&JSON.parse(item.companyRegion).cityName}}
                       </p>
                   </dd>
               </dl>

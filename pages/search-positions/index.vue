@@ -103,7 +103,7 @@
                     <div class="head">
                         <span v-if="item.is_worry == 1">急<br />聘</span>
                         <div class="rows_left">
-                            <div class="title"><span>{{item.name}}[ {{JSON.parse(item.companyRegion).cityName}} ]</span>{{item.workExperience ? workExpress.find(i => i.id == item.workExperience).labelName : null}} / {{item.educational ? educationals.find(i => i.id == item.educational).labelName : null}}</div>
+                            <div class="title"><span>{{item.name}}[ {{item.companyRegion&&JSON.parse(item.companyRegion).cityName}} ]</span>{{item.workExperience ? workExpress.find(i => i.id == item.workExperience).labelName : null}} / {{item.educational ? educationals.find(i => i.id == item.educational).labelName : null}}</div>
                             <div class="list">
                                 <div class="li">
                                     <p>
@@ -134,7 +134,7 @@
                             <div>
                                 <p>{{item.jobPrice}}/月</p>
                                 <p>{{item.companyName}}</p>
-                                <p>{{item.trade ? trades.find(i => i.id == item.trade).labelName : null}}/{{item.capitalize ? capitalizes.find(i => i.id == item.capitalize).labelName : null}}/{{JSON.parse(item.companyRegion).cityName}}</p>
+                                <p>{{item.trade ? trades.find(i => i.id == item.trade).labelName : null}}/{{item.capitalize ? capitalizes.find(i => i.id == item.capitalize).labelName : null}}/{{item.companyRegion&&JSON.parse(item.companyRegion).cityName}}</p>
                             </div>
                             <em><img :src="item.logo" alt=""></em>
                         </div>
@@ -320,12 +320,12 @@ export default {
               };
           });
           this.params = Object.assign(this.params, {region: {
-              provincesId: provinces.id, 
-              provincesName: provinces.name,
-              cityId: citys.id,
-              cityName: citys.name,
-              area: this.areaItem.id,
-              areaName: this.areaItem.name
+              provincesId: provinces&&provinces.id, 
+              provincesName: provinces&&provinces.name,
+              cityId: citys&&citys.id,
+              cityName: citys&&citys.name,
+              area: this.areaItem&&this.areaItem.id,
+              areaName: this.areaItem&&this.areaItem.name
           }});
           this.searchData();
       },

@@ -1,30 +1,36 @@
 <template>
-  <div>
-    <div v-show="isPc">
-        <navgation v-if="!isLogin"></navgation>
+  <a-locale-provider :locale="zh_CN">
+    <div>
+        <div v-show="isPc">
+            <navgation v-if="!isLogin"></navgation>
+        </div>
+        <div v-show="!isPc">
+            <mobile-navgation></mobile-navgation>
+        </div>
+        <nuxt/>
+        <div v-show="isPc">
+          <footer-bot v-if="!isLogin"></footer-bot>
+        </div>
+        <div v-show="!isPc">
+            <mobile-footer ></mobile-footer>
+        </div>
     </div>
-    <div v-show="!isPc">
-        <mobile-navgation></mobile-navgation>
-    </div>
-    <nuxt/>
-    <div v-show="isPc">
-      <footer-bot v-if="!isLogin"></footer-bot>
-    </div>
-    <div v-show="!isPc">
-        <mobile-footer ></mobile-footer>
-    </div>
-  </div>
+  </a-locale-provider>
 </template>
 <script>
 const navgation = () => import("./navgation/index.vue");
 const footerBot = () => import("./footer/index.vue");
 const mobileNavgation = () => import("./mobile/mobile-navgation/index.vue");
 const mobileFooter = () => import("./mobile/mobile-footer/index.vue");
+import zh_CN from 'ant-design-vue/lib/locale-provider/zh_CN';
+import moment from 'moment';
+import 'moment/locale/zh-cn';
 export default {
   data() {
     return {
       isPc: false,
-      isLogin: false
+      isLogin: false,
+      zh_CN
     };
   },
   watch: {

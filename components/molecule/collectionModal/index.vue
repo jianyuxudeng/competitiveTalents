@@ -66,7 +66,7 @@ export default {
       },
       handleChange({ file, fileList }) {
           let newList = [...fileList];
-          newList = newList.slice(-1);
+        //   newList = newList.slice(-1);
           newList = newList.map((v) => {
               if (v.response) {
                   v.url = v.response.data.imageList;
@@ -78,14 +78,32 @@ export default {
       addCollection() {
           if(this.collectionFileList.length > 0 && this.collectionFileList[0].status == 'done') {
               let userInfo = util.getStore('userInfo');
-              ajax.post('user/collection', {
-                  user_id: userInfo.id,
-                  collection_link: this.collectionFileList[0].url[0]
-              }).then(res => {
-                  this.modelData = null;
-                  this.collectionFileList = [];
-                  this.$emit('okModel', 'collectionModal');
-              })
+              let _collection_link = this.collectionFileList.map(item => item.url[0]);
+              if(this.modelEdit && this.modelEdit.id) {
+                  let newArr = [...this.modelEdit.collection_link, ..._collection_link];
+                  ajax.put('user/collection', {
+                      user_id: userInfo.id,
+                      collection_link: JSON.stringify(newArr),
+                      id: this.modelEdit.id
+                  }).then(res => {
+                      if(res.retcode == 0) {
+                          this.modelData = null;
+                          this.collectionFileList = [];
+                          this.$emit('okModel', 'collectionModal');
+                      }
+                  })
+              }else{
+                  ajax.post('user/collection', {
+                      user_id: userInfo.id,
+                      collection_link: JSON.stringify(_collection_link)
+                  }).then(res => {
+                      if(res.retcode == 0) {
+                          this.modelData = null;
+                          this.collectionFileList = [];
+                          this.$emit('okModel', 'collectionModal');
+                      }
+                  })
+              }
           }
       }
   }

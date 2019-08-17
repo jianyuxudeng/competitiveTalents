@@ -71,7 +71,7 @@ export default {
   data() {
       return{
           listCope: [],
-          labels: null,
+          labels: {},
           util: util
       }
   },

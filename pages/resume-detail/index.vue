@@ -206,9 +206,9 @@
                 </a>
               </div>
               <div class="picture">
-                <div v-for="item in collection" :key="item.id">
-                  <img :src="item.collection_link" alt="">
-                  <a v-if="isEdit && isShow" @click="del('collection', item.id)"><a-icon type="delete" /></a>
+                <div v-for="(item, index) in collection.collection_link" :key="index">
+                  <img :src="item" alt="">
+                  <a v-if="isEdit && isShow" @click="delCollection(index)"><a-icon type="delete" /></a>
                 </div>
               </div>
             </div>
@@ -370,7 +370,7 @@ export default {
         education: [],
         sendStatus:{},
         social: [],
-        collection: [],
+        collection: {},
         objective: {},
         annexResumes: [],
         user_id: null,
@@ -512,7 +512,7 @@ export default {
           });
           break;
         case 'collection':
-          this.collectionModal = Object.assign({}, {
+          this.collectionModal = Object.assign(this.collection, {
             title: '作品集上传',
             isEdit: false
           });
@@ -582,6 +582,18 @@ export default {
         }
       })
     },
+    delCollection(index) {
+      this.collection.collection_link.splice(index, 1);
+      ajax.put('user/collection', {
+          user_id: this.collection.user_id,
+          collection_link: JSON.stringify(this.collection.collection_link),
+          id: this.collection.id
+      }).then(res => {
+          if(res.retcode == 0) {
+              this.getData();
+          }
+      })
+    },
     cancelModel(name) { //点击弹窗关闭按钮时，清空弹窗数据
       this[name] = null;
     },
@@ -605,12 +617,13 @@ export default {
           this.projectExpress = _data.projectExpress || [];
           this.education = _data.education || [];
           this.social = _data.social || [];
-          this.collection = _data.collection || [];
+          this.collection = _data.collection && _data.collection.length > 0 ? _data.collection[0] : {};
           this.objective = _data.objective[0] || {};
           this.process = parseFloat(_data.process) || 0;
           this.experience.map(item => {
             if(item.skills) item.skillsName = item.skills.split(',');
           });
+          if(this.collection.collection_link) this.collection.collection_link = JSON.parse(this.collection.collection_link);
           if(_data.sendStatus){
           this.sendStatus = _data.sendStatus[0]||{};
             if(this.sendStatus.is_read==0){

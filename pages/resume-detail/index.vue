@@ -245,7 +245,7 @@
             </p>
             <p>
               <em><img src="../../assets/images/address.png" alt=""></em>
-              <span>{{objective.city && objective.city != 'null' ? JSON.parse(objective.city).cityName : objective.cityName}}</span>
+              <span>{{objective.city && objective.city != 'null' ? JSON.parse(objective.city).name : objective.cityName}}</span>
             </p>
             <p>
               <em><img src="../../assets/images/money.png" alt=""></em>

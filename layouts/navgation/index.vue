@@ -14,6 +14,7 @@
             <span @click="navLink(item.code)">{{item.name}}</span>
             <em v-if="isLogin && item.code=='logout'"><a-icon :type="isSelect ? 'caret-up' : 'caret-down'" /></em>
             <ul v-if="isSelect && item.code=='logout'">
+              <li @click="goResumeDetail">个人信息</li>
               <li @click="goLodout">退出登录</li>
             </ul>
           </a>
@@ -158,6 +159,12 @@ export default {
           path: '/login'
         })
       }
+    },
+    goResumeDetail() {
+      this.$router.push({
+        path: 'resume-detail'
+      });
+      this.isSelect = false;
     },
     //首页
     goHome() {

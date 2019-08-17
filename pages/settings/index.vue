@@ -11,7 +11,8 @@
                     <a-col :span="16" v-if="isInput"><a-input v-model="username" /></a-col>
                     <a-col :span="5" v-else>{{userInfo.username}}</a-col>
                     <a-col :span="4">
-                      <a @click="handleInput">{{isInput ? '确认' : '更换手机号'}}</a>
+                      <a @click="handleInput(true)" v-if="isInput">确认</a>
+                      <a @click="handleInput(false)" v-else>更换手机号</a>
                     </a-col>
                   </a-row>
                   <p>绑定后，你可以同时使用一下方式登录</p>
@@ -151,18 +152,21 @@ export default {
       this.devHideCompany();
       this.devInfo();
     },
-    handleInput() { //更换手机号
-      this.isInput = true;
-      if(this.isInput && this.username) {
+    handleInput(name) { //更换手机号
+      if(name) {
         ajax.put('user/updatePhone', {
           user_id: this.userInfo.id,
           username: this.username
         }).then(res => {
           if(res.retcode == 0) {
-            this.isInput = false;
-            this.username = null;
+            this.$router.push({
+              path: '/login'
+            })
           }
         })
+      }else{
+        this.isInput = true;
+        this.username = this.userInfo.username;
       }
     },
     onChange(e) { //单选 1: 真名 2: 匿名

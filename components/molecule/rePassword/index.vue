@@ -2,9 +2,9 @@
     <section class="login_form">
         <div class="goLogin">
             <a @click="goLogin">返回登录</a>
-                <em></em>
-            <a>
-            <span>通过邮箱找回</span>
+            <em></em>
+            <a @click="goEMail">
+                <span>通过邮箱找回</span>
                 <a-icon type="play-circle" theme="filled" />
             </a>
         </div>
@@ -120,7 +120,10 @@ export default {
       this.active = key;
     },
     goLogin() { //返回登录
-        this.$emit('handleShow', 1)
+        this.$emit('handleShow', 1);
+    },
+    goEMail() {
+        this.$emit('handleShow', 5);
     },
     emitEmpty() { //点击发送验证码
       let _phone = this.form.getFieldValue('username');
@@ -157,7 +160,7 @@ export default {
             });
             ajax.put('rePassword', this.params).then(res => {
               if(res.retcode == 0) {
-                this.$emit('handleOk', 4)
+                this.$emit('handleShow', 4)
               }else{
                 this.$message.warning(res.msg);
               }

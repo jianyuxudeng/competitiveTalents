@@ -15,6 +15,15 @@
                       <a @click="handleInput(false)" v-else>更换手机号</a>
                     </a-col>
                   </a-row>
+                  <a-row type="flex" justify="start" align="middle" class="email">
+                    <a-col :span="2">邮箱</a-col>
+                    <a-col :span="5" v-if="isEmail">{{email}}</a-col>
+                    <a-col :span="16" v-else><a-input v-model="email" /></a-col>
+                    <a-col :span="4">
+                      <a @click="isEmail = false" v-if="isEmail">修改邮箱</a>
+                      <a @click="handleEmail" v-else>绑定邮箱</a>
+                    </a-col>
+                  </a-row>
                   <p>绑定后，你可以同时使用一下方式登录</p>
                 </div>
                 <!-- <div class="cent">
@@ -131,7 +140,9 @@ export default {
       isInput: false,
       username: null,
       sex: 1,
-      anonymousName: ''
+      anonymousName: '',
+      email: null,
+      isEmail: false
     };
   },
   async asyncData() {
@@ -167,6 +178,19 @@ export default {
       }else{
         this.isInput = true;
         this.username = this.userInfo.username;
+      }
+    },
+    handleEmail() { //绑定邮箱
+      if(this.email) {
+        ajax.post('user/detail', {
+          user_id: this.userInfo.id,
+          email: this.email
+        }).then(res => {
+          if(res.retcode == 0) {
+            this.$message.success(res.msg);
+            this.devInfo();
+          }
+        })
       }
     },
     onChange(e) { //单选 1: 真名 2: 匿名
@@ -234,9 +258,15 @@ export default {
       ajax.get('user/' + this.userInfo.id).then(res => {
         if(res.retcode == 0) {
           this.userParams = res.data || {};
-          if(res.data.userInfo[0].sex) this.sex = res.data.userInfo[0].sex;
-          if(res.data.userInfo[0].anonymous) this.anonymous = res.data.userInfo[0].anonymous + '';
-          if(res.data.userInfo[0].is_hide) this.is_hide = res.data.userInfo[0].is_hide == 1 ? true : false;
+          if(res.data && res.data.userInfo && res.data.userInfo.length > 0) {
+            if(res.data.userInfo[0].sex) this.sex = res.data.userInfo[0].sex;
+            if(res.data.userInfo[0].anonymous) this.anonymous = res.data.userInfo[0].anonymous + '';
+            if(res.data.userInfo[0].is_hide) this.is_hide = res.data.userInfo[0].is_hide == 1 ? true : false;
+            if(res.data.userInfo[0].email) {
+              this.email = res.data.userInfo[0].email;
+              this.isEmail = true;
+            };
+          }
           this.anonymousName = res.data.username.substr(0, 1);
         };
       })

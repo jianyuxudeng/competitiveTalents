@@ -20,7 +20,7 @@
                     <p>重设密码完成</p>
                     <p>请返回登录页面重新登录</p>
                 </section>
-                <eMail v-if="isShow == 5" @handleShow="goLogin"></eMail>
+                <eMail v-if="isShow == 5" :emailRoter="emailRoter" @handleShow="goLogin"></eMail>
               </div>
           </div>
           <!-- footer -->
@@ -52,12 +52,24 @@ export default {
   data() {
       return{
         isShow: 1, //1：登录   2：注册   3：找回密码   4：重设密码完成   5:邮箱找回密码
-        type: '2'
+        type: '2',
+        emailRoter: null
       }
   },
   mounted() {
+    this.init();
   },
   methods: {
+    init() {
+      if(this.getQueryVariable('isShow')) {
+        this.isShow = this.getQueryVariable('isShow') || 1;
+        this.emailRoter = {
+          emailRepassword: this.getQueryVariable('emailRepassword') || null,
+          email: this.getQueryVariable('email'),
+          code: this.getQueryVariable('code')
+        }
+      }
+    },
     toRegister(e) { //进入注册 || 修改密码
       this.isShow = e.val;
       if(e.val == 3) {
@@ -66,6 +78,16 @@ export default {
     },
     goLogin(val) {
       this.isShow = val;
+      this.emailRoter = null;
+    },
+    getQueryVariable(variable){
+        var query = decodeURIComponent(window.location.search.substring(1));
+        var vars = query.split("&");
+        for (var i=0;i<vars.length;i++) {
+                var pair = vars[i].split("=");
+                if(pair[0] == variable){return pair[1];}
+        }
+        return(false);
     }
   }
 };

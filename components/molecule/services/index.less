@@ -1,5 +1,5 @@
 .services_page{
-    width: 11.83rem;
+    max-width: 11.83rem;
     margin: .4rem auto 0;
     ul{
         display: flex;
@@ -45,6 +45,32 @@
         }
         em{
             background: #ffac60;
+        }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .services_page{
+        ul{
+            flex-wrap: wrap;
+            justify-content: center;
+            li{
+                width: 1.95rem;
+                height: 1.92rem;
+                margin: 0 .14rem .2rem;
+                dl{
+                    height: 100%;
+                    margin-bottom: 0;
+                }
+                dt{
+                    width: .6rem;
+                }
+            }
+        }
+        &.freeker{
+            dl{
+                background: #fff;
+            }
         }
     }
 }

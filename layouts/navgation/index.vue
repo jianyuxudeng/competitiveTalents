@@ -161,10 +161,16 @@ export default {
       }
     },
     goResumeDetail() {
-      this.$router.push({
-        path: 'resume-detail'
-      });
-      this.isSelect = false;
+        if(util.getStore('userInfo').type == 2) {
+            this.$router.push({
+                path: 'resume-detail'
+            });
+        }else{
+            this.$router.push({
+                path: 'company-info'
+            })
+        };
+        this.isSelect = false;
     },
     //首页
     goHome() {

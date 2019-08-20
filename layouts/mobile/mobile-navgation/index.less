@@ -1,0 +1,102 @@
+.nav-bg{
+    height: .91rem;
+    background: rgba(24, 29, 76);
+}
+.mobile_navgation{
+    width: 100%;
+    height: .91rem;
+    background: rgba(24, 29, 76);
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 9;
+    .head_flex{
+        height: 100%;
+        padding: 0 .3rem;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .head_logo{
+            display: flex;
+            align-items: center;
+            em{
+                width: 1.81rem;
+                height: .57rem;
+                margin-right: .64rem;
+            }
+            a{
+                font-size: .18rem;
+                color: #ffffff;
+                margin: 0 .15rem;
+            }
+        }
+        .head_nav{
+            display: flex;
+            .nav_menu{
+                position: absolute;
+                top: .91rem;
+            }
+            .san{
+                width: 0.46rem;
+                height: 0.3rem;
+                position: relative;
+                margin-left: .9rem;
+                span {
+                    width: 100%;
+                    position: absolute;
+                    height: .04rem;
+                    background: #fff;
+                    display: block;
+                    transition: all .5s;
+                    &:nth-child(1) {
+                        top: 0;
+                    }
+                    &:nth-child(2) {
+                        top: 50%;
+                        margin-top: -1px;
+                    }
+                    &:nth-child(3) {
+                        bottom: 0;
+                    }
+                }
+                &.cur{
+                    span{
+                        &:nth-child(2) {
+                            transform: rotate(-45deg);
+                        }
+                        &:nth-child(1) {
+                            top: 50%;
+                            margin-top: -1px;
+                            transform: rotate(45deg);
+                        }
+                        &:nth-child(3) {
+                            display: none;
+                        }
+                    }
+                }
+            }
+            a{
+                font-size: .18rem;
+                color: #ffffff;
+                margin: 0 .15rem;
+                display: flex;
+                align-items: center;
+                position: relative;
+                ul{
+                    width: 100%;
+                    position: absolute;
+                    left: 0;
+                    top: .59rem;
+                }
+                li{
+                    background: rgba(24, 29, 76, .8);
+                    padding: 0 0 .1rem;
+                    margin: 0;
+                    text-align: center;
+                    z-index: 2;
+                }
+            }
+        }
+    }
+}

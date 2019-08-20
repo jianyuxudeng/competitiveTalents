@@ -1,5 +1,6 @@
 <template>
   <footer id="footer" ref="footer" :class="[exducationFooter,'mfooter']">
+    <img src="../../../assets/images/foot_img.jpg" alt="">
   </footer>
 </template>
 <script>

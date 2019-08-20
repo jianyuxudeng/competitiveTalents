@@ -69,17 +69,15 @@
                     display: flex;
                     margin: .1rem auto .2rem;
                     span{
-                        width: .83rem;
-                        height: .27rem;
                         border-radius: .04rem;
                         border: 1px solid #d1d1d1;
                         margin-right: .08rem;
+                        padding: .02rem .2rem;
                         font-size: .12rem;
                         color: #969696;
                         text-align: center;
-                        line-height: .27rem;
+                        line-height: 1.6;
                         &:first-child{
-                            width: .56rem;
                             color: #ffffff;
                         }
                         &.blue{
@@ -119,6 +117,16 @@
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .demands_page{
+        ul{
+            li{
+                width: 100%;
             }
         }
     }

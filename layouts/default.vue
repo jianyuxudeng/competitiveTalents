@@ -5,14 +5,14 @@
             <navgation v-if="!isLogin"></navgation>
         </div>
         <div v-show="!isPc">
-            <mobile-navgation></mobile-navgation>
+            <mobile-navgation v-if="!isLogin"></mobile-navgation>
         </div>
         <nuxt/>
         <div v-show="isPc">
           <footer-bot v-if="!isLogin"></footer-bot>
         </div>
         <div v-show="!isPc">
-            <mobile-footer ></mobile-footer>
+            <mobile-footer v-if="!isLogin"></mobile-footer>
         </div>
     </div>
   </a-locale-provider>

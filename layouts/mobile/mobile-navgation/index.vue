@@ -3,23 +3,25 @@
       <div class="head_flex">
         <!-- logo -->
         <div class="head_logo">
-          <em><img src="../../../assets/images/LOGO.png" alt=""></em>
         </div>
         <!-- nav -->
         <div class="head_nav">
           <a v-if="!isLogin" @click="gotoLogin">注册/登录</a>
           <a v-else>
-              <span>{{username}}</span>
+              <span @click="isSelect = !isSelect; isMune = false">{{username}}</span>
               <em><a-icon :type="isSelect ? 'caret-up' : 'caret-down'" /></em>
               <a-menu
                 mode="inline"
                 theme="dark"
+                v-if="isSelect"
               >
-                <a-menu-item>个人信息</a-menu-item>
-                <a-menu-item>退出登录</a-menu-item>
+                <a-menu-item @click="goResumeDetail">个人信息</a-menu-item>
+                <a-menu-item @click="navLink('settings')">账号设置</a-menu-item>
+                <a-menu-item @click="goLodout">切换为招聘者</a-menu-item>
+                <a-menu-item @click="goLodout">退出登录</a-menu-item>
               </a-menu>
           </a>
-          <div class="san" :class="{cur: isMune}" @click="isMune = !isMune">
+          <div class="san" :class="{cur: isMune}" @click="isMune = !isMune; isSelect = false">
               <span></span>
               <span></span>
               <span></span>
@@ -89,7 +91,11 @@ export default {
           case 2:
             _navs = [
               {
-                name: '简历',
+                name: '首页',
+                code: ''
+              },
+              {
+                name: '我的简历',
                 code: 'resume-detail'
               },
               {
@@ -97,17 +103,17 @@ export default {
                 code: 'delivery-status'
               },
               {
-                name: '收藏夹',
+                name: '职位收藏',
                 code: 'job-collection'
-              },
-              {
-                name: '账号设置',
-                code: 'settings'
               }
             ];
             break;
           case 3: 
             _navs = [
+              {
+                name: '首页',
+                code: ''
+              },
               {
                 name: '职位发布',
                 code: 'job-release'
@@ -134,7 +140,11 @@ export default {
         _isLogin = false;
         _navs = [
             {
-              name: '简历',
+              name: '首页',
+              code: ''
+            },
+            {
+              name: '我的简历',
               code: 'resume-detail'
             },
             {
@@ -142,12 +152,8 @@ export default {
               code: 'delivery-status'
             },
             {
-              name: '收藏夹',
+              name: '职位收藏',
               code: 'job-collection'
-            },
-            {
-              name: '账号设置',
-              code: 'company-info'
             }
           ];
       };

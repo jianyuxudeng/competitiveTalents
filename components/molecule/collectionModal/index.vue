@@ -16,6 +16,7 @@
                     :supportServerRender="true"
                     :withCredentials="true"
                     @change="handleChange"
+                    accept='image/*'
                 >
                     <a-button type="primary">选择上传作品</a-button>
                 </a-upload>

@@ -221,7 +221,7 @@ export default {
               if(this.modelEdit.come_time) this.come_time = util.formatDate(this.modelEdit.come_time);
               if(this.modelEdit.leave_time) this.leave_time = util.formatDate(this.modelEdit.leave_time);
               if(this.modelEdit.skills_ids) this.skillsId = this.modelEdit.skills_ids.split(',');
-              if(this.modelEdit.is_show) this.is_show = this.modelEdit.is_show == 1;
+              if(this.modelEdit.is_show) this.is_show = this.modelEdit.is_show == 0;
           }
       }
   },
@@ -268,7 +268,7 @@ export default {
                       skills: `${values.skills}`,
                       come_time: this.come_time,
                       leave_time: this.leave_time,
-                      is_show: values.is_show ? 1 : 0,
+                      is_show: values.is_show ? 0 : 1,
                       skills_ids: this.skillsId.join(','),
                       user_id: userInfo.id,
                       id: this.modelEdit.id || null

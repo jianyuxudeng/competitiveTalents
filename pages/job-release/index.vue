@@ -108,7 +108,11 @@
                   :value="item.labelName"
                 >{{item.labelName}}</a-select-option>
               </a-select>
-              <a-input size="large" class="w184" v-model="params.jobPrice" v-else></a-input>
+              <a-row type="flex" justify="space-between" align="middle" v-else>
+                <a-input-number size="large" class="w90" v-model="jobPriceFirt"></a-input-number>
+                <span>-</span>
+                <a-input-number size="large" class="w90" :min="jobPriceFirt + 1" v-model="jobPriceLast"></a-input-number>
+              </a-row>
               <a
                 @click="() => {
                                   isTrue = false;
@@ -181,6 +185,152 @@
             ></a-input>
           </a-form-item>
         </div>
+        <div class="list labelMat">
+          <a-form-item class="left" label="工作经验">
+            <a-select
+              size="large"
+              v-decorator="[
+                              'workExperience',
+                              {
+                                  initialValue: params.workExperience,
+                                  rules: [{ required: false }]
+                              }
+                          ]"
+            >
+              <a-select-option
+                v-for="item in labels.workExpress"
+                :key="item.id"
+                :value="item.id"
+              >{{item.labelName}}</a-select-option>
+            </a-select>
+          </a-form-item>
+          <a-form-item class="right" label="行业领域">
+            <a-select
+              size="large"
+              v-decorator="[
+                              'trade',
+                              {
+                                  initialValue: params.trade,
+                                  rules: [{ required: false }]
+                              }
+                          ]"
+            >
+              <a-select-option
+                v-for="item in labels.trades"
+                :key="item.id"
+                :value="item.id"
+              >{{item.labelName}}</a-select-option>
+            </a-select>
+          </a-form-item>
+        </div>
+        <div class="list labelMat">
+          <a-form-item class="left" label="公司规模">
+            <a-select
+              size="large"
+              v-decorator="[
+                              'companySize',
+                              {
+                                  initialValue: params.companySize,
+                                  rules: [{ required: false }]
+                              }
+                          ]"
+            >
+              <a-select-option
+                v-for="item in labels.companySizes"
+                :key="item.id"
+                :value="item.id"
+              >{{item.labelName}}</a-select-option>
+            </a-select>
+          </a-form-item>
+          <a-form-item class="right" label="融资阶段">
+            <a-select
+              size="large"
+              v-decorator="[
+                              'capitalize',
+                              {
+                                  initialValue: params.capitalize,
+                                  rules: [{ required: false }]
+                              }
+                          ]"
+            >
+              <a-select-option
+                v-for="item in labels.capitalizes"
+                :key="item.id"
+                :value="item.id"
+              >{{item.labelName}}</a-select-option>
+            </a-select>
+          </a-form-item>
+        </div>
+        <div class="list labelMat">
+          <a-form-item class="left" label="学历要求">
+            <a-select
+              size="large"
+              v-decorator="[
+                              'educational',
+                              {
+                                  initialValue: params.educational,
+                                  rules: [{ required: false }]
+                              }
+                          ]"
+            >
+              <a-select-option
+                v-for="item in labels.educationals"
+                :key="item.id"
+                :value="item.id"
+              >{{item.labelName}}</a-select-option>
+            </a-select>
+          </a-form-item>
+          <a-form-item class="right" label="工作周期">
+            <a-input
+              size="large"
+              v-decorator="[
+                              'work_time',
+                              {
+                                  initialValue: params.work_time,
+                                  rules: [{ required: false }]
+                              }
+                          ]"
+            />
+          </a-form-item>
+        </div>
+        <div class="list labelMat">
+          <a-form-item class="left" label="工作形式">
+            <a-input
+              size="large"
+              v-decorator="[
+                              'form',
+                              {
+                                  initialValue: params.form,
+                                  rules: [{ required: false }]
+                              }
+                          ]"
+            />
+          </a-form-item>
+          <a-form-item class="right" label="截止时间">
+            <a-date-picker
+              size="large"
+              :defaultValue="moment(deadTime || formatDate(new Date()), dateFormat)"
+              @change="handleDeadTime"
+            />
+          </a-form-item>
+        </div>
+        <div class="list labelMat">
+          <a-form-item class="left" label="是否急聘">
+            <a-radio-group
+                size="large"
+                v-decorator="[
+                    'is_worry',
+                    {
+                        initialValue: params.is_worry,
+                        rules: [{ required: false }]
+                    }
+                ]"
+            >
+              <a-radio :value="0">否</a-radio>
+              <a-radio :value="1">是</a-radio>
+            </a-radio-group>
+          </a-form-item>
+        </div>
         <div class="list">
           <a-form-item label="职位描述">
             <a-textarea
@@ -240,6 +390,7 @@ import "./index.less";
 import ajax from "../../plugins/api";
 import util from "../../plugins/utils/util";
 import area from "../../plugins/utils/area";
+import moment from 'moment';
 
 export default {
   name: "job-release",
@@ -249,6 +400,7 @@ export default {
   data() {
     return {
       form: this.$form.createForm(this),
+      dateFormat: 'YYYY-MM-DD',
       careers: [],
       labels: [],
       provincesList: [],
@@ -259,16 +411,21 @@ export default {
       area: null,
       region: {},
       jobPrice: null,
+      jobPriceFirt: null,
+      jobPriceLast: null,
       isTrue: true,
       active: null,
       params: {},
-      careerIds: []
+      careerIds: [],
+      deadTime: null
     };
   },
   mounted() {
     this.init();
   },
   methods: {
+    moment,
+    formatDate: util.formatDate,
     async init() {
       //初始化
       this.provincesList = area;
@@ -276,11 +433,14 @@ export default {
       const res = await this.getCareers();
       if (_id&&res) {
         this.devData(_id);
-      }
+      };
     },
     callback(key) {
       //类型切换
       this.active = key;
+    },
+    handleDeadTime(date, dateString) {
+      this.deadTime = dateString;
     },
     handleSkills(value) {
       if (value.length > 3) {
@@ -359,10 +519,11 @@ export default {
             careers_id: values.careers_id[values.careers_id.length - 1],
             user_id: userInfo.id,
             region: JSON.stringify(this.region),
-            jobPrice: this.jobPrice,
+            jobPrice: this.isTrue ? this.jobPrice : (this.jobPriceFirt + '-' + this.jobPriceLast),
             skills_ids: `${skills_ids}`,
             skills: `${values.skills}`,
-            careers_type: this.active
+            careers_type: this.active,
+            deadTime: this.deadTime || util.formatDate(new Date())
           });
           params &&
             Object.keys(params).map(item => {
@@ -405,6 +566,7 @@ export default {
         .then(async res => {
           if (res.retcode == 0) {
             this.params = res.data.jobDetail[0] || {};
+            if (this.params.deadTime) this.deadTime = util.formatDate(this.params.deadTime) || util.formatDate(new Date());
             if (this.params.type) this.params.type = Number(this.params.type);
             if (this.params.careerPrice)
               this.params.careerPrice = Number(this.params.careerPrice);

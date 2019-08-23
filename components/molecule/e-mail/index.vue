@@ -27,6 +27,7 @@
             <section v-else>
                 <a-form-item>
                     <a-input 
+                    type="password"
                     placeholder="请输入新密码"
                     v-decorator="[
                         'password',
@@ -38,6 +39,7 @@
                 </a-form-item>
                 <a-form-item>
                     <a-input 
+                    type="password"
                     placeholder="请再次输入新密码"
                     v-decorator="[
                         'rePassword',
@@ -74,6 +76,7 @@ export default {
       }
   },
   mounted() {
+      this.init();
   },
   watch: {
       emailRoter() {
@@ -118,6 +121,8 @@ export default {
                     if(res.retcode == 0) {
                         this.$message.success(res.msg);
                         this.goLogin();
+                    }else{
+                        this.$message.error('验证已过期');
                     }
                 })
             }

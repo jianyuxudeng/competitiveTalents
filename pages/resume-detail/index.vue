@@ -89,7 +89,13 @@
               <em>
                 <img src="../../assets/images/position.png" alt />
               </em>
-              <span>{{objective.expected_position_name}}/{{objective.job_type_name}}</span>
+              <span>{{objective.expected_position_name}}</span>
+            </p>
+            <p>
+              <em>
+                <img src="../../assets/images/resume-type.png" alt />
+              </em>
+              <span>{{objective.job_type_name}}</span>
             </p>
             <p>
               <em>

@@ -139,7 +139,7 @@
                         :wrapper-col="wrapperCol"
                     >
                          <a-select
-                             mode="multiple"
+                             mode="tags"
                              :tokenSeparators="[',']"
                              @change="handleSkills"
                              v-decorator="[
@@ -208,7 +208,6 @@ export default {
           labels: {},
           come_time: null,
           leave_time: null,
-          skillsId: [],
           is_show: false
       }
   },
@@ -220,7 +219,6 @@ export default {
           if(this.modelEdit) {
               if(this.modelEdit.come_time) this.come_time = util.formatDate(this.modelEdit.come_time);
               if(this.modelEdit.leave_time) this.leave_time = util.formatDate(this.modelEdit.leave_time);
-              if(this.modelEdit.skills_ids) this.skillsId = this.modelEdit.skills_ids.split(',');
               this.is_show = this.modelEdit.is_show == 0;
           }
       }
@@ -234,15 +232,6 @@ export default {
           if(value.length > 3) {
               value.length = 3;
           };
-          let skillsId = [];
-          this.labels.skills.forEach((item, index) => {
-              value.filter(i => {
-                  if(i == item.labelName) {
-                      skillsId.push(item.id);
-                  }
-              });
-          });
-          this.skillsId = skillsId;
       },
       comeTime(date, dateString) {
           this.come_time = dateString;
@@ -254,7 +243,6 @@ export default {
           this.modelData = null;
           this.come_time = null;
           this.leave_time = null;
-          this.skillsId = [];
           this.is_show = false;
           this.$emit('cancelModel', 'jobExperienceModel');
       },
@@ -269,7 +257,6 @@ export default {
                       come_time: this.come_time,
                       leave_time: this.leave_time,
                       is_show: values.is_show ? 0 : 1,
-                      skills_ids: this.skillsId.join(','),
                       user_id: userInfo.id,
                       id: this.modelEdit.id || null
                   });
@@ -279,7 +266,6 @@ export default {
                               this.modelData = null;
                               this.come_time = null;
                               this.leave_time = null;
-                              this.skillsId = [];
                               this.is_show = false;
                               this.$emit('okModel', 'jobExperienceModel');
                           }
@@ -290,7 +276,6 @@ export default {
                               this.modelData = null;
                               this.come_time = null;
                               this.leave_time = null;
-                              this.skillsId = [];
                               this.is_show = false;
                               this.$emit('okModel', 'jobExperienceModel');
                           }

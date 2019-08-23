@@ -382,7 +382,7 @@
       </div>
     </a-row>
     <infoModal :modelEdit="infoModel" @cancelModel="cancelModel" @okModel="okModel"></infoModal>
-    <videoModal :modelEdit="videoModel" @cancelModel="cancelModel"></videoModal>
+    <videoModal :modelEdit="videoModel" @cancelModel="cancelModel"  @okModel="okModel"></videoModal>
     <jobExperienceModal
       :modelEdit="jobExperienceModal"
       @cancelModel="cancelModel"

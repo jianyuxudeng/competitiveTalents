@@ -16,6 +16,7 @@
                     :supportServerRender="true"
                     :withCredentials="true"
                     @change="handleChange"
+                    accept='.mp4,.avi'
                 >
                     <a-button type="primary">选择上传文件</a-button>
                 </a-upload>

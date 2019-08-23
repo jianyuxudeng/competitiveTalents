@@ -39,7 +39,7 @@
 							]"
             >
               <a-select-option
-                v-for="item in labels.careers"
+                v-for="item in labels.jobTypes"
                 :key="item.id"
                 :value="item.id"
               >{{item.labelName}}</a-select-option>
@@ -276,10 +276,10 @@ export default {
       getName(this.careers, _expected_position);
     },
     handleJobTypeName(value) {
-      this.careers.map(item => {
+      this.labels.jobTypes.map(item => {
         if (item.id == value) {
           this.params = Object.assign(this.params, {
-            job_type_name: item.name
+            job_type_name: item.labelName
           });
         }
       });

@@ -49,8 +49,8 @@
     <!-- recommend -->
     <div class="services demands">
       <Title 
-        :title="userInfo ? recommend.title : demands.title" 
-        :titleEn="userInfo ? recommend.titleEn : demands.titleEn"
+        :title="userInfo && userInfo.type == 3 ? recommend.title : demands.title" 
+        :titleEn="userInfo && userInfo.type == 3 ? recommend.titleEn : demands.titleEn"
       ></Title>
       <div class="demands_conten">
         <Demands :userInfo="userInfo" @goJobDetail="goJobDetail"></Demands>

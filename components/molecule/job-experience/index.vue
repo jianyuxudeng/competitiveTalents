@@ -268,7 +268,7 @@ export default {
                       skills: `${values.skills}`,
                       come_time: this.come_time,
                       leave_time: this.leave_time,
-                      is_show: values.is_show ? 1 : 0,
+                      is_show: values.is_show ? 0 : 1,
                       skills_ids: this.skillsId.join(','),
                       user_id: userInfo.id,
                       id: this.modelEdit.id || null

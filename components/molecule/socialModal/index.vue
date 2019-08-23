@@ -2,6 +2,7 @@
     <section v-if="modelData">
         <a-modal
             :confirmLoading="false"
+            :maskClosable="false"
             :visible="true"
             class="socia_model"
             @cancel="handleCancel"

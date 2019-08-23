@@ -34,7 +34,7 @@
             <!-- 视频 -->
             <div id="video">
               <div class="title">
-                <span>可视化描述</span>
+                <span>可视化简历</span>
                 <a v-if="isEdit  && isShow" @click="add('video')">
                   <em><a-icon type="plus-square" /></em>
                   <span>添加</span>
@@ -59,6 +59,32 @@
                   </a>
                 </div>
               </a-row>
+            </div>
+            <!-- 求职意向 -->
+            <div class="job_intention" id="job_intention">
+              <div class="title">
+                <span>求职意向</span>
+                <a v-if="isEdit && isShow" @click="edit('objective', objective)">
+                  <em><img src="../../assets/images/edit.png" alt=""></em>
+                  <span>编辑</span>
+                </a>
+              </div>
+              <p>
+                <em><img src="../../assets/images/position.png" alt=""></em>
+                <span>{{objective.expected_position_name}}/{{objective.job_type_name}}</span>
+              </p>
+              <p>
+                <em><img src="../../assets/images/address.png" alt=""></em>
+                <span>{{objective.city && objective.city != 'null' ? JSON.parse(objective.city).name : objective.cityName}}</span>
+              </p>
+              <p>
+                <em><img src="../../assets/images/money.png" alt=""></em>
+                <span>{{objective.expected_salary}}/月</span>
+              </p>
+              <p>
+                <em><img src="../../assets/images/time.png" alt=""></em>
+                <span>{{objective.now_status}} / {{objective.work_time}}</span>
+              </p>
             </div>
             <!-- 工作经历 -->
             <div id="job_experience">
@@ -131,8 +157,8 @@
                       </a>
                     </div>
                   </div>
-                  <p>{{item.project_des}}</p>
-                  <p>{{item.achievement}}</p>
+                  <p>项目描述: {{item.project_des}}</p>
+                  <p>我的成就: {{item.achievement}}</p>
                 </div>
               </div>
             </div>
@@ -182,7 +208,7 @@
               <div class="social_url" v-for="item in social" :key="item.id">
                 <dl>
                   <dt><img src="../../assets/images/social.png" alt=""></dt>
-                  <dd>{{item.social_link}}</dd>
+                  <dd><a :href="item.social_link" target="_blank">{{item.social_link}}</a></dd>
                 </dl>
                 <div v-if="isEdit && isShow" class="item_btn">
                   <a @click="edit('social', item)">
@@ -228,34 +254,6 @@
           </div>
         </div>
         <div class="resume_right">
-          <!-- 求职意向 -->
-          <div class="job_intention">
-            <div class="title">
-              <p>求职意向</p>
-              <div>
-                <a v-if="isEdit && isShow" @click="edit('objective', objective)">
-                  <em><img src="../../assets/images/edit.png" alt=""></em>
-                  <span>编辑</span>
-                </a>
-              </div>
-            </div>
-            <p>
-              <em><img src="../../assets/images/position.png" alt=""></em>
-              <span>{{objective.expected_position_name}}/{{objective.job_type_name}}</span>
-            </p>
-            <p>
-              <em><img src="../../assets/images/address.png" alt=""></em>
-              <span>{{objective.city && objective.city != 'null' ? JSON.parse(objective.city).name : objective.cityName}}</span>
-            </p>
-            <p>
-              <em><img src="../../assets/images/money.png" alt=""></em>
-              <span>{{objective.expected_salary}}/月</span>
-            </p>
-            <p>
-              <em><img src="../../assets/images/time.png" alt=""></em>
-              <span>{{objective.now_status}} / {{objective.work_time}}</span>
-            </p>
-          </div>
           <!-- 附件简历 -->
           <div class="enclosure">
             <div class="title">
@@ -289,6 +287,9 @@
                 <div v-if="item.url == 'info'">
                   <a v-if="isEdit && isShow" @click.stop="edit('info')">编辑</a>
                 </div>
+                <div v-else-if="item.url == 'job_intention'">
+                  <a v-if="isEdit && isShow" @click.stop="edit('objective', objective)">编辑</a>
+                </div>
                 <div v-else>
                   <a v-if="isEdit && isShow" @click="add(item.url)">添加</a>
                   <a v-if="isEdit && isShow" @click="del(item.url)">删除</a>
@@ -309,6 +310,7 @@
       <annexResumesModal :modelEdit="annexResumesModal" @cancelModel="cancelModel" @okModel="okModel"></annexResumesModal>
       <a-modal
             :confirmLoading="false"
+            :maskClosable="false"
             :visible="showResumesVis"
             class='resumesImg'
             @cancel="handleCancel"
@@ -356,7 +358,8 @@ export default {
         annexResumesModal: null,
         navs: [
           {name: '基本信息', url: 'info'},
-          {name: '可视化描述', url: 'video'},
+          {name: '可视化简历', url: 'video'},
+          {name: '求职意向', url: 'job_intention'},
           {name: '工作经历', url: 'job_experience'},
           {name: '项目经验', url: 'projectExpress'},
           {name: '教育经历', url: 'education'},
@@ -483,7 +486,7 @@ export default {
       switch (name) {
         case 'video':
           this.videoModel = Object.assign({}, {
-            title: '上传可视化描述视频',
+            title: '上传可视化简历',
             isEdit: false
           });
           break;
@@ -536,7 +539,7 @@ export default {
           break;
         case 'video':
           this.videoModel = Object.assign(this.desVideo, {
-            title: '上传可视化描述视频',
+            title: '上传可视化简历',
             isEdit: true
           });
           break;

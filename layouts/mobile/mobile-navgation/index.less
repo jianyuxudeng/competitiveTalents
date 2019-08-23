@@ -12,7 +12,6 @@
     z-index: 9;
     .head_flex{
         height: 100%;
-        padding: 0 .3rem;
         margin: 0 auto;
         display: flex;
         justify-content: space-between;
@@ -32,7 +31,9 @@
             }
         }
         .head_nav{
+            width: 100%;
             display: flex;
+            justify-content: flex-end;
             .nav_menu{
                 position: absolute;
                 top: .91rem;
@@ -42,6 +43,7 @@
                 height: 0.3rem;
                 position: relative;
                 margin-left: .9rem;
+                margin-right: .3rem;
                 span {
                     width: 100%;
                     position: absolute;
@@ -79,10 +81,10 @@
             a{
                 font-size: .18rem;
                 color: #ffffff;
-                margin: 0 .15rem;
                 display: flex;
                 align-items: center;
                 position: relative;
+                padding: 0 .3rem;
                 ul{
                     width: 100%;
                     position: absolute;
@@ -91,9 +93,8 @@
                 }
                 li{
                     background: rgba(24, 29, 76, .8);
-                    padding: 0 0 .1rem;
+                    padding: 0 .3rem .1rem !important;
                     margin: 0;
-                    text-align: center;
                     z-index: 2;
                 }
             }

@@ -3,6 +3,7 @@
         <a-modal
             :title="modelData.title"
             :confirmLoading="false"
+            :maskClosable="false"
             :visible="true"
             class="annexResumes_model"
             @cancel="handleCancel"

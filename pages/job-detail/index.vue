@@ -93,6 +93,7 @@
       <a-modal
             title="投递简历"
             :confirmLoading="false"
+            :maskClosable="false"
             :visible="isModalShow"
             class="jobDModal"
             @cancel="handleCancel"

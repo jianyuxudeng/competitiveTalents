@@ -3,18 +3,17 @@
       <div class="head_flex">
         <!-- logo -->
         <div class="head_logo">
-          <em><img src="../../assets/images/LOGO.png" alt=""></em>
-          <a @click="goHome">首页</a>
-          <a>行业资讯</a>
-          <a v-if="!isLogin" @click="gotoLogin">企业用户登录</a>
         </div>
         <!-- nav -->
         <div class="head_nav">
+          <a @click="goHome">首页</a>
           <a v-for="item in navs" :key="item.code">
             <span @click="navLink(item.code)">{{item.name}}</span>
             <em v-if="isLogin && item.code=='logout'"><a-icon :type="isSelect ? 'caret-up' : 'caret-down'" /></em>
             <ul v-if="isSelect && item.code=='logout'">
               <li @click="goResumeDetail">个人信息</li>
+              <li @click="goSettings">账号设置</li>
+              <li @click="goLodout">切换为招聘者</li>
               <li @click="goLodout">退出登录</li>
             </ul>
           </a>
@@ -61,7 +60,7 @@ export default {
             _isLogin = true;
             _navs = [
               {
-                name: '简历',
+                name: '我的简历',
                 code: 'resume-detail'
               },
               {
@@ -69,12 +68,8 @@ export default {
                 code: 'delivery-status'
               },
               {
-                name: '收藏夹',
+                name: '职位收藏',
                 code: 'job-collection'
-              },
-              {
-                name: '账号设置',
-                code: 'settings'
               },
               {
                 name: userInfo.username,
@@ -93,10 +88,6 @@ export default {
                 name: '职位管理',
                 code: 'resume-manage'
               },
-              // {
-              //   name: '简历搜索',
-              //   code: 'resume-manage'
-              // },
               {
                 name: '收件箱',
                 code: 'mailbox'
@@ -119,7 +110,7 @@ export default {
         _isLogin = false;
         _navs = [
             {
-              name: '简历',
+              name: '我的简历',
               code: 'resume-detail'
             },
             {
@@ -127,15 +118,11 @@ export default {
               code: 'delivery-status'
             },
             {
-              name: '收藏夹',
+              name: '职位收藏',
               code: 'job-collection'
             },
             {
-              name: '账号设置',
-              code: 'company-info'
-            },
-            {
-              name: '求职者登录',
+              name: '用户登录',
               code: 'login'
             }
           ];
@@ -178,6 +165,12 @@ export default {
         path: '/'
       })
     },
+    goSettings() {
+      this.$router.push({
+        path: '/settings'
+      });
+      this.isSelect = false;
+    },
     goLodout() { //退出登录
       ajax.get('layout').then(res => {
         util.setStore('userInfo', null)
@@ -185,11 +178,6 @@ export default {
         this.$router.push({
           path: '/login'
         })
-      })
-    },
-    gotoLogin() {
-      this.$router.push({
-        path: '/login'
       })
     }
   }

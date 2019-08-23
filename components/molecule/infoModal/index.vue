@@ -2,6 +2,7 @@
     <section v-if="modelData">
         <a-modal
             :confirmLoading="false"
+            :maskClosable="false"
             :visible="true"
             class="infoModel"
             @cancel="handleCancel"
@@ -92,12 +93,12 @@
                          />
                     </a-form-item>
                     <a-form-item
-                        label="当前身份"
+                        label="求职状态"
                         :colon="false"
                         :label-col="labelCol"
                         :wrapper-col="wrapperCol"
                     >
-                        <a-radio-group
+                        <a-select
                           v-decorator="[
                             'indenty',
                             {
@@ -106,9 +107,11 @@
                             }
                           ]"
                         >
-                            <a-radio value="0">非学生</a-radio>
-                            <a-radio value="1">学生</a-radio>
-                        </a-radio-group>
+                            <a-select-option value="1">离职-随时到岗</a-select-option>
+                            <a-select-option value="2">在职-月内到岗</a-select-option>
+                            <a-select-option value="3">在职-考虑机会</a-select-option>
+                            <a-select-option value="4">在校学生</a-select-option>
+                        </a-select>
                     </a-form-item>
                     <a-form-item
                         label="工作时间"

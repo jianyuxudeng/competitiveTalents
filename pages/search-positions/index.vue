@@ -118,7 +118,7 @@
                                         <em><img src="../../assets/images/cycle.png" alt=""></em>
                                         <span>周期</span>
                                     </p>
-                                    <p>{{item.work_time}}个月</p>
+                                    <p>{{item.work_time}}</p>
                                 </div>
                                 <em></em>
                                 <div class="li">

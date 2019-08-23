@@ -84,7 +84,7 @@
                     <template slot="operationBtn" slot-scope="text, record">
                         <div class="operation_btn">
                             <span @click="() => modify(record)">修改职位</span>
-                            <span @click="() => offline(record)">下线职位</span>
+                            <span @click="() => offline(record)">{{record.is_on == 0 ? '上线职位' : '下线职位'}}</span>
                         </div>
                     </template>
                 </a-table>
@@ -224,7 +224,7 @@ export default {
       offline(record) {
           let _obj = {
               id: record.id,
-              is_on: 0
+              is_on: record.is_on == 0 ? 1 : 0
           };
           this.handleModify(_obj);
       },

@@ -192,7 +192,7 @@
               v-decorator="[
                               'workExperience',
                               {
-                                  initialValue: params.workExperience,
+                                  initialValue: handleIdTrue(params.workExperience),
                                   rules: [{ required: false }]
                               }
                           ]"
@@ -210,7 +210,7 @@
               v-decorator="[
                               'trade',
                               {
-                                  initialValue: params.trade,
+                                  initialValue: handleIdTrue(params.trade),
                                   rules: [{ required: false }]
                               }
                           ]"
@@ -230,7 +230,7 @@
               v-decorator="[
                               'companySize',
                               {
-                                  initialValue: params.companySize,
+                                  initialValue: handleIdTrue(params.companySize),
                                   rules: [{ required: false }]
                               }
                           ]"
@@ -248,7 +248,7 @@
               v-decorator="[
                               'capitalize',
                               {
-                                  initialValue: params.capitalize,
+                                  initialValue: handleIdTrue(params.capitalize),
                                   rules: [{ required: false }]
                               }
                           ]"
@@ -268,7 +268,7 @@
               v-decorator="[
                               'educational',
                               {
-                                  initialValue: params.educational,
+                                  initialValue: handleIdTrue(params.educational),
                                   rules: [{ required: false }]
                               }
                           ]"
@@ -420,6 +420,18 @@ export default {
       deadTime: null
     };
   },
+  watch: {
+    $route() {
+      this.params = {};
+      this.careerIds = [];
+      this.provincesList = [];
+      this.provincesId = null;
+      this.cityList = [];
+      this.city = null;
+      this.areaList = [];
+      this.area = null;
+    }
+  },
   mounted() {
     this.init();
   },
@@ -544,6 +556,13 @@ export default {
         }
       });
     },
+    handleIdTrue(id) {
+      if(id) {
+        return parseFloat(id);
+      }else{
+        return null;
+      }
+    },
     async getCareers() {
       const res = await ajax.get("careers");
       if (res) {
@@ -597,6 +616,7 @@ export default {
               }
               this.params.region = _region;
             }
+            if(this.params.careers_type) this.active = this.params.careers_type * 1;
           }
         });
     },

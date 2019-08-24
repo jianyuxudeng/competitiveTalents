@@ -267,10 +267,13 @@ export default {
           //   return;
           // }
           let _id = this.$route.query.id;
-          ajax.get('jobs/detail', {
-              // user_id: userInfo.id,
-              job_id: _id
-          }).then(res => {
+          let query = {
+             job_id: _id
+          }
+          if(userInfo){
+            query.user_id = userInfo.id;
+          }
+          ajax.get('jobs/detail', query).then(res => {
             if(res.retcode == 0) {
               console.log(res.data)
               this.params = res.data.jobDetail || {};

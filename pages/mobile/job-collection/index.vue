@@ -121,7 +121,8 @@ export default {
           labels: {},
           rows: [],
           modelRow: [],
-          userInfo: {}
+          userInfo: {},
+          pamars:{}
       }
   },
   mounted() {
@@ -136,6 +137,7 @@ export default {
           this.isModalShow = false;
       },
       handleModel(e) { //显示弹窗
+          this.pamars = e;
           ajax.get('user/annexResumes/list', {
               user_id: this.userInfo.id
           }).then(res => {
@@ -149,7 +151,7 @@ export default {
           ajax.post('user/sendResumes', {
               user_id: this.userInfo.id,
               job_id: this.pamars.id,
-              company_id: this.pamars.user_id,
+              company_id: this.pamars.company_id,
               resumes_type: this.value
           }).then(res => {
               if(res.retcode == 0) {

@@ -340,7 +340,7 @@
             </a>
           </div>
           <p v-for="item in annexResumes" :key="item.id">
-            <span>{{item.resume_link}}</span>
+            <span>{{item.name}}</span>
             <a v-if="isEdit && isShow" @click="del('annexResumes', item.id)">
               <a-icon type="delete" />
             </a>

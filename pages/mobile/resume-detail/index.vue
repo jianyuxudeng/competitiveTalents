@@ -340,7 +340,7 @@
             </a>
           </div>
           <p v-for="item in annexResumes" :key="item.id">
-            <span>{{item.resume_link}}</span>
+            <span>{{item.name}}</span>
             <a v-if="isEdit && isShow" @click="del('annexResumes', item.id)">
               <a-icon type="delete" />
             </a>
@@ -756,6 +756,7 @@ export default {
           this.desVideo = _data.desVideo[0] || {};
           this.experience = _data.experience || [];
           this.projectExpress = _data.projectExpress || [];
+          this.annexResumes = _data.annexResumes || [];
           this.education = _data.education || [];
           this.social = _data.social || [];
           this.collection =

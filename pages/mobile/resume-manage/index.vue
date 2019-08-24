@@ -6,6 +6,8 @@
                 <!-- title -->
                 <div class="head_title">
                     <span>职位管理</span>
+                </div>
+                <div class="head_btn">
                     <a-button type="primary" @click="add"><span>+</span>发布新职位</a-button>
                 </div>
                 <!-- search -->
@@ -15,16 +17,12 @@
                             <a-form-item
                                 label="所属部门"
                                 :colon="false"
-                                :label-col="{span: 9}"
-                                :wrapper-col="{span: 12}"
                             >
                                 <a-input v-decorator="['depatment']" placeholder="全部部门"></a-input>
                             </a-form-item>
                             <a-form-item
                                 label="关键字"
                                 :colon="false"
-                                :label-col="{span: 5}"
-                                :wrapper-col="{span: 14}"
                             >
                                 <a-input v-decorator="['keywords']" placeholder="职位名称/发布地址"></a-input>
                             </a-form-item>
@@ -74,13 +72,13 @@
                     <template slot="name" slot-scope="text, record">
                         <span @click="() => handleItem(record)">{{text}}</span>
                     </template>
-                    <template slot="operation" slot-scope="text, record">
+                    <!-- <template slot="operation" slot-scope="text, record">
                         <div class="operation">
                             <span @click="() => placement(record)">职位置顶</span>
-                            <!-- <span>职位刷新</span>
-                            <span>职位推荐</span> -->
+                            <span>职位刷新</span>
+                            <span>职位推荐</span>
                         </div>
-                    </template>
+                    </template> -->
                     <template slot="operationBtn" slot-scope="text, record">
                         <div class="operation_btn">
                             <span @click="() => modify(record)">修改职位</span>
@@ -116,24 +114,24 @@ export default {
                 dataIndex: 'name',
                 scopedSlots: { customRender: 'name' }
             },
-            {title: '发布日期', dataIndex: 'sendTime'},
-            {title: '截至日期', dataIndex: 'deadTime'},
-            {title: '所属部门', dataIndex: 'depatment'},
+            // {title: '发布日期', dataIndex: 'sendTime'},
+            // {title: '截至日期', dataIndex: 'deadTime'},
+            // {title: '所属部门', dataIndex: 'depatment'},
             {title: '发布地点', dataIndex: 'regionName'},
             {title: '投递', dataIndex: 'resumes'},
-            {
-                title: '操作', 
-                dataIndex: 'operation', 
-                colSpan: 2,
-                width: '1.8rem',
-                scopedSlots: { customRender: 'operation' }
-            },
+            // {
+            //     title: '操作', 
+            //     dataIndex: 'operation', 
+            //     colSpan: 2,
+            //     width: '1.8rem',
+            //     scopedSlots: { customRender: 'operation' }
+            // },
             {
                 title: '操作', 
                 dataIndex: 'operationBtn', 
-                colSpan: 0,
-                width: '1rem',
-                scopedSlots: { customRender: 'operationBtn' }
+                // colSpan: 0,
+                scopedSlots: { customRender: 'operationBtn' },
+                width: '40%'
             }
         ],
         rows: [], //列表数据

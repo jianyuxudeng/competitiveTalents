@@ -272,6 +272,7 @@
                   listType="picture-card"
                   :fileList="companyFileList"
                   :action="upLoadUrl"
+                  :withCredentials="true"
                   v-decorator="['imgList', {
                     valuePropName: 'companyFileList',
                     getValueFromEvent: normFile
@@ -360,7 +361,7 @@ export default {
       newList = newList.slice(-1);
       newList = newList.map((v) => {
         if (v.response) {
-          v.url = v.response.data.imageList;
+          v.url = v.response.url;
         }
         return v;
       });
@@ -372,7 +373,6 @@ export default {
       newList = newList.slice(-6);
       newList = newList.map((v) => {
         if (v.response) {
-          console.log(v.response)
           v.url = v.response.url;
         }
         return v;
@@ -427,17 +427,17 @@ export default {
           let _imgList = [];
           let _logo = '';
           this.companyFileList.map(item => {
-            _imgList.push(item.url);
+            _imgList.push(item.url || item.response.data.imageList[0]);
           });
           this.logoFileList.map(item => {
-            _logo = item.url[0];
+            _logo = item.url || item.response.data.imageList[0];
           });
           let params = Object.assign({}, values, {
             region: JSON.stringify(this.region),
             id: this.params.id,
             user_id: userInfo.id,
-            logo: _logo
-            //imgList: _imgList
+            logo: _logo,
+            imgList: _imgList.length > 0 ? _imgList.join(',') : null
           });
           ajax.post('company', params).then(res => {
             if(res.retcode == 0) {
@@ -475,6 +475,30 @@ export default {
               this.area = _region.area;
               this.onArea(_region.area);
             };
+          };
+          if(this.params.logo) {
+            let _logoFileList = this.params.logo.split(',');
+            this.logoFileList = [];
+            _logoFileList.map(item => {
+              this.logoFileList.push({
+                uid: '-0',
+                name: 'xxx.png',
+                status: 'done',
+                url: item
+              });
+            })
+          };
+          if(this.params.imgList) {
+            let _companyFileList = this.params.imgList.split(',');
+            this.companyFileList = [];
+            _companyFileList.map((item, index) => {
+              this.companyFileList.push({
+                uid: -index + '',
+                name: 'yyy.png',
+                status: 'done',
+                url: item
+              });
+            })
           }
         }
       })

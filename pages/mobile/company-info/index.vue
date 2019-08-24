@@ -246,6 +246,7 @@
                   listType="picture-card"
                   :fileList="companyFileList"
                   :action="upLoadUrl"
+                  :withCredentials="true"
                   v-decorator="['imgList', {
                     valuePropName: 'companyFileList',
                     getValueFromEvent: normFile
@@ -392,17 +393,17 @@ export default {
           let _imgList = [];
           let _logo = '';
           this.companyFileList.map(item => {
-            _imgList = item.response.data.imageList;
+            _imgList.push(item.url || item.response.data.imageList[0]);
           });
           this.logoFileList.map(item => {
-            _logo = item.response.data.imageList[0];
+            _logo = item.url || item.response.data.imageList[0];
           });
           let params = Object.assign({}, values, {
             region: JSON.stringify(this.region),
             id: this.params.id,
             user_id: userInfo.id,
             logo: _logo,
-            //imgList: _imgList
+            imgList: _imgList.length > 0 ? _imgList.join(',') : null
           });
           ajax.post('company', params).then(res => {
             if(res.retcode == 0) {
@@ -443,10 +444,23 @@ export default {
           };
           if(this.params.logo) {
             let _logoFileList = this.params.logo.split(',');
+            this.logoFileList = [];
             _logoFileList.map(item => {
               this.logoFileList.push({
-                uid: '-1',
+                uid: '-0',
                 name: 'xxx.png',
+                status: 'done',
+                url: item
+              });
+            })
+          };
+          if(this.params.imgList) {
+            let _companyFileList = this.params.imgList.split(',');
+            this.companyFileList = [];
+            _companyFileList.map((item, index) => {
+              this.companyFileList.push({
+                uid: -index + '',
+                name: 'yyy.png',
                 status: 'done',
                 url: item
               });

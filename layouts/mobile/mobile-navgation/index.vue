@@ -15,9 +15,9 @@
                 theme="dark"
                 v-if="isSelect"
               >
-                <a-menu-item @click="goResumeDetail">个人信息</a-menu-item>
-                <a-menu-item @click="navLink('settings')">账号设置</a-menu-item>
-                <a-menu-item @click="goLodout">切换为招聘者</a-menu-item>
+                <a-menu-item @click="goResumeDetail">{{userInfo.type == 2 ? '个人信息' : '企业信息'}}</a-menu-item>
+                <a-menu-item @click="navLink('settings')" v-if="userInfo.type == 2">账号设置</a-menu-item>
+                <a-menu-item @click="goLodout" v-if="userInfo.type == 2">切换为招聘者</a-menu-item>
                 <a-menu-item @click="goLodout">退出登录</a-menu-item>
               </a-menu>
           </a>
@@ -36,15 +36,6 @@
                   {{item.name}}
               </a-menu-item>
           </a-menu>
-          <!-- <a @click="goHome">首页</a> -->
-          <!-- <a v-for="item in navs" :key="item.code">
-            <span @click="navLink(item.code)">{{item.name}}</span>
-            <em v-if="isLogin && item.code=='logout'"><a-icon :type="isSelect ? 'caret-up' : 'caret-down'" /></em>
-            <ul v-if="isSelect && item.code=='logout'">
-              <li @click="goResumeDetail">个人信息</li>
-              <li @click="goLodout">退出登录</li>
-            </ul>
-          </a> -->
         </div>
       </div>
     </div>
@@ -62,7 +53,8 @@ export default {
       isLogin: false,
       isSelect: false,
       isMune: false,
-      username: null
+      username: null,
+      userInfo: null
     };
   },
   async asyncData() {
@@ -159,6 +151,7 @@ export default {
       };
       this.navs = _navs;
       this.isLogin = _isLogin;
+      this.userInfo = userInfo;
     },
     //导航路由跳转
     navLink(code) {
@@ -166,16 +159,18 @@ export default {
       if(userInfo) {
         if(code != 'logout') {
           this.$router.push({
-            path: '/' + code
+            path: '/mobile/' + code
           })
         }else{
           this.isSelect = !this.isSelect;
         }
       }else{
         this.$router.push({
-          path: '/login'
+          path: '/mobile/login'
         })
-      }
+      };
+      this.isMune = false;
+      this.isSelect = false;
     },
     goResumeDetail() {
         if(util.getStore('userInfo').type == 2) {
@@ -192,7 +187,7 @@ export default {
     //首页
     goHome() {
       this.$router.push({
-        path: '/'
+        path: '/mobile/'
       })
     },
     goLodout() { //退出登录
@@ -200,13 +195,13 @@ export default {
         util.setStore('userInfo', null)
         this.init();
         this.$router.push({
-          path: '/login'
+          path: '/mobile/login'
         })
       })
     },
     gotoLogin() {
       this.$router.push({
-        path: '/login'
+        path: '/mobile/login'
       })
     }
   }

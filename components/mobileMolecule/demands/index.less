@@ -1,0 +1,133 @@
+.demands_page{
+    ul{
+        display: flex;
+        flex-wrap: wrap;
+        li{
+            width: 3.83rem;
+            background: #f8f8f8;
+            border-radius: .08rem;
+            margin: .08rem;
+            padding: .18rem;
+            cursor: pointer;
+            .demands_top{
+                .demands_text{
+                    display: flex;
+                    justify-content: space-between;
+                    div{
+                        p{
+                            font-size: .14rem;
+                            color: #969696;
+                            margin: 0;
+                            span{
+                                font-size: .18rem;
+                                color: #515ffd;
+                            }
+                            &:first-child{
+                                font-size: .18rem;
+                                color: #464646;
+                            }
+                        }
+                        >span{
+                            font-size: .18rem;
+                            color: #515ffd;
+                            margin-right: .12rem;
+                            &:first-child{
+                                font-size: .14rem;
+                                color: #969696;
+                                margin-right: .04rem;
+                            }
+                        }
+                    }
+                    &.size{
+                        div{
+                            p{
+                                &:first-child{
+                                    font-size: .16rem;
+                                }
+                                span{
+                                    font-size: .16rem;
+                                }
+                            }
+                            >span{
+                                &:first-child{
+                                    font-size: .16rem;
+                                    color: #515ffd;
+                                    margin-right: .12rem;
+                                }
+                            }
+                        }
+                    }
+                }
+                .resume_text{
+                    font-size: .14rem;
+                    color: #969696;
+                    span{
+                        margin-right: .16rem;
+                    }
+                }
+                .demands_btn{
+                    display: flex;
+                    margin: .1rem auto .2rem;
+                    span{
+                        border-radius: .04rem;
+                        border: 1px solid #d1d1d1;
+                        margin-right: .08rem;
+                        padding: .02rem .2rem;
+                        font-size: .12rem;
+                        color: #969696;
+                        text-align: center;
+                        line-height: 1.6;
+                        &:first-child{
+                            color: #ffffff;
+                        }
+                        &.blue{
+                            background: #515ffd;
+                            border: 1px solid #babffa;
+                        }
+                        &.orange{
+                            background: #ffac60;
+                            border: 1px solid #fbd2ac;
+                        }
+                        &.green{
+                            background: #00ce8e;
+                            border: 1px solid #7ce3c3;
+                        }
+                    }
+                }
+            }
+            dl{
+                border-top: 1px dashed #d4d4d4;
+                padding-top: .2rem;
+                display: flex;
+                align-items: center;
+                dt{
+                    width: .4rem;
+                    height: .4rem;
+                    overflow: hidden;
+                    margin-right: .12rem;
+                }
+                dd{
+                    margin: 0;
+                    font-size: .13rem;
+                    color: #969696;
+                    p{
+                        margin: 0;
+                        &:first-child{
+                            color: #464646;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .demands_page{
+        ul{
+            li{
+                width: 100%;
+            }
+        }
+    }
+}

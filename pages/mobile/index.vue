@@ -105,11 +105,11 @@ export default {
          title: '个人电竞职客服务',
          titleEn: 'FREEKER SERVICES',
          list: [
-           {img: require('../../assets/images/freeker1.png'), text: '赛事相关职位'},
-           {img: require('../../assets/images/freeker2.png'), text: '电竞俱乐部'},
-           {img: require('../../assets/images/freeker3.png'), text: '媒体及内容制作'},
-           {img: require('../../assets/images/freeker4.png'), text: '直播及艺人相关'},
-           {img: require('../../assets/images/freeker5.png'), text: '电竞衍生领域'}
+           {img: require('../../assets/images/mobile/freeker1.png'), text: '赛事相关职位'},
+           {img: require('../../assets/images/mobile/freeker2.png'), text: '电竞俱乐部'},
+           {img: require('../../assets/images/mobile/freeker3.png'), text: '媒体及内容制作'},
+           {img: require('../../assets/images/mobile/freeker4.png'), text: '直播及艺人相关'},
+           {img: require('../../assets/images/mobile/freeker5.png'), text: '电竞衍生领域'}
          ]
        },
        //infoEnterprise
@@ -117,9 +117,9 @@ export default {
          title: '企业电竞服务',
          titleEn: 'ENTERPRISE SERVIVES',
          list: [
-           {img: require('../../assets/images/enterprise1.png'), text: '职位发布', key: 'job-release'},
-           {img: require('../../assets/images/release.png'), text: '职位管理', key: 'resume-manage'},
-           {img: require('../../assets/images/inbox.png'), text: '收件箱', key: 'mailbox'},
+           {img: require('../../assets/images/mobile/enterprise1.png'), text: '职位发布', key: 'job-release'},
+           {img: require('../../assets/images/mobile/release.png'), text: '职位管理', key: 'resume-manage'},
+           {img: require('../../assets/images/mobile/inbox.png'), text: '收件箱', key: 'mailbox'},
          ]
        },
        //enterprise
@@ -127,11 +127,11 @@ export default {
          title: '企业电竞服务',
          titleEn: 'ENTERPRISE SERVIVES',
          list: [
-           {img: require('../../assets/images/enterprise1.png'), text: '发布全职职位'},
-           {img: require('../../assets/images/enterprise2.png'), text: '发布兼职职位'},
-           {img: require('../../assets/images/enterprise3.png'), text: '发布任务外包'},
-           {img: require('../../assets/images/enterprise4.png'), text: '查看收到简历'},
-           {img: require('../../assets/images/enterprise5.png'), text: '协会就业联盟'}
+           {img: require('../../assets/images/mobile/enterprise1.png'), text: '发布全职职位'},
+           {img: require('../../assets/images/mobile/enterprise2.png'), text: '发布兼职职位'},
+           {img: require('../../assets/images/mobile/enterprise3.png'), text: '发布任务外包'},
+           {img: require('../../assets/images/mobile/enterprise4.png'), text: '查看收到简历'},
+           {img: require('../../assets/images/mobile/enterprise5.png'), text: '协会就业联盟'}
          ]
        },
        //demands 1:全职 2:兼职 3:外包
@@ -168,11 +168,11 @@ export default {
     handelFreeker() {
       if(!this.userInfo) {
         this.$router.push({
-          path: '/login'
+          path: '/mobile/login'
         })
       }else{
         this.$router.push({
-          path: 'search-positions'
+          path: 'mobile/search-positions'
         })
       };
     },
@@ -182,7 +182,7 @@ export default {
     goJobDetail(e) {
       if(this.userInfo && this.userInfo.type == 3) {
         this.$router.push({
-          path: 'resume-detail',
+          path: 'mobile/resume-detail',
           query: {
             user_id: e.user_id
           }
@@ -190,11 +190,11 @@ export default {
       }else{
         if(!this.userInfo) {
           this.$router.push({
-            path: 'search-positions'
+            path: 'mobile/search-positions'
           })
         }else{
           this.$router.push({
-            path: 'job-detail',
+            path: 'mobile/job-detail',
             query: {
               id: e.id
             }
@@ -205,23 +205,23 @@ export default {
     onMore() { //点击MORE按钮
       if(!this.userInfo || this.userInfo.type == 2) {
         this.$router.push({
-          path: 'search-positions'
+          path: 'mobile/search-positions'
         })
       }else{
         this.$router.push({
-          path: 'search-resume'
+          path: 'mobile/search-resume'
         })
       }
     },
     handleInfoEnterprise(e) {
       this.$router.push({
-        path: e.key
+        path: 'mobile/' + e.key
       })
     },
     handleEnterprise(e) {
       if(this.userInfo) {
         this.$router.push({
-          path: '/login'
+          path: '/mobile/login'
         })
       }
     },
@@ -254,7 +254,7 @@ export default {
             window.open(res.data[0].out_link);
           }else{
             this.$router.push({
-              path: 'industry-detail',
+              path: 'mobile/industry-detail',
               query: {
                 content: res.data[0].content
               }

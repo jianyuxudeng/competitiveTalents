@@ -11,7 +11,7 @@
             <span @click="navLink(item.code)">{{item.name}}</span>
             <em v-if="isLogin && item.code=='logout'"><a-icon :type="isSelect ? 'caret-up' : 'caret-down'" /></em>
             <ul v-if="isSelect && item.code=='logout'">
-              <li @click="goResumeDetail">个人信息</li>
+              <li @click="goResumeDetail">{{userInfo.type == 2 ? '个人信息' : '企业信息'}}</li>
               <li @click="goSettings" v-if="userInfo.type == 2">账号设置</li>
               <li @click="goLodout" v-if="userInfo.type == 2">切换为招聘者</li>
               <li @click="goLodout">退出登录</li>

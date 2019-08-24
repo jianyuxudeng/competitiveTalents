@@ -1,0 +1,99 @@
+.mailbox{
+    .centent{
+        width: 11.78rem;
+        border: 1px solid #cbcbcb;
+        border-radius: .08rem;
+        margin: .6rem auto;
+        overflow: hidden;
+        .ant-tabs-bar{
+            padding: 0 .6rem;
+            background: #edefff;
+            border-bottom: none;
+            .ant-tabs-tab{
+                font-size: .2rem;
+                color: #969696;
+            }
+            .ant-tabs-tab-active{
+                color: #464646;
+            }
+        }
+        .search{
+            display: flex;
+            justify-content: center;
+            padding-bottom: .16rem;
+            margin-bottom: .36rem;
+            border-bottom: .02rem solid #e4e4e4;
+            .ant-form-item{
+                display: flex;
+                margin: 0 .4rem;
+                label{
+                    font-size: .16rem;
+                    color: #646464;
+                }
+                input{
+                    width: 1.86rem;
+                }
+                .ant-select-selection--single{
+                    width: 1.86rem;
+                }
+            }
+        }
+        .table_title{
+            height: .59rem;
+            padding: 0 .6rem;
+            background: #edefff;
+            display: flex;
+            align-items: center;
+            .ant-btn{
+                margin-right: .3rem;
+            }
+            .ant-radio-wrapper{
+                margin: 0 .1rem;
+            }
+            .ant-select{
+                width: 1.88rem;
+            }
+            .ant-checkbox-inner{
+                border-radius: 100%;
+            }
+            p{
+                margin-bottom: 0;
+                margin-left: 3rem;
+                span{
+                    margin: 0 .1rem;
+                    font-size: .16rem;
+                }
+            }
+        }
+        th{
+            font-size: .16rem;
+            color: #515ffd;
+            text-align: center;
+            background: transparent;
+            padding: .1rem .16rem;
+        }
+        td{
+            text-align: center;
+            padding: .1rem .16rem;
+            font-size: .16rem;
+            &:first-child{
+                color: #515ffd;
+            }
+            &:nth-of-type(2) {
+                color: #515ffd;
+            }
+        }
+        tr{
+            cursor: pointer;
+            &:last-child{
+                td{
+                    border-bottom: none;
+                }
+            }
+        }
+    }
+    .ant-pagination{
+        text-align: center;
+        margin: .6rem auto;
+    }
+}

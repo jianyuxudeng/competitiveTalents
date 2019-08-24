@@ -1,0 +1,139 @@
+.login{
+    position: relative;
+    overflow: hidden;
+    .login_conten{
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        .login_logo{
+            width: 2.4rem;
+        }
+        .login_section{
+            width: 6.71rem;
+            position: relative;
+            margin: .3rem auto;
+            .login_position{
+                width: 100%;
+                height: 6.14rem;
+                position: absolute;
+                top: 2.46rem;
+                right: 0;
+            }
+            .login_form{
+                height: 100%;
+                padding: 0 .5rem;
+                display: flex;
+                flex-flow: column;
+                justify-content: center;
+                align-items: center;
+            }
+            .goLogin{
+                width: 3.6rem;
+                margin-bottom: .2rem;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                a{
+                    font-size: .16rem;
+                }
+                em{
+                    width: 1px;
+                    height: .15rem;
+                    background: #c8c8c8;
+                    margin: 0 .15rem;
+                }
+            }
+            .ant-tabs{
+                margin-bottom: .1rem;
+                width: 100%;
+            }
+            .ant-tabs-nav{
+                width: 100%;
+            }
+            .ant-tabs-tab{
+                width: 50%;
+                font-size: .16rem;
+                color: #969696;
+                padding: .12rem 0;
+                text-align: center;
+                margin: 0;
+                &.ant-tabs-tab-active{
+                    color: #464646;
+                }
+            }
+            .ant-form{
+                width: 100%;
+                .ant-form-item{
+                    margin-bottom: .16rem;
+                    input{
+                        height: .6rem;
+                    }
+                    .isPhone{
+                        line-height: 1;
+                        padding: 0 .02rem;
+                        display: flex;
+                        justify-content: space-between;
+                        a{
+                            &:nth-of-type(2){
+                                color: #969696;
+                            }
+                        }
+                    }
+                    .ant-btn{
+                        width: 100%;
+                    }
+                    .ant-input-suffix{
+                        .ant-btn{
+                            border: none;
+                            padding: 0;
+                            height: auto;
+                        }
+                        span{
+                            width: .6rem;
+                            display: inline-block;
+                            background: #ccc;
+                            border-radius: .04rem;
+                            color: #fff;
+                            text-align: center;
+                        }
+                    }
+                }
+            }
+            .center{
+                text-align: center;
+                a{
+                    color: #969696;
+                }
+                .ant-form-item-control{
+                    line-height: 1;
+                }
+            }
+            .password_ok{
+                em{
+                    width: 2.5rem;
+                    height: 1.73rem;
+                    display: block;
+                    margin: .1rem auto;
+                }
+                p{
+                    margin-bottom: 0;
+                    font-size: .16rem;
+                    color: #515ffd;
+                    text-align: center;
+                    line-height: 1.6;
+                }
+            }
+        }
+        .login_foot{
+            font-size: .23rem;
+            font-weight: bold;
+            color: #ffffff;
+            text-align: center;
+        }
+    }
+}

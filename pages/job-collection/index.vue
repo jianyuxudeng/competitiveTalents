@@ -139,6 +139,7 @@ export default {
       },
       handleModel(e) { //显示弹窗
           this.pamars = e;
+          console.log(e)
           ajax.get('user/annexResumes/list', {
               user_id: this.userInfo.id
           }).then(res => {

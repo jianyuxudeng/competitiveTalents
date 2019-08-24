@@ -758,6 +758,7 @@ export default {
           this.projectExpress = _data.projectExpress || [];
           this.education = _data.education || [];
           this.social = _data.social || [];
+          this.annexResumes = _data.annexResumes || [];
           this.collection =
             _data.collection && _data.collection.length > 0
               ? _data.collection[0]

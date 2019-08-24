@@ -82,11 +82,13 @@ export default {
           this.annexResumesFileList = newList;
       },
       addVideo() {
+          console.log(this.annexResumesFileList)
           if(this.annexResumesFileList.length > 0 && this.annexResumesFileList[0].status == 'done') {
               let userInfo = util.getStore('userInfo');
               ajax.post('user/annexResumes', {
                   user_id: userInfo.id,
-                  resume_link: this.annexResumesFileList[0].url[0]
+                  resume_link: this.annexResumesFileList[0].url[0],
+                  name:this.annexResumesFileList[0].name
               }).then(res => {
                   if(res.retcode == 0) {
                       this.modelData = null;

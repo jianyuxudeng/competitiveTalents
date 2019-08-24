@@ -25,8 +25,8 @@
                                     <a @click="collectionPosition(item)">取消收藏</a>
                                     <em></em>
                                     <a v-if="item.sendAgain&&item.is_on" @click="handleModel(item)">投简历</a>
-                                    <a v-if="!item.sendAgain&&item.is_on">已投递投</a>
-                                    <span v-if="!item.is_on">已下线</span>
+                                    <a style="color:#cccccc" v-if="!item.sendAgain&&item.is_on">已投递投</a>
+                                    <span style="color:#cccccc" v-if="!item.is_on">已下线</span>
                                 </div>
                             </div>
                         </div>

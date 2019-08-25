@@ -1,6 +1,7 @@
 <template>
   <section class="mailbox page_centent">
       <div class="nav-bg"></div>
+      <div class="title">收件箱</div>
       <div class="centent">
           <a-tabs defaultActiveKey="1" @change="callbackTab">
               <a-tab-pane tab="按职位查看" key="1"></a-tab-pane>
@@ -44,7 +45,7 @@
                       <a-select-option :value="item.id" v-for="(item, index) in jobs" :key="index">{{item.name}}</a-select-option>
                   </a-select>
               </a-form-item>
-              <a-form-item>
+              <a-form-item class="search_btn">
                   <a-button type="primary" html-type="submit">搜索</a-button>
               </a-form-item>
           </a-form>
@@ -52,28 +53,30 @@
               <a-button type="primary">查看简历</a-button>
               <a-checkbox @change="isContact">合并多投</a-checkbox>
               <a-checkbox @change="isHasSvatar">有照片</a-checkbox>
-              <a-select placeholder="简历状态筛选" @change="handleRead">
+              <a-select placeholder="简历状态" @change="handleRead">
+                  <a-icon slot="suffixIcon" type="caret-down" />
                   <a-select-option value="">全部</a-select-option>
                   <a-select-option :value="0">未查看</a-select-option>
                   <a-select-option :value="1">已查看</a-select-option>
                   <a-select-option :value="2">不合适</a-select-option>
               </a-select>
-              <p>
-                  <span>共{{total}}条</span>
-                  <span>每页10条</span>
-              </p>
           </div>
-          <a-table 
-              :columns="columns" 
-              :dataSource="rows" 
-              :pagination="false" 
-              :customRow="handleItem"
-              :rowKey="record => record.id"
-          >
-              <template slot="follow" slot-scope="is_collect">
-                  <a-icon type="star" :theme="is_collect ? 'filled' : 'outlined'" />
-              </template>
-          </a-table>
+          <table>
+              <tr v-for="item in rows" :key="item.id">
+                  <td @click="handleCollect(item)"><a-icon type="star" :theme="item.is_collect ? 'filled' : 'outlined'" /></td>
+                  <td @click="handleItem(item)">
+                      <span>{{item.username}}</span>
+                      <span>{{item.jobName}}</span>
+                      <span>{{item.city}}</span>
+                      <span>{{item.compatibility}}</span>
+                      <span>{{item.age}}</span>
+                      <span>{{item.workTime}}</span>
+                      <span>{{item.phone}}</span>
+                      <!-- <span>{{item.edit_time}}</span> -->
+                      <span>投递时间: {{item.send_time}}</span>
+                  </td>
+              </tr>
+          </table>
       </div>
       <a-pagination showQuickJumper :defaultCurrent="1" :total="total" @change="onChangePage"></a-pagination>
   </section>
@@ -95,18 +98,6 @@ export default {
   data() {
       return{
           form: this.$form.createForm(this),
-          columns: [
-              {title: '关注', dataIndex: 'is_collect', scopedSlots: { customRender: 'follow' }, width: '6%'},
-              {title: '姓名', dataIndex: 'username', width: '10%'},
-              {title: '职位名称', dataIndex: 'jobName', width: '10%'},
-              {title: '发布城市', dataIndex: 'city', width: '10%'},
-              {title: '匹配度', dataIndex: 'compatibility', width: '7%'},
-              {title: '年龄', dataIndex: 'age', width: '6%'},
-              {title: '年限', dataIndex: 'workTime'},
-              {title: '联系电话', dataIndex: 'phone', width: '10%'},
-              {title: '简历更新时间', dataIndex: 'edit_time'},
-              {title: '投递时间', dataIndex: 'send_time'}
-          ],
           rows: [],
           total: 0,
           params: {
@@ -199,21 +190,15 @@ export default {
           });
           this.getData();
       },
-      handleItem(record, index) { //点击列表里的每一行
-          return {
-              on: {
-                  click: () => {
-                      this.$router.push({
-                          path: 'resume-detail',
-                          query: {
-                            //   isEdit: false,
-                              id: record.id,
-                              user_id: record.user_id
-                          }
-                      })
-                  }
-              }
-          }
+      handleItem(e) { //点击列表里的每一行
+          this.$router.push({
+                path: 'resume-detail',
+                query: {
+                //   isEdit: false,
+                    id: e.id,
+                    user_id: e.user_id
+                }
+            })
       },
       onChangePage(pageNumber) { //分页
           this.params = Object.assign(this.params, {pageNumber});
@@ -234,17 +219,29 @@ export default {
               this.jobs = [{id: '', name: '全部'}, ...res.data] || [];
           })
       },
+      handleCollect(e) {
+          ajax.put('company/resumes', {
+              id: e.id,
+              is_collect: !e.is_collect
+          }).then(res => {
+              if(res.retcode == 0) {
+                  this.getData();
+              }
+          })
+      },
       getData() {
           let userInfo = util.getStore('userInfo');
           let params = Object.assign(this.params, {company_id: userInfo.id});
           ajax.get('company/resumes', params).then(res => {
-              this.rows = res.data.list || [];
-              this.rows.map(item => {
-                  if(item.send_time) item.send_time = this.format(item.send_time);
-                  if(item.edit_time) item.edit_time = this.format(item.edit_time);
-                  if(item.city) item.city = JSON.parse(item.city).cityName;
-              });
-              this.total = res.data.total;
+              if(res.retcode == 0) {
+                this.rows = res.data.list || [];
+                this.rows.map(item => {
+                    if(item.send_time) item.send_time = this.format(item.send_time);
+                    if(item.edit_time) item.edit_time = this.format(item.edit_time);
+                    if(item.city) item.city = JSON.parse(item.city).name;
+                });
+                this.total = res.data.total;
+              }
           })
       }
   }

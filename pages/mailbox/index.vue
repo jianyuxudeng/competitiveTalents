@@ -67,11 +67,13 @@
               :columns="columns" 
               :dataSource="rows" 
               :pagination="false" 
-              :customRow="handleItem"
               :rowKey="record => record.id"
           >
-              <template slot="follow" slot-scope="is_collect">
-                  <a-icon type="star" :theme="is_collect ? 'filled' : 'outlined'" />
+              <template slot="follow" slot-scope="is_collect, record">
+                  <a-icon type="star" :theme="is_collect ? 'filled' : 'outlined'" @click="() => handleCollect(record)" />
+              </template>
+              <template slot="username" slot-scope="text, record">
+                  <span @click="() => handleItem(record)">{{text}}</span>
               </template>
           </a-table>
       </div>
@@ -97,7 +99,7 @@ export default {
           form: this.$form.createForm(this),
           columns: [
               {title: '关注', dataIndex: 'is_collect', scopedSlots: { customRender: 'follow' }, width: '6%'},
-              {title: '姓名', dataIndex: 'username', width: '10%'},
+              {title: '姓名', dataIndex: 'username', scopedSlots: {customRender: 'username'}, width: '10%'},
               {title: '职位名称', dataIndex: 'jobName', width: '10%'},
               {title: '发布城市', dataIndex: 'city', width: '10%'},
               {title: '匹配度', dataIndex: 'compatibility', width: '7%'},
@@ -199,21 +201,25 @@ export default {
           });
           this.getData();
       },
-      handleItem(record, index) { //点击列表里的每一行
-          return {
-              on: {
-                  click: () => {
-                      this.$router.push({
-                          path: 'resume-detail',
-                          query: {
-                            //   isEdit: false,
-                              id: record.id,
-                              user_id: record.user_id
-                          }
-                      })
-                  }
+      handleItem(record) { //点击列表里的每一行
+          this.$router.push({
+                path: 'resume-detail',
+                query: {
+                //   isEdit: false,
+                    id: record.id,
+                    user_id: record.user_id
+                }
+            })
+      },
+      handleCollect(record) {
+          ajax.put('company/resumes', {
+              id: record.id,
+              is_collect: !record.is_collect
+          }).then(res => {
+              if(res.retcode == 0) {
+                  this.getData();
               }
-          }
+          })
       },
       onChangePage(pageNumber) { //分页
           this.params = Object.assign(this.params, {pageNumber});

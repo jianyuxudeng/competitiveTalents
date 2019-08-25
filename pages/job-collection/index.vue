@@ -11,7 +11,7 @@
                     </div>
                     <div class="list">
                         <div class="item" v-for="(item, index) in rows" :key="index">
-                            <dl>
+                            <dl @click="goJobDetail(item.id)">
                                 <dt><img :src="item.logo" alt=""></dt>
                                 <dd>
                                     <h4>{{item.careersName}} <span>{{item.jobPrice}}/月</span></h4>
@@ -145,6 +145,14 @@ export default {
               if(res.retcode == 0) {
                   this.ModelRow = res.data || [];
                   this.isModalShow = true;
+              }
+          })
+      },
+      goJobDetail(id) {
+          this.$router.push({
+              path: 'job-detail',
+              query: {
+                  id: id
               }
           })
       },

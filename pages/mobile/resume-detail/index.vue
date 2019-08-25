@@ -341,9 +341,12 @@
           </div>
           <p v-for="item in annexResumes" :key="item.id">
             <span>{{item.name}}</span>
-            <a v-if="isEdit && isShow" @click="del('annexResumes', item.id)">
-              <a-icon type="delete" />
-            </a>
+            <span v-if="isEdit && isShow">
+              <a @click="del('annexResumes', item.id)">
+                <a-icon type="delete" />
+              </a>
+              <a :href="item.resume_link"><a-icon type="download" /></a>
+            </span>
           </p>
         </div>
         <!-- 简历完整度 -->

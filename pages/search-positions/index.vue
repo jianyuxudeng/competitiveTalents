@@ -21,7 +21,7 @@
       <div class="centent">
           <div class="left">
               <a-input-group compact>
-                  <a-cascader :defaultValue="[1, 1]" :fieldNames="{label: 'name', value: 'id', children: 'item'}" :options="areas" size="large" class="pos_selsct" @change="onCascader">
+                  <a-cascader :allowClear="false" :defaultValue="[1, 1]" :fieldNames="{label: 'name', value: 'id', children: 'item'}" :options="areas" size="large" class="pos_selsct" @change="onCascader">
                       <template slot="displayRender" slot-scope="{labels}">
                           <span v-for="(label, index) in labels" :key="index">
                               <span v-if="index == 1">{{label}}</span>

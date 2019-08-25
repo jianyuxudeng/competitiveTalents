@@ -13,7 +13,7 @@
           <a-form-item>
             <h4>修改求职意向</h4>
           </a-form-item>
-          <a-form-item label="期望职位" :colon="false" :label-col="labelCol" :wrapper-col="wrapperCol">
+          <a-form-item label="期望职位" :colon="false">
             <a-cascader
               :fieldNames="{label: 'name', value: 'id', children: 'children'}"
               :options="careers"
@@ -27,7 +27,7 @@
               </template>
             </a-cascader>
           </a-form-item>
-          <a-form-item label="职位类型" :colon="false" :label-col="labelCol" :wrapper-col="wrapperCol">
+          <a-form-item label="职位类型" :colon="false">
             <a-select
               @change="handleJobTypeName"
               v-decorator="[
@@ -45,7 +45,7 @@
               >{{item.labelName}}</a-select-option>
             </a-select>
           </a-form-item>
-          <a-form-item label="所在城市" :colon="false" :label-col="labelCol" :wrapper-col="wrapperCol">
+          <a-form-item label="所在城市" :colon="false">
             <a-cascader
               :fieldNames="{label: 'name', value: 'id', children: 'item'}"
               :options="areas"
@@ -59,7 +59,7 @@
               </template>
             </a-cascader>
           </a-form-item>
-          <a-form-item label="期望薪资" :colon="false" :label-col="labelCol" :wrapper-col="wrapperCol">
+          <a-form-item label="期望薪资" :colon="false">
             <a-select
               v-decorator="[
 								'expected_salary_start',
@@ -97,7 +97,7 @@
 							</a-select>
             </a-select>
           </a-form-item>
-          <a-form-item label="目前状态" :colon="false" :label-col="labelCol" :wrapper-col="wrapperCol">
+          <a-form-item label="目前状态" :colon="false">
             <a-select
               v-decorator="[
                 'now_status',
@@ -112,7 +112,7 @@
               <a-select-option value="暂时不换工作">暂时不换工作</a-select-option>
             </a-select>
           </a-form-item>
-          <a-form-item label="到岗时间" :colon="false" :label-col="labelCol" :wrapper-col="wrapperCol">
+          <a-form-item label="到岗时间" :colon="false">
             <a-select
               v-decorator="[
 								'work_time',
@@ -129,7 +129,7 @@
 							<a-select-option value="3个月以上">3个月以上</a-select-option>
             </a-select>
           </a-form-item>
-          <a-form-item label="1" :label-col="labelCol" class="btn">
+          <a-form-item label="1" class="btn">
             <a-button type="primary" html-type="submit">保存</a-button>
           </a-form-item>
         </a-form>
@@ -154,8 +154,6 @@ export default {
   data() {
     return {
       modelData: null,
-      labelCol: { span: 3 },
-      wrapperCol: { span: 21 },
       form: this.$form.createForm(this),
       labels: {},
       areas: [],

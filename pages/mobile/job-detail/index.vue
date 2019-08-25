@@ -2,7 +2,7 @@
   <section class="job_detail page_centent">
       <div class="nav-bg"></div>
       <div class="detail_head">
-        <a-row type="flex" justify="space-between" align="middle">
+        <a-row>
           <a-col>
             <dl>
               <dt v-if="params.is_worry == 1">急聘</dt>
@@ -22,7 +22,7 @@
               </dd>
             </dl>
           </a-col>
-          <a-col v-if="userInfo.type == 2">
+          <a-col v-if="userInfo.type == 2" class="detail_head_btn">
             <a-button class="back" size="large" @click="(collectionPosition(!params.collect))">
               <a-icon type="star" />
               <span v-if="!params.collect">收藏</span>
@@ -30,10 +30,15 @@
             </a-button>
             <a-button type="primary" size="large" :disabled="!sendAgain" @click="handleModel">投递简历</a-button>
           </a-col>
+          <a-col v-if="userInfo.type == 3" class="detail_head_btn">
+            <a-button type="primary" size="large" @click="placement(params.id)">置顶</a-button>
+            <a-button type="primary" size="large" @click="modify(params.id)">修改职位</a-button>
+            <a-button type="primary" size="large" @click="offline(params.id, params.is_on)">{{params.is_on == 0 ? '上线职位' : '下线职位'}}</a-button>
+          </a-col>
         </a-row>
       </div>
       <div class="centent">
-        <a-row type="flex" justify="space-between" align="top">
+        <a-row>
           <div class="left">
             <div class="title">
               <em><img src="../../../assets/images/describe.png" alt=""></em>
@@ -67,26 +72,30 @@
             <div class="one">
               <dl>
                 <dt><img :src="params.logo" alt=""></dt>
-                <dd>{{params.companyName}}</dd>
+                <dd>
+                  <span>{{params.companyName}}</span>
+                  <div>
+                    <p>
+                      <a-icon type="appstore" theme="filled" />
+                      <span>{{params.trade}}</span>
+                    </p>
+                    <p>
+                      <em><img src="../../../assets/images/user.png" alt=""></em>
+                      <span>{{params.companySize}}</span>
+                    </p>
+                    <p>
+                      <a-icon type="pay-circle" theme="filled" />
+                      <span>{{params.capitalize}}</span>
+                    </p>
+                    <p>
+                      <em><img src="../../../assets/images/esports.png" alt=""></em>
+                      <span>{{params.website}}</span>
+                    </p>
+                  </div>
+                </dd>
               </dl>
-              <p>
-                <a-icon type="appstore" theme="filled" />
-                <span>{{params.trade}}</span>
-              </p>
-              <p>
-                <a-icon type="pay-circle" theme="filled" />
-                <span>{{params.capitalize}}</span>
-              </p>
-              <p>
-                <em><img src="../../../assets/images/user.png" alt=""></em>
-                <span>{{params.companySize}}</span>
-              </p>
-              <p>
-                <em><img src="../../../assets/images/esports.png" alt=""></em>
-                <span>{{params.website}}</span>
-              </p>
             </div>
-            <Interest></Interest>
+            <Interest className="mobile_job_detail"></Interest>
           </div>
         </a-row>
       </div>
@@ -111,9 +120,9 @@
                             </a-col>
                             <a-col>
                                 <a-row type="flex" justify="end" align="middle">
-                                    <a>预览</a>
-                                    <em></em>
-                                    <a>修改</a>
+                                    <!-- <a>预览</a>
+                                    <em></em> -->
+                                    <a @click="modifyResume">修改</a>
                                 </a-row>
                             </a-col>
                         </a-row>
@@ -169,7 +178,7 @@ export default {
         sendAgain: true,
         isModalShow: false,
         modelRow: [],
-        value: null,
+        value: 0,
         userInfo: {},
         radioStyle: {
             display: 'block',
@@ -188,6 +197,41 @@ export default {
     this.labelDev();
   },
   methods: {
+      offline(id, is_on) {
+        let _obj = {
+            id: id,
+            is_on: is_on == 0 ? 1 : 0
+        };
+        this.handleModify(_obj);
+      },
+      placement(id) {
+          let _obj = {
+              id: id,
+              top: true
+          };
+          this.handleModify(_obj);
+      },
+      handleModify(obj={}) { //置顶，下线职位
+          ajax.put('jobs', obj).then(res => {
+              if(res.retcode == 0) {
+                  this.devData();
+                  this.$message.success(res.msg);
+              }
+          });
+      },
+      modify(id) {
+        this.$router.push({
+            path: 'job-release',
+            query: {
+                id: id
+            }
+        })
+      },
+      modifyResume() {
+        this.$router.push({
+          path: 'resume-detail'
+        })
+      },
       collectionPosition(collect) { //收藏职位
         let userInfo = util.getStore('userInfo');
         if(!userInfo){
@@ -267,10 +311,13 @@ export default {
           //   return;
           // }
           let _id = this.$route.query.id;
-          ajax.get('jobs/detail', {
-              // user_id: userInfo.id,
-              job_id: _id
-          }).then(res => {
+          let query = {
+             job_id: _id
+          }
+          if(userInfo){
+            query.user_id = userInfo.id;
+          }
+          ajax.get('jobs/detail', query).then(res => {
             if(res.retcode == 0) {
               console.log(res.data)
               this.params = res.data.jobDetail || {};

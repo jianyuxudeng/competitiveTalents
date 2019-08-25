@@ -11,7 +11,7 @@
                     </div>
                     <div class="list">
                         <div class="item" v-for="(item, index) in rows" :key="index">
-                            <dl>
+                            <dl @click="goJobDetail(item.id)">
                                 <dt><img :src="item.logo" alt=""></dt>
                                 <dd>
                                     <h4>{{item.careersName}} <span>{{item.jobPrice}}/月</span></h4>
@@ -25,16 +25,15 @@
                                     <a @click="collectionPosition(item)">取消收藏</a>
                                     <em></em>
                                     <a v-if="item.sendAgain&&item.is_on" @click="handleModel(item)">投简历</a>
-                                    <a style="color:#cccccc" v-if="!item.sendAgain&&item.is_on">已投递投</a>
+                                    <a style="color:#cccccc" v-if="!item.sendAgain&&item.is_on">已投递</a>
                                     <span style="color:#cccccc" v-if="!item.is_on">已下线</span>
-                                    <!-- <span>已下线</span> -->
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="right">
-                    <Interest></Interest>
+                    <Interest className="mobile_job_detail"></Interest>
                 </div>
             </a-row>
         </div>
@@ -59,9 +58,9 @@
                             </a-col>
                             <a-col>
                                 <a-row type="flex" justify="end" align="middle">
-                                    <a>预览</a>
-                                    <em></em>
-                                    <a>修改</a>
+                                    <!-- <a>预览</a>
+                                    <em></em> -->
+                                    <a @click="modify">修改</a>
                                 </a-row>
                             </a-col>
                         </a-row>
@@ -113,7 +112,7 @@ export default {
   data() {
       return{
           isModalShow: false,
-          value: null,
+          value: 0,
           radioStyle: {
               display: 'block',
               height: '.3rem',
@@ -147,6 +146,19 @@ export default {
                   this.ModelRow = res.data || [];
                   this.isModalShow = true;
               }
+          })
+      },
+      goJobDetail(id) {
+          this.$router.push({
+              path: 'job-detail',
+              query: {
+                  id: id
+              }
+          })
+      },
+      modify() {
+          this.$router.push({
+              path: 'resume-detail'
           })
       },
       handleresume() {

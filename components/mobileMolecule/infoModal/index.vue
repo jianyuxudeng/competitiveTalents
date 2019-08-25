@@ -16,8 +16,6 @@
                     <a-form-item
                         label="姓名"
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                         <a-input
                           v-decorator="[
@@ -32,16 +30,12 @@
                     <a-form-item
                         label="生日"
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                         <a-date-picker :defaultValue="modelData.birth&&moment(modelData.birth, dateFormat)" @change="handleBirth" />
                     </a-form-item>
                     <a-form-item
                         label="性别"
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                         <a-radio-group
                           v-decorator="[
@@ -59,8 +53,6 @@
                     <a-form-item
                         label="所在城市"
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                         <a-cascader
                           :fieldNames="{label: 'name', value: 'id', children: 'item'}"
@@ -79,8 +71,6 @@
                     <a-form-item
                         label="手机号码"
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                         <a-input
                           v-decorator="[
@@ -95,8 +85,6 @@
                     <a-form-item
                         label="求职状态"
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                         <a-select
                           v-decorator="[
@@ -116,12 +104,10 @@
                     <a-form-item
                         label="工作时间"
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                         <a-date-picker :defaultValue="modelData.workTime&&moment(modelData.workTime, dateFormat)" @change="handleWorkTime" />
                     </a-form-item>
-                    <a-form-item label="1" :label-col="labelCol" class="btn">
+                    <a-form-item label="1" class="btn">
                         <a-button type="primary" html-type="submit">保存</a-button>
                     </a-form-item>
                 </a-form>
@@ -150,8 +136,6 @@ export default {
       return{
           dateFormat: 'YYYY-MM-DD',
           modelData: null,
-          labelCol: {span: 3},
-          wrapperCol: {span: 21},
           form: this.$form.createForm(this),
           labels: {},
           areas: [],

@@ -2,7 +2,7 @@
   <section class="search_positions page_centent">
       <div class="nav-bg"></div>
       <div class="banner">
-          <img src="../../../assets/images/positions_banner.jpg" alt="">
+          <img src="../../../assets/images/mobile/positions_banner.jpg" alt="">
           <div class="banner_cent">
               <a-upload 
                   name="file" 
@@ -21,81 +21,28 @@
       <div class="centent">
           <div class="left">
               <a-input-group compact>
-                  <a-cascader :defaultValue="[1, 1]" :fieldNames="{label: 'name', value: 'id', children: 'item'}" :options="areas" size="large" class="pos_selsct" @change="onCascader">
+                  <a-input-search class="pos_search" size="large" placeholder="查找工作请输入技能、项目名称或职位" @search="onSearch" />
+              </a-input-group>
+              <div class="search_list">
+                  <a-cascader :allowClear="false" :defaultValue="[1, 1]" :fieldNames="{label: 'name', value: 'id', children: 'item'}" :options="areas" size="large" class="pos_selsct" @change="onCascader">
                       <template slot="displayRender" slot-scope="{labels}">
                           <span v-for="(label, index) in labels" :key="index">
                               <span v-if="index == 1">{{label}}</span>
                           </span>
                       </template>
+                      <a-icon slot="suffixIcon" type="caret-down" class="search_list_icon" />
                   </a-cascader>
-                  <a-input-search class="pos_search" size="large" placeholder="查找工作请输入技能、项目名称或职位" @search="onSearch" />
-              </a-input-group>
-              <div class="search_list">
-                  <div class="search_area">
-                      <dl>
-                          <dt>行政区</dt>
-                          <dd>
-                              <span v-for="(item, index) in regionList" :key="item.id" :class="{active: active == index}" @click="handleRegion(item, index)">{{item.name}}</span>
-                          </dd>
-                      </dl>
-                  </div>
-                  <div>
-                      <dl>
-                          <dt>工作经验</dt>
-                          <dd>
-                              <span v-for="item in workExpress" :key="item.id" :class="{active: params.workExperience == item.id}" @click="handleArea('workExperience', item.id)">{{item.labelName}}</span>
-                          </dd>
-                      </dl>
-                      <dl>
-                          <dt>学历要求</dt>
-                          <dd>
-                              <span v-for="item in educationals" :key="item.id" :class="{active: params.educational == item.id}" @click="handleArea('educational', item.id)">{{item.labelName}}</span>
-                          </dd>
-                      </dl>
-                      <dl>
-                          <dt>融资阶段</dt>
-                          <dd>
-                              <span v-for="item in capitalizes" :key="item.id" :class="{active: params.capitalize == item.id}" @click="handleArea('capitalize', item.id)">{{item.labelName}}</span>
-                          </dd>
-                      </dl>
-                      <dl>
-                          <dt>公司规模</dt>
-                          <dd>
-                              <span v-for="item in companySizes" :key="item.id" :class="{active: params.companySize == item.id}" @click="handleArea('companySize', item.id)">{{item.labelName}}</span>
-                          </dd>
-                      </dl>
-                      <dl>
-                          <dt>行业领域</dt>
-                          <dd>
-                              <span v-for="item in trades" :key="item.id" :class="{active: params.trade == item.id}" @click="handleArea('trade', item.id)">{{item.labelName}}</span>
-                          </dd>
-                      </dl>
-                  </div>
-              </div>
-              <div class="search_list">
-                  <div class="sorting">
-                      <dl>
-                          <dt>排序方式</dt>
-                          <dd>
-                              <span v-for="(item, index) in sortingList" :key="index" :class="{active: params.sorting == index}">{{item}}</span>
-                          </dd>
-                      </dl>
-                      <dl>
-                          <dt>月薪</dt>
-                          <dd>
-                              <a-select defaultValue="" @change="onJobPrices">
-                                  <a-select-option :value="item.id" v-for="item in jobPrices" :key="item.id">{{item.labelName}}</a-select-option>
-                              </a-select>
-                          </dd>
-                      </dl>
-                      <dl>
-                          <dt>工作性质</dt>
-                          <dd>
-                              <a-select defaultValue="" @change="onJobTypes">
-                                  <a-select-option :value="item.id" v-for="item in jobTypes" :key="item.id">{{item.labelName}}</a-select-option>
-                              </a-select>
-                          </dd>
-                      </dl>
+                  <a-select placeholder="工作性质" @change="onJobTypes">
+                      <a-icon slot="suffixIcon" type="caret-down" class="search_list_icon" />
+                      <a-select-option v-for="item in jobTypes" :key="item.id" :value="item.id">{{item.labelName}}</a-select-option>
+                  </a-select>
+                  <a-select placeholder="月薪" @change="onJobPrices">
+                      <a-icon slot="suffixIcon" type="caret-down" class="search_list_icon" />
+                      <a-select-option v-for="item in jobPrices" :key="item.id" :value="item.id">{{item.labelName}}</a-select-option>
+                  </a-select>
+                  <div class="showModel" @click="handleShowModel">
+                      <span>更多</span>
+                      <a-icon type="caret-down" class="search_list_icon" />
                   </div>
               </div>
               <div class="rows">
@@ -103,60 +50,93 @@
                     <div class="head">
                         <span v-if="item.is_worry == 1">急<br />聘</span>
                         <div class="rows_left">
-                            <div class="title"><span>{{item.name}}[ {{item.companyRegion&&JSON.parse(item.companyRegion).cityName}} ]</span>{{item.workExperience ? workExpress.find(i => i.id == item.workExperience).labelName : null}} / {{item.educational ? educationals.find(i => i.id == item.educational).labelName : null}}</div>
+                            <div class="title">
+                                <span>
+                                    {{item.name}}
+                                    <p>{{item.workExperience ? workExpress.find(i => i.id == item.workExperience).labelName : null}} / {{item.educational ? educationals.find(i => i.id == item.educational).labelName : null}}</p>
+                                </span>
+                                <span class="title_right">
+                                    <p>[{{item.sendTime ? formatTime(item.sendTime) : null}}发布]</p>
+                                    <span>{{item.jobPrice}}/月</span>
+                                </span>
+                            </div>
                             <div class="list">
-                                <div class="li">
-                                    <p>
-                                        <em><img src="../../../assets/images/type.png" alt=""></em>
-                                        <span>招聘类型</span>
-                                    </p>
-                                    <p>{{item.typeName}}</p>
-                                </div>
-                                <em></em>
-                                <div class="li">
-                                    <p>
-                                        <em><img src="../../../assets/images/cycle.png" alt=""></em>
-                                        <span>周期</span>
-                                    </p>
-                                    <p>{{item.work_time}}</p>
-                                </div>
-                                <em></em>
-                                <div class="li">
-                                    <p>
-                                        <em><img src="../../../assets/images/shape.png" alt=""></em>
-                                        <span>形式</span>
-                                    </p>
-                                    <p>{{item.form}}</p>
+                                <div class="btn">
+                                    <span :class="item.typeClassName">{{item.typeName}}</span>
+                                    <span v-for="(i, index) in item.skills" :key="index">{{i}}</span>
                                 </div>
                             </div>
                         </div>
                         <div class="rows_right">
+                            <em><img :src="item.logo" alt=""></em>
                             <div>
-                                <p>{{item.jobPrice}}/月</p>
                                 <p>{{item.companyName}}</p>
                                 <p>{{item.trade ? trades.find(i => i.id == item.trade).labelName : null}}/{{item.capitalize ? capitalizes.find(i => i.id == item.capitalize).labelName : null}}/{{item.companyRegion&&JSON.parse(item.companyRegion).cityName}}</p>
                             </div>
-                            <em><img :src="item.logo" alt=""></em>
-                        </div>
-                    </div>
-                    <div class="foot">
-                        <div class="btn">
-                            <span v-for="(i, index) in item.skills" :key="index">{{i}}</span>
-                        </div>
-                        <div class="times">
-                            <a-icon type="clock-circle" />
-                            <span>发布时间 {{item.sendTime}}</span>
                         </div>
                     </div>
                   </div>
               </div>
               <a-pagination showQuickJumper :defaultCurrent="1" :total="total" @change="onChangePage" />
           </div>
-          <div class="right">
+          <!-- <div class="right">
               <div><img src="../../../assets/images/positions_1.jpg" alt=""></div>
               <div><router-link to='/resume-detail'><img src="../../../assets/images/positions_2.jpg" alt=""></router-link></div>
               <div><img src="../../../assets/images/positions_3.jpg" alt=""></div>
-          </div>
+          </div> -->
+          <a-modal
+            :confirmLoading="false"
+            :maskClosable="false"
+            :visible="showModel"
+            class="seletModel"
+            @cancel="showModel = false"
+            @ok="handleSearch"
+          >
+            <div class="seletModel_centent">
+                <!-- <dl>
+                    <dt>排序方式</dt>
+                    <dd>
+                        <span v-for="(item, index) in sortingList" :key="index" :class="{active: params.sorting == index}">{{item}}</span>
+                    </dd>
+                </dl> -->
+                <dl>
+                    <dt>行政区</dt>
+                    <dd>
+                        <span v-for="(item, index) in regionList" :key="item.id" :class="{active: active == index}" @click="handleRegion(item, index)">{{item.name}}</span>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>工作经验</dt>
+                    <dd>
+                        <span v-for="item in workExpress" :key="item.id" :class="{active: params.workExperience == item.id}" @click="handleArea('workExperience', item.id)">{{item.labelName}}</span>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>学历要求</dt>
+                    <dd>
+                        <span v-for="item in educationals" :key="item.id" :class="{active: params.educational == item.id}" @click="handleArea('educational', item.id)">{{item.labelName}}</span>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>融资阶段</dt>
+                    <dd>
+                        <span v-for="item in capitalizes" :key="item.id" :class="{active: params.capitalize == item.id}" @click="handleArea('capitalize', item.id)">{{item.labelName}}</span>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>公司规模</dt>
+                    <dd>
+                        <span v-for="item in companySizes" :key="item.id" :class="{active: params.companySize == item.id}" @click="handleArea('companySize', item.id)">{{item.labelName}}</span>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>行业领域</dt>
+                    <dd>
+                        <span v-for="item in trades" :key="item.id" :class="{active: params.trade == item.id}" @click="handleArea('trade', item.id)">{{item.labelName}}</span>
+                    </dd>
+                </dl>
+            </div>
+          </a-modal>
       </div>
   </section>
 </template>
@@ -187,12 +167,12 @@ export default {
           jobTypes: [], //工作性质
           sortingList: ['默认', '最新发布'], //排序方式
           params: { //筛选参数
-              region: null, //地区
-              workExperience: null, //工作经验
-              educational: null, //学历要求
-              capitalize: null, //融资阶段
-              companySize: null, //公司规模
-              trade: null, //行业领域
+              region: '', //地区
+              workExperience: '', //工作经验
+              educational: '', //学历要求
+              capitalize: '', //融资阶段
+              companySize: '', //公司规模
+              trade: '', //行业领域
               sorting: null, //排序方式
               jobPrice: null, //月薪
               jobType: null, //职位类型
@@ -211,13 +191,15 @@ export default {
               name: ''
           },
           uploadUrl: util.upLoadUrl,
-          isZip: true
+          isZip: true,
+          showModel: false
       }
   },
   mounted() {
       this.getData();
   },
   methods: {
+      formatTime: util.formatTime,
       init(obj) { //初始化数据
           this.regionList = [ //地区
               {id: null, name: '不限'},
@@ -225,7 +207,7 @@ export default {
           ];
           Object.keys(obj).map(item => {
               this[item] = [
-                  {id: null, labelName: '不限'},
+                  {id: '', labelName: '不限'},
                   ...obj[item]
               ]
           });
@@ -250,6 +232,9 @@ export default {
           };
           return isZip;
       },
+      handleShowModel() {
+          this.showModel = true;
+      },
       goJobDetail(e) {
           this.$router.push({
               path: 'job-detail',
@@ -257,6 +242,10 @@ export default {
                   id: e.id
               }
           })
+      },
+      handleSearch() {
+          this.showModel = false;
+          this.searchData();
       },
       onSearch(value) { //关键字筛选
           this.params = Object.assign(this.params, {keywords: value});
@@ -331,7 +320,7 @@ export default {
       },
       handleArea(name, val) { //筛选
           this.params = Object.assign(this.params, {[name]: val});
-          this.searchData();
+        //   this.searchData();
       },
       onChangePage(pageNumber) { //分页
           this.params = Object.assign(this.params, {pageNumber});
@@ -350,7 +339,20 @@ export default {
               this.rows = res.data.list || [];
               this.rows.forEach(item => {
                   item.skills = item.skills?item.skills.split(',') : [];
-                  item.sendTime = item.sendTime&&moment(item.sendTime).format('YYYY-MM-DD HH:mm') //util.format(item.sendTime);
+                  item.sendTime = item.sendTime&&moment(item.sendTime).format('YYYY-MM-DD HH:mm'); //util.format(item.sendTime);
+                  switch (item.typeName) {
+                      case '全职':
+                          item.typeClassName = 'blur';
+                          break;
+                      case '兼职':
+                          item.typeClassName = 'yellor';
+                          break;
+                      case '外包':
+                          item.typeClassName = 'green';
+                          break;
+                      default:
+                          break;
+                  }
                   return item;
               });
               this.total = res.data.total;

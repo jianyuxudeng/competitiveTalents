@@ -3,37 +3,30 @@
       <div class="nav-bg"></div>
       <div class="centent">
           <div class="left">
-              <a-input-group compact>
-                  <a-cascader :defaultValue="[1, 1]" :fieldNames="{label: 'name', value: 'id', children: 'item'}" :options="areas" size="large" class="pos_selsct" @change="onCascader">
-                      <template slot="displayRender" slot-scope="{labels}">
-                          <span v-for="(label, index) in labels" :key="index">
-                              <span v-if="index == 1">{{label}}</span>
-                          </span>
-                      </template>
-                  </a-cascader>
-                  <a-input-search class="pos_search" size="large" placeholder="查找简历" @search="onSearch" />
-              </a-input-group>
+              <a-input-search class="pos_search" size="large" placeholder="查找简历" @search="onSearch" />
               <div class="search_list">
-                  <div>
-                      <dl>
-                          <dt>工作经验</dt>
-                          <dd>
-                              <span v-for="(item, index) in workExpress" :key="index" :class="{active: params.workTime == item.id}" @click="handleArea('workTime', item.id)">{{item.labelName}}</span>
-                          </dd>
-                      </dl>
-                      <dl>
-                          <dt>学历要求</dt>
-                          <dd>
-                              <span v-for="item in educationals" :key="item.id" :class="{active: params.qualifications_id == item.id}" @click="handleArea('qualifications_id', item.id)">{{item.labelName}}</span>
-                          </dd>
-                      </dl>
-                      <dl>
-                          <dt>薪资要求</dt>
-                          <dd>
-                              <span v-for="item in jobPrices" :key="item.id" :class="{active: params.price == item.id}" @click="handleArea('price', item.id)">{{item.labelName}}</span>
-                          </dd>
-                      </dl>
-                  </div>
+                  <a-input-group compact>
+                        <a-cascader :allowClear="false" :defaultValue="[1, 1]" :fieldNames="{label: 'name', value: 'id', children: 'item'}" :options="areas" class="pos_selsct" @change="onCascader">
+                            <template slot="displayRender" slot-scope="{labels}">
+                                <span v-for="(label, index) in labels" :key="index">
+                                    <span v-if="index == 1">{{label}}</span>
+                                </span>
+                            </template>
+                            <a-icon slot="suffixIcon" type="caret-down" class="search_list_icon" />
+                        </a-cascader>
+                    </a-input-group>
+                    <a-select placeholder="工作经验" @change="handleAreaWorkTime">
+                        <a-icon slot="suffixIcon" type="caret-down" class="search_list_icon" />
+                        <a-select-option v-for="(item, index) in workExpress" :key="index" :value="item.id">{{item.labelName}}</a-select-option>
+                    </a-select>
+                    <a-select placeholder="学历要求" @change="handleAreaQualificationsId">
+                        <a-icon slot="suffixIcon" type="caret-down" class="search_list_icon" />
+                        <a-select-option v-for="(item, index) in educationals" :key="index" :value="item.id">{{item.labelName}}</a-select-option>
+                    </a-select>
+                    <a-select placeholder="薪资要求" @change="handleAreaPrice">
+                        <a-icon slot="suffixIcon" type="caret-down" class="search_list_icon" />
+                        <a-select-option v-for="(item, index) in jobPrices" :key="index" :value="item.id">{{item.labelName}}</a-select-option>
+                    </a-select>
               </div>
               <div class="rows">
                   <div class="rows_li" v-for="item in rows" :key="item.id" @click="goJobDetail(item)">
@@ -68,11 +61,11 @@
               </div>
               <a-pagination showQuickJumper :defaultCurrent="1" :total="total" @change="onChangePage" />
           </div>
-          <div class="right">
+          <!-- <div class="right">
               <div><img src="../../../assets/images/positions_1.jpg" alt=""></div>
               <div><img src="../../../assets/images/positions_2.jpg" alt=""></div>
               <div><img src="../../../assets/images/positions_3.jpg" alt=""></div>
-          </div>
+          </div> -->
       </div>
   </section>
 </template>
@@ -120,7 +113,7 @@ export default {
       init(obj) { //初始化数据
           Object.keys(obj).map(item => {
               this[item] = [
-                  {id: null, labelName: '不限'},
+                  {id: '', labelName: '不限'},
                   ...obj[item]
               ]
           });
@@ -176,8 +169,16 @@ export default {
           this.params = Object.assign(this.params, {cityId: citys.id});
           this.searchData();
       },
-      handleArea(name, val) { //筛选
-          this.params = Object.assign(this.params, {[name]: val});
+      handleAreaWorkTime(value) {
+          this.params = Object.assign(this.params, {workTime: value});
+          this.searchData();
+      },
+      handleAreaQualificationsId(value) {
+          this.params = Object.assign(this.params, {qualifications_id: value});
+          this.searchData();
+      },
+      handleAreaPrice(value) {
+          this.params = Object.assign(this.params, {price: value});
           this.searchData();
       },
       onChangePage(pageNumber) { //分页

@@ -16,8 +16,6 @@
                     <a-form-item
                         label=""
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                         <a-input
                           v-decorator="[
@@ -32,12 +30,10 @@
                     <a-form-item
                         label=""
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                         <p>请添加能突出你个人专业能力示例的主页</p>
                     </a-form-item>
-                    <a-form-item label="1" :label-col="labelCol" class="btn">
+                    <a-form-item label="1" class="btn">
                         <a-button type="primary" html-type="submit">保存</a-button>
                     </a-form-item>
                 </a-form>
@@ -63,8 +59,6 @@ export default {
   data() {
       return{
           modelData: null,
-          labelCol: {span: 3},
-          wrapperCol: {span: 21},
           form: this.$form.createForm(this),
       }
   },

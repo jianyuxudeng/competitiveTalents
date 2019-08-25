@@ -16,8 +16,6 @@
                     <a-form-item
                         label="公司名称"
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                         <a-input
                           v-decorator="[
@@ -32,8 +30,6 @@
                     <a-form-item
                         label=" "
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                         <a-checkbox
                             :checked="is_show"
@@ -50,8 +46,6 @@
                     <a-form-item
                         label="行业标签"
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                         <a-select
                           v-decorator="[
@@ -72,8 +66,6 @@
                     <a-form-item
                         label="所属部门"
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                         <a-input
                           v-decorator="[
@@ -88,8 +80,6 @@
                     <a-form-item
                         label="职位类型"
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                         <a-select
                           v-decorator="[
@@ -110,8 +100,6 @@
                     <a-form-item
                         label="职位名称"
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                         <a-input
                           v-decorator="[
@@ -126,8 +114,6 @@
                     <a-form-item
                         label="在职时间"
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                         <a-date-picker :defaultValue="moment(come_time, dateFormat)" @change="comeTime" />
                         <a-date-picker :defaultValue="moment(leave_time, dateFormat)" @change="leaveTime" />
@@ -135,8 +121,6 @@
                     <a-form-item
                         label="技能标签"
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                          <a-select
                              mode="tags"
@@ -161,8 +145,6 @@
                         label="工作内容"
                         class="start"
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                         <a-textarea
                           v-decorator="[
@@ -174,7 +156,7 @@
                           ]"
                          />
                     </a-form-item>
-                    <a-form-item label="1" :label-col="labelCol" class="btn">
+                    <a-form-item label="1" class="btn">
                         <a-button type="primary" html-type="submit">保存</a-button>
                     </a-form-item>
                 </a-form>
@@ -202,8 +184,6 @@ export default {
       return{
           dateFormat: 'YYYY-MM-DD',
           modelData: null,
-          labelCol: {span: 3},
-          wrapperCol: {span: 21},
           form: this.$form.createForm(this),
           labels: {},
           come_time: null,

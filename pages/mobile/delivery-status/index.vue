@@ -6,7 +6,7 @@
               <div class="title">
                   <a-row type="flex" justify="space-between" align="middle">
                       <span>已投递简历状态</span>
-                      <a>
+                      <a @click="refresh">
                           刷新
                           <a-icon type="sync" />
                       </a>
@@ -20,17 +20,19 @@
                       <template slot="header">
                           <div class="status_item">
                               <a-row type="flex" justify="space-between" align="bottom">
-                                  <a-col class="left">
+                                  <a-col class="status_item_left">
                                       <h4>{{item.careersName}}<span>{{item.jobPrice}}/月</span></h4>
                                       <p>{{item.companyName}}</p>
-                                      <p><span>使用简历：</span>在线简历</p>
-                                  </a-col>
-                                  <a-col class="right">
-                                      <p>{{item.send_time ? format(item.send_time) : item.send_time}}</p>
-                                      <div>
-                                          {{active == 0 ? '投递成功' : '被查看'}}
-                                          <a-icon type="caret-down" />
-                                      </div>
+                                      <a-row type="flex" justify="space-between" align="middle">
+                                          <a-col><p><span>使用简历：</span>在线简历</p></a-col>
+                                          <a-col class="status_item_right">
+                                              <p>{{item.send_time ? format(item.send_time) : item.send_time}}</p>
+                                              <div>
+                                                  {{active == 0 ? '投递成功' : '被查看'}}
+                                                  <a-icon type="caret-down" />
+                                              </div>
+                                          </a-col>
+                                      </a-row>
                                   </a-col>
                               </a-row>
                           </div>
@@ -69,7 +71,7 @@
               </a-collapse>
           </div>
           <div class="right">
-              <Interest></Interest>
+              <Interest className="mobile_job_detail"></Interest>
           </div>
       </div>
   </section>
@@ -151,6 +153,9 @@ export default {
               default:
                   break;
           }
+      },
+      refresh() {
+          this.devData();
       },
       devData() {
           let userInfo = util.getStore('userInfo');

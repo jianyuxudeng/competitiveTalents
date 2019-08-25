@@ -25,7 +25,7 @@
                                     <a @click="collectionPosition(item)">取消收藏</a>
                                     <em></em>
                                     <a v-if="item.sendAgain&&item.is_on" @click="handleModel(item)">投简历</a>
-                                    <a style="color:#cccccc" v-if="!item.sendAgain&&item.is_on">已投递投</a>
+                                    <a style="color:#cccccc" v-if="!item.sendAgain&&item.is_on">已投递</a>
                                     <span style="color:#cccccc" v-if="!item.is_on">已下线</span>
                                 </div>
                             </div>
@@ -58,9 +58,9 @@
                             </a-col>
                             <a-col>
                                 <a-row type="flex" justify="end" align="middle">
-                                    <a>预览</a>
-                                    <em></em>
-                                    <a>修改</a>
+                                    <!-- <a>预览</a>
+                                    <em></em> -->
+                                    <a @click="modify">修改</a>
                                 </a-row>
                             </a-col>
                         </a-row>
@@ -133,6 +133,11 @@ export default {
   methods: {
       init() {
           this.userInfo = util.getStore('userInfo');
+      },
+      modify() {
+          this.$router.push({
+              path: 'resume-detail'
+          })
       },
       handleCancel() { //关闭弹窗
           this.isModalShow = false;

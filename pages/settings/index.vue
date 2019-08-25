@@ -52,7 +52,7 @@
                     <span>匿名显示</span>
                   </dt>
                   <dd>
-                    <p>选中你敏展示后,HR无法看到你的真是头像和姓名</p>
+                    <p>选中匿名展示后,HR无法看到你的真实头像和姓名</p>
                     <a-radio-group @change="onChange" v-model="anonymous">
                       <a-radio value="0">
                         <img src="../../assets/images/tx.png" />

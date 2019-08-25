@@ -1,19 +1,18 @@
 .collection{
-    width: 11.8rem;
-    margin: .4rem auto;
+    width: 100%;
+    margin: 0 auto 1.6rem;
     .left{
-        width: 9.19rem;
-        border: 1px solid #d1d1d2;
-        border-radius: .08rem;
+        width: 100%;
         overflow: hidden;
         .title{
-            height: .7rem;
+            height: .8rem;
             background: #edefff;
             padding: 0 .36rem;
-            font-size: .22rem;
+            font-size: .28rem;
             color: #464646;
             .ant-row-flex{
                 height: 100%;
+                justify-content: center;
             }
         }
         .ant-tabs-bar{
@@ -30,20 +29,15 @@
                 margin-right: 0;
             }
         }
-        .list{
-            padding: 0 .24rem;
-        }
         .item{
-            height: 1.05rem;
             background: #f8f8f8;
-            padding: .15rem .2rem;
+            padding: .15rem 0;
             margin: .2rem auto;
-            display: flex;
-            justify-content: space-between;
             dl{
                 display: flex;
                 align-items: center;
                 margin-bottom: 0;
+                padding: 0 .24rem .2rem;
             }
             dt{
                 width: .68rem;
@@ -59,7 +53,7 @@
                 justify-content: space-between;
                 h4{
                     margin-bottom: 0;
-                    font-size: .18rem;
+                    font-size: .24rem;
                     color: #515ffd;
                     span{
                         margin-left: .16rem;
@@ -68,7 +62,7 @@
                 p{
                     margin-bottom: 0;
                     margin: .02rem 0;
-                    font-size: .15rem;
+                    font-size: .2rem;
                     color: #464646;
                 }
                 >span{
@@ -78,8 +72,10 @@
             }
             .btn{
                 display: flex;
-                flex-flow: column;
                 justify-content: space-between;
+                align-items: center;
+                padding: .1rem .24rem 0;
+                border-top: 1px solid #afafaf;
                 p{
                     margin-bottom: 0;
                     font-size: .13rem;
@@ -101,6 +97,10 @@
                 }
             }
         }
+    }
+    .right{
+        width: 90%;
+        margin: .2rem auto 0;
     }
 }
 .collectionModal{

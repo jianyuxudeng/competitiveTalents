@@ -6,7 +6,7 @@
               <div class="title">
                   <a-row type="flex" justify="space-between" align="middle">
                       <span>已投递简历状态</span>
-                      <a>
+                      <a @click="refresh">
                           刷新
                           <a-icon type="sync" />
                       </a>
@@ -151,6 +151,9 @@ export default {
               default:
                   break;
           }
+      },
+      refresh() {
+          this.devData();
       },
       devData() {
           let userInfo = util.getStore('userInfo');

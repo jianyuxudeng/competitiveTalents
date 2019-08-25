@@ -6,15 +6,23 @@
         <div class="centent">
           <!-- 个人信息 -->
           <div class="info">
-            <a-row type="flex" justify="space-between" align="top">
+            <a-row>
               <dl>
                 <dt>
                   <img src="../../../assets/images/tx.png" alt />
                 </dt>
                 <dd>
-                  <div class="name">{{userDetail.username}}</div>
+                  <div class="name">
+                    <span>{{userDetail.username}}</span>
+                    <a @click="edit('info')" v-if="isEdit && isShow">
+                      <em>
+                        <img src="../../../assets/images/edit.png" alt />
+                      </em>
+                      <span>编辑</span>
+                    </a>
+                  </div>
                   <p>{{experience.length > 0 ? experience[0].company_name : null}} / {{experience.length > 0 ? experience[0].career_name : null}}</p>
-                  <p>{{userDetail.workTimeLen}}工作经验 / {{education.length > 0 ? education[0].qualifications : null}} / {{userDetail.birthLen}}岁</p>
+                  <p>{{userDetail.workTimeLen}} / {{education.length > 0 ? education[0].qualifications : null}} / {{userDetail.birthLen}}岁</p>
                   <div class="tel">
                     <div v-if="userDetail.phone">
                       <a-icon type="tablet" />
@@ -27,13 +35,43 @@
                   </div>
                 </dd>
               </dl>
-              <a @click="edit('info')" v-if="isEdit && isShow">
-                <em>
-                  <img src="../../../assets/images/edit.png" alt />
-                </em>
-                <span>编辑</span>
-              </a>
             </a-row>
+          </div>
+          <div class="resume_right">
+            <!-- 附件简历 -->
+            <div class="enclosure">
+              <div class="resume_right_title">
+                <p>附件简历</p>
+                <a v-if="isEdit && isShow" @click="add('annexResumes')">
+                  <em>
+                    <a-icon type="plus-square" />
+                  </em>
+                  <span>添加</span>
+                </a>
+              </div>
+              <p v-for="item in annexResumes" :key="item.id">
+                <span>{{item.name}}</span>
+                <span v-if="isEdit && isShow">
+                  <a @click="del('annexResumes', item.id)">
+                    <a-icon type="delete" />
+                  </a>
+                  <a :href="item.resume_link"><a-icon type="download" /></a>
+                </span>
+              </p>
+            </div>
+            <!-- 简历完整度 -->
+            <div class="completeness">
+              <div class="resume_right_title">
+                <p>简历完整度： {{process}}%</p>
+                <a @click="showResumes">
+                  <em>
+                    <a-icon type="search" />
+                  </em>
+                  <span>简历预览</span>
+                </a>
+              </div>
+              <a-progress :percent="process" :showInfo="false" />
+            </div>
           </div>
           <!-- 视频 -->
           <div id="video">
@@ -85,36 +123,38 @@
                 <span>编辑</span>
               </a>
             </div>
-            <p>
-              <em>
-                <img src="../../../assets/images/position.png" alt />
-              </em>
-              <span>{{objective.expected_position_name}}</span>
-            </p>
-            <p>
-              <em>
-                <img src="../../../assets/images/resume-type.png" alt />
-              </em>
-              <span>{{objective.job_type_name}}</span>
-            </p>
-            <p>
-              <em>
-                <img src="../../../assets/images/address.png" alt />
-              </em>
-              <span>{{objective.city && objective.city != 'null' ? JSON.parse(objective.city).name : objective.cityName}}</span>
-            </p>
-            <p>
-              <em>
-                <img src="../../../assets/images/money.png" alt />
-              </em>
-              <span>{{objective.expected_salary}}/月</span>
-            </p>
-            <p>
-              <em>
-                <img src="../../../assets/images/time.png" alt />
-              </em>
-              <span>{{objective.now_status}} / {{objective.work_time}}</span>
-            </p>
+            <div class="job_intention_flex">
+              <p>
+                <em>
+                  <img src="../../../assets/images/position.png" alt />
+                </em>
+                <span>{{objective.expected_position_name}}</span>
+              </p>
+              <p>
+                <em>
+                  <img src="../../../assets/images/resume-type.png" alt />
+                </em>
+                <span>{{objective.job_type_name}}</span>
+              </p>
+              <p>
+                <em>
+                  <img src="../../../assets/images/address.png" alt />
+                </em>
+                <span>{{objective.city && objective.city != 'null' ? JSON.parse(objective.city).name : objective.cityName}}</span>
+              </p>
+              <p>
+                <em>
+                  <img src="../../../assets/images/money.png" alt />
+                </em>
+                <span>{{objective.expected_salary}}/月</span>
+              </p>
+              <p>
+                <em>
+                  <img src="../../../assets/images/time.png" alt />
+                </em>
+                <span>{{objective.now_status}} / {{objective.work_time}}</span>
+              </p>
+            </div>
           </div>
           <!-- 工作经历 -->
           <div id="job_experience">
@@ -129,6 +169,11 @@
             </div>
             <div class="job_experience">
               <div class="item" v-for="item in experience" :key="item.id">
+                <p class="times">
+                  {{item.come_time ? formatMouth(item.come_time) : item.come_time}}
+                  -
+                  {{item.leave_time ? formatMouth(item.leave_time) : item.leave_time}}
+                </p>
                 <div class="item_info">
                   <dl>
                     <dt>
@@ -140,11 +185,6 @@
                     </dd>
                   </dl>
                   <div class="item_btn">
-                    <p>
-                      {{item.come_time ? formatMouth(item.come_time) : item.come_time}}
-                      -
-                      {{item.leave_time ? formatMouth(item.leave_time) : item.leave_time}}
-                    </p>
                     <a v-if="isEdit  && isShow">
                       <em>
                         <img src="../../../assets/images/edit.png" alt />
@@ -179,14 +219,14 @@
             </div>
             <div class="project_experience">
               <div class="item" v-for="item in projectExpress" :key="item.id">
+                <p class="times">
+                  {{item.begin_time ? formatMouth(item.begin_time) : item.begin_time}}
+                  -
+                  {{item.end_time ? formatMouth(item.end_time) : item.end_time}}
+                </p>
                 <div class="item_title">
                   <span>{{item.project_name}}（{{item.company_name}}）</span>
                   <div class="item_btn">
-                    <p>
-                      {{item.begin_time ? formatMouth(item.begin_time) : item.begin_time}}
-                      -
-                      {{item.end_time ? formatMouth(item.end_time) : item.end_time}}
-                    </p>
                     <a v-if="isEdit  && isShow">
                       <em>
                         <img src="../../../assets/images/edit.png" alt />
@@ -217,34 +257,36 @@
                 <span>添加</span>
               </a>
             </div>
-            <div class="education_experience" v-for="item in education" :key="item.id">
-              <dl>
-                <dt>
-                  <img src="../../../assets/images/company_img.png" alt />
-                </dt>
-                <dd>
-                  <p>{{item.school_name}}</p>
-                  <span>{{item.qualifications}} / {{item.major}}</span>
-                </dd>
-              </dl>
-              <div class="item_btn">
-                <p>
+            <div v-for="item in education" :key="item.id">
+              <p class="times">
                   {{item.start_time ? formatMouth(item.start_time) : item.start_time}}
                   -
                   {{item.end_time ? formatMouth(item.end_time) : item.end_time}}
-                </p>
-                <a v-if="isEdit && isShow">
-                  <em>
-                    <img src="../../../assets/images/edit.png" alt />
-                  </em>
-                  <span @click="edit('education', item)">编辑</span>
-                </a>
-                <a v-if="isEdit && isShow">
-                  <em>
-                    <a-icon type="close-square" />
-                  </em>
-                  <span @click="del('education', item.id)">删除</span>
-                </a>
+              </p>
+              <div class="education_experience">
+                <dl>
+                  <dt>
+                    <img src="../../../assets/images/company_img.png" alt />
+                  </dt>
+                  <dd>
+                    <p>{{item.school_name}}</p>
+                    <span>{{item.qualifications}} / {{item.major}}</span>
+                  </dd>
+                </dl>
+                <div class="item_btn">
+                  <a v-if="isEdit && isShow">
+                    <em>
+                      <img src="../../../assets/images/edit.png" alt />
+                    </em>
+                    <span @click="edit('education', item)">编辑</span>
+                  </a>
+                  <a v-if="isEdit && isShow">
+                    <em>
+                      <a-icon type="close-square" />
+                    </em>
+                    <span @click="del('education', item.id)">删除</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -327,68 +369,6 @@
           <span v-if="sendStatus.is_read==2">不适合</span>
         </div>
       </div>
-      <div class="resume_right">
-        <!-- 附件简历 -->
-        <div class="enclosure">
-          <div class="title">
-            <p>附件简历</p>
-            <a v-if="isEdit && isShow" @click="add('annexResumes')">
-              <em>
-                <a-icon type="plus-square" />
-              </em>
-              <span>添加</span>
-            </a>
-          </div>
-          <p v-for="item in annexResumes" :key="item.id">
-            <span>{{item.name}}</span>
-            <span v-if="isEdit && isShow">
-              <a @click="del('annexResumes', item.id)">
-                <a-icon type="delete" />
-              </a>
-              <a :href="item.resume_link"><a-icon type="download" /></a>
-            </span>
-          </p>
-        </div>
-        <!-- 简历完整度 -->
-        <div class="completeness">
-          <div class="title">
-            <p>简历完整度： {{process}}%</p>
-            <a @click="showResumes">
-              <em>
-                <a-icon type="search" />
-              </em>
-              <span>简历预览</span>
-            </a>
-          </div>
-          <a-progress :percent="process" :showInfo="false" />
-        </div>
-        <!-- 导航 -->
-        <div class="nav">
-          <div
-            v-for="(item, index) in navs"
-            :key="index"
-            :class="{active: active == index}"
-            @click.stop="goItem(index)"
-          >
-            <a
-              :href="'#' + item.url"
-              :style="{width: active == index ? 'auto' : '100%'}"
-            >{{item.name}}</a>
-            <div v-if="active == index">
-              <div v-if="item.url == 'info'">
-                <a v-if="isEdit && isShow" @click.stop="edit('info')">编辑</a>
-              </div>
-              <div v-else-if="item.url == 'job_intention'">
-                <a v-if="isEdit && isShow" @click.stop="edit('objective', objective)">编辑</a>
-              </div>
-              <div v-else>
-                <a v-if="isEdit && isShow" @click="add(item.url)">添加</a>
-                <a v-if="isEdit && isShow" @click="del(item.url)">删除</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </a-row>
     <infoModal :modelEdit="infoModel" @cancelModel="cancelModel" @okModel="okModel"></infoModal>
     <videoModal :modelEdit="videoModel" @cancelModel="cancelModel"  @okModel="okModel"></videoModal>
@@ -430,18 +410,18 @@ export default {
     return {};
   },
   components: {
-    infoModal: () => import("../../../components/molecule/infoModal"),
-    videoModal: () => import("../../../components/molecule/videoModal"),
+    infoModal: () => import("../../../components/mobileMolecule/infoModal"),
+    videoModal: () => import("../../../components/mobileMolecule/videoModal"),
     jobExperienceModal: () =>
-      import("../../../components/molecule/job-experience"),
+      import("../../../components/mobileMolecule/job-experience"),
     projectExpressModal: () =>
-      import("../../../components/molecule/projectExpressModal"),
-    educationModal: () => import("../../../components/molecule/educationModal"),
-    socialModal: () => import("../../../components/molecule/socialModal"),
-    collectionModal: () => import("../../../components/molecule/collectionModal"),
-    objectiveModal: () => import("../../../components/molecule/objectiveModal"),
+      import("../../../components/mobileMolecule/projectExpressModal"),
+    educationModal: () => import("../../../components/mobileMolecule/educationModal"),
+    socialModal: () => import("../../../components/mobileMolecule/socialModal"),
+    collectionModal: () => import("../../../components/mobileMolecule/collectionModal"),
+    objectiveModal: () => import("../../../components/mobileMolecule/objectiveModal"),
     annexResumesModal: () =>
-      import("../../../components/molecule/annexResumesModal")
+      import("../../../components/mobileMolecule/annexResumesModal")
   },
   data() {
     return {

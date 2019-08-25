@@ -116,9 +116,9 @@
                             </a-col>
                             <a-col>
                                 <a-row type="flex" justify="end" align="middle">
-                                    <a>预览</a>
-                                    <em></em>
-                                    <a>修改</a>
+                                    <!-- <a>预览</a>
+                                    <em></em> -->
+                                    <a @click="modifyResume">修改</a>
                                 </a-row>
                             </a-col>
                         </a-row>
@@ -174,7 +174,7 @@ export default {
         sendAgain: true,
         isModalShow: false,
         modelRow: [],
-        value: null,
+        value: 0,
         userInfo: {},
         radioStyle: {
             display: 'block',
@@ -221,6 +221,11 @@ export default {
             query: {
                 id: id
             }
+        })
+      },
+      modifyResume() {
+        this.$router.push({
+          path: 'resume-detail'
         })
       },
       collectionPosition(collect) { //收藏职位

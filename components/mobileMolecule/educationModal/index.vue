@@ -16,8 +16,6 @@
                     <a-form-item
                         label="学校名称"
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                         <a-input
                           v-decorator="[
@@ -32,8 +30,6 @@
                     <a-form-item
                         label="在校时间"
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                         <a-date-picker :defaultValue="moment(start_time, dateFormat)" @change="beginTime" />
                         <a-date-picker :defaultValue="moment(end_time, dateFormat)" @change="endTime" />
@@ -41,8 +37,6 @@
                     <a-form-item
                         label="学历"
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                         <a-select
                           v-decorator="[
@@ -63,8 +57,6 @@
                     <a-form-item
                         label="专业名称"
                         :colon="false"
-                        :label-col="labelCol"
-                        :wrapper-col="wrapperCol"
                     >
                         <a-input
                           v-decorator="[
@@ -76,7 +68,7 @@
                           ]"
                         />
                     </a-form-item>
-                    <a-form-item label="1" :label-col="labelCol" class="btn">
+                    <a-form-item label="1" class="btn">
                         <a-button type="primary" html-type="submit">保存</a-button>
                     </a-form-item>
                 </a-form>
@@ -104,8 +96,6 @@ export default {
       return{
           dateFormat: 'YYYY-MM-DD',
           modelData: null,
-          labelCol: {span: 3},
-          wrapperCol: {span: 21},
           form: this.$form.createForm(this),
           start_time: null,
           end_time: null,

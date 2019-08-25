@@ -1,30 +1,31 @@
 <template>
     <section class="settings page_centent">
         <div class="nav-bg"></div>
-        <a-tabs defaultActiveKey="1" tabPosition="left">
+        <div class="title">账号设置</div>
+        <a-tabs defaultActiveKey="1" tabPosition="top">
             <!-- 账号绑定 -->
             <a-tab-pane tab="账号绑定" key="1">
               <div class="account">
                 <div class="head">
                   <a-row type="flex" justify="start" align="middle">
-                    <a-col :span="2">帐号</a-col>
-                    <a-col :span="16" v-if="isInput"><a-input v-model="username" /></a-col>
-                    <a-col :span="5" v-else>{{userInfo.username}}</a-col>
-                    <a-col :span="4">
+                    <a-col :span="3">帐号</a-col>
+                    <a-col :span="14" v-if="isInput"><a-input v-model="username" /></a-col>
+                    <a-col :span="8" v-else>{{userInfo.username}}</a-col>
+                    <a-col :span="5" class="mar">
                       <a @click="handleInput(true)" v-if="isInput">确认</a>
                       <a @click="handleInput(false)" v-else>更换手机号</a>
                     </a-col>
                   </a-row>
                   <a-row type="flex" justify="start" align="middle" class="email">
-                    <a-col :span="2">邮箱</a-col>
-                    <a-col :span="5" v-if="isEmail">{{email}}</a-col>
-                    <a-col :span="16" v-else><a-input v-model="email" /></a-col>
-                    <a-col :span="4">
+                    <a-col :span="3">邮箱</a-col>
+                    <a-col :span="12" v-if="isEmail">{{email}}</a-col>
+                    <a-col :span="14" v-else><a-input v-model="email" /></a-col>
+                    <a-col :span="5" class="mar">
                       <a @click="isEmail = false" v-if="isEmail">修改邮箱</a>
                       <a @click="handleEmail" v-else>绑定邮箱</a>
                     </a-col>
                   </a-row>
-                  <p>绑定后，你可以同时使用一下方式登录</p>
+                  <p>绑定后，你可以同时使用以下方式登录</p>
                 </div>
                 <!-- <div class="cent">
                   <p v-for="item in accounts" :key="item.type" :class="{active: item.isBinding}">
@@ -52,7 +53,7 @@
                     <span>匿名显示</span>
                   </dt>
                   <dd>
-                    <p>选中你敏展示后,HR无法看到你的真是头像和姓名</p>
+                    <p>选中匿名展示后,HR无法看到你的真实头像和姓名</p>
                     <a-radio-group @change="onChange" v-model="anonymous">
                       <a-radio value="0">
                         <img src="../../../assets/images/tx.png" />
@@ -86,7 +87,7 @@
             <a-tab-pane tab="修改密码" key="3">
               <div class="new_password">
                 <a-row type="flex" justify="start">
-                  <a-col :span="6">登录帐号</a-col>
+                  <a-col :span="5">登录帐号</a-col>
                   <a-col :span="10">{{userInfo.username}}</a-col>
                 </a-row>
                 <a-form :form="form" @submit="handleSubmit">
@@ -171,7 +172,7 @@ export default {
         }).then(res => {
           if(res.retcode == 0) {
             this.$router.push({
-              path: '/login'
+              path: '/mobile/login'
             })
           }
         })
@@ -186,8 +187,8 @@ export default {
           user_id: this.userInfo.id,
           email: this.email
         }).then(res => {
+          this.$message.success(res.msg);
           if(res.retcode == 0) {
-            this.$message.success(res.msg);
             this.devInfo();
           }
         })

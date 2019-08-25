@@ -172,7 +172,7 @@ export default {
         })
       }else{
         this.$router.push({
-          path: 'mobile/search-positions'
+          path: '/mobile/search-positions'
         })
       };
     },
@@ -182,7 +182,7 @@ export default {
     goJobDetail(e) {
       if(this.userInfo && this.userInfo.type == 3) {
         this.$router.push({
-          path: 'mobile/resume-detail',
+          path: '/mobile/resume-detail',
           query: {
             user_id: e.user_id
           }
@@ -190,11 +190,11 @@ export default {
       }else{
         if(!this.userInfo) {
           this.$router.push({
-            path: 'mobile/search-positions'
+            path: '/mobile/search-positions'
           })
         }else{
           this.$router.push({
-            path: 'mobile/job-detail',
+            path: '/mobile/job-detail',
             query: {
               id: e.id
             }
@@ -205,17 +205,17 @@ export default {
     onMore() { //点击MORE按钮
       if(!this.userInfo || this.userInfo.type == 2) {
         this.$router.push({
-          path: 'mobile/search-positions'
+          path: '/mobile/search-positions'
         })
       }else{
         this.$router.push({
-          path: 'mobile/search-resume'
+          path: '/mobile/search-resume'
         })
       }
     },
     handleInfoEnterprise(e) {
       this.$router.push({
-        path: 'mobile/' + e.key
+        path: '/mobile/' + e.key
       })
     },
     handleEnterprise(e) {
@@ -254,7 +254,7 @@ export default {
             window.open(res.data[0].out_link);
           }else{
             this.$router.push({
-              path: 'mobile/industry-detail',
+              path: '/mobile/industry-detail',
               query: {
                 content: res.data[0].content
               }

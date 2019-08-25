@@ -1,5 +1,5 @@
 <template>
-  <section class="interest" v-if="userInfo">
+  <section class="interest" :class="className" v-if="userInfo && userInfo.type == 2">
       <div class="title">猜您感兴趣</div>
       <dl v-for="item in rows" :key="item.id" @click="goJobDetail(item)">
           <dt><img :src="item.logo" alt=""></dt>
@@ -19,7 +19,7 @@ import util from '../../../plugins/utils/util';
 
 export default {
   name: "Interest",
-  props: [],
+  props: ['className'],
   async asyncData(){
      return{
 

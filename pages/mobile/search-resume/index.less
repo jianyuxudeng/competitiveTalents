@@ -1,12 +1,10 @@
 .search_resume{
     background: #f8f8f8;
     .centent{
-        width: 11.93rem;
-        margin: .4rem auto 0;
-        display: flex;
-        justify-content: space-between;
+        width: 100%;
+        margin: .4rem auto 1.6rem;
+        padding: 0 .3rem;
         .left{
-            width: 9.2rem;
             .ant-pagination{
                 margin: .4rem auto;
                 text-align: center;
@@ -14,23 +12,47 @@
             .ant-select-selection{
                 background: #f8f8f8;
             }
-            .pos_selsct{
-                width: 1.2rem;
-            }
-            .pos_search{
-                width: 8rem;
-            }
             .search_list{
                 width: 100%;
-                border: 1px solid #c7c7c7;
                 border-radius: .08rem;
                 margin: .1rem auto;
-                background: #fff;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                .ant-input-group{
+                    width: 25%;
+                }
+                .ant-input{
+                    border: none;
+                    color: #464646;
+                    font-size: .24rem;
+                }
+                .ant-cascader-picker{
+                    &:focus{
+                        .ant-cascader-input{
+                            box-shadow: none;
+                        }
+                    }
+                }
+                .pos_selsct{
+                    font-size: .24rem;
+                    background: transparent;
+                }
                 .ant-select-selection{
-                    background: #fff;
+                    background: transparent;
+                    border: none;
+                    box-shadow: none;
+                }
+                .search_list_icon{
+                    color: #515ffd;
                 }
                 >div{
                     padding: .06rem 0;
+                    width: 25%;
+                    .ant-select-selection__placeholder{
+                        color: #464646;
+                        font-size: .24rem;
+                    }
                     &.search_area{
                         border-bottom: 1px solid #c7c7c7;
                         padding: .06rem 0;

@@ -86,7 +86,7 @@ export default {
               let userInfo = util.getStore('userInfo');
               ajax.post('user/annexResumes', {
                   user_id: userInfo.id,
-                  video_link: this.annexResumesFileList[0].url[0]
+                  resume_link: this.annexResumesFileList[0].url[0]
               }).then(res => {
                   if(res.retcode == 0) {
                       this.modelData = null;

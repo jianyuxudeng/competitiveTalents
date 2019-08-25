@@ -24,7 +24,9 @@
                                 <div>
                                     <a @click="collectionPosition(item)">取消收藏</a>
                                     <em></em>
-                                    <a @click="handleModel(item)">投简历</a>
+                                    <a v-if="item.sendAgain&&item.is_on" @click="handleModel(item)">投简历</a>
+                                    <a style="color:#cccccc" v-if="!item.sendAgain&&item.is_on">已投递投</a>
+                                    <span style="color:#cccccc" v-if="!item.is_on">已下线</span>
                                     <!-- <span>已下线</span> -->
                                 </div>
                             </div>
@@ -121,7 +123,8 @@ export default {
           labels: {},
           rows: [],
           modelRow: [],
-          userInfo: {}
+          userInfo: {},
+          pamars:{}
       }
   },
   mounted() {
@@ -136,6 +139,7 @@ export default {
           this.isModalShow = false;
       },
       handleModel(e) { //显示弹窗
+          this.pamars = e;
           ajax.get('user/annexResumes/list', {
               user_id: this.userInfo.id
           }).then(res => {
@@ -149,7 +153,7 @@ export default {
           ajax.post('user/sendResumes', {
               user_id: this.userInfo.id,
               job_id: this.pamars.id,
-              company_id: this.pamars.user_id,
+              company_id: this.pamars.company_id,
               resumes_type: this.value
           }).then(res => {
               if(res.retcode == 0) {

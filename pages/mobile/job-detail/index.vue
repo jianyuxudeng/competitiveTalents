@@ -22,7 +22,7 @@
               </dd>
             </dl>
           </a-col>
-          <a-col >
+          <a-col v-if="userInfo.type == 2">
             <a-button class="back" size="large" @click="(collectionPosition(!params.collect))">
               <a-icon type="star" />
               <span v-if="!params.collect">收藏</span>

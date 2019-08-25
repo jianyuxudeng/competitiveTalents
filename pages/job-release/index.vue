@@ -422,14 +422,7 @@ export default {
   },
   watch: {
     $route() {
-      this.params = {};
-      this.careerIds = [];
-      this.provincesList = [];
-      this.provincesId = null;
-      this.cityList = [];
-      this.city = null;
-      this.areaList = [];
-      this.area = null;
+      this.init();
     }
   },
   mounted() {
@@ -445,6 +438,15 @@ export default {
       const res = await this.getCareers();
       if (_id&&res) {
         this.devData(_id);
+      }else{
+        this.params = {};
+        this.careerIds = [];
+        this.provincesList = [];
+        this.provincesId = null;
+        this.cityList = [];
+        this.city = null;
+        this.areaList = [];
+        this.area = null;
       };
     },
     callback(key) {
@@ -584,7 +586,7 @@ export default {
         })
         .then(async res => {
           if (res.retcode == 0) {
-            this.params = res.data.jobDetail[0] || {};
+            this.params = res.data.jobDetail || {};
             if (this.params.deadTime) this.deadTime = util.formatDate(this.params.deadTime) || util.formatDate(new Date());
             if (this.params.type) this.params.type = Number(this.params.type);
             if (this.params.careerPrice)

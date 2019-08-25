@@ -22,13 +22,18 @@
               </dd>
             </dl>
           </a-col>
-          <a-col >
+          <a-col v-if="userInfo.type == 2">
             <a-button class="back" size="large" @click="(collectionPosition(!params.collect))">
               <a-icon type="star" />
               <span v-if="!params.collect">收藏</span>
               <span v-else>取消收藏</span>
             </a-button>
             <a-button type="primary" size="large" :disabled="!sendAgain" @click="handleModel">投递简历</a-button>
+          </a-col>
+          <a-col v-if="userInfo.type == 3">
+            <a-button type="primary" size="large" @click="placement(params.id)">置顶</a-button>
+            <a-button type="primary" size="large" @click="modify(params.id)">修改职位</a-button>
+            <a-button type="primary" size="large" @click="offline(params.id, params.is_on)">{{params.is_on == 0 ? '上线职位' : '下线职位'}}</a-button>
           </a-col>
         </a-row>
       </div>
@@ -188,6 +193,36 @@ export default {
     this.labelDev();
   },
   methods: {
+      offline(id, is_on) {
+        let _obj = {
+            id: id,
+            is_on: is_on == 0 ? 1 : 0
+        };
+        this.handleModify(_obj);
+      },
+      placement(id) {
+          let _obj = {
+              id: id,
+              top: true
+          };
+          this.handleModify(_obj);
+      },
+      handleModify(obj={}) { //置顶，下线职位
+          ajax.put('jobs', obj).then(res => {
+              if(res.retcode == 0) {
+                  this.devData();
+                  this.$message.success(res.msg);
+              }
+          });
+      },
+      modify(id) {
+        this.$router.push({
+            path: 'job-release',
+            query: {
+                id: id
+            }
+        })
+      },
       collectionPosition(collect) { //收藏职位
         let userInfo = util.getStore('userInfo');
         if(!userInfo){

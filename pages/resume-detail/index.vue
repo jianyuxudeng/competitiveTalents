@@ -341,11 +341,11 @@
           </div>
           <p v-for="item in annexResumes" :key="item.id">
             <span>{{item.name}}</span>
-            <span v-if="isEdit && isShow">
-              <a @click="del('annexResumes', item.id)">
+            <span>
+              <a @click="del('annexResumes', item.id)" v-if="isEdit && isShow">
                 <a-icon type="delete" />
               </a>
-              <a :href="item.resume_link"><a-icon type="download" /></a>
+              <a :href="item.resume_link" v-if="isShow"><a-icon type="download" /></a>
             </span>
           </p>
         </div>

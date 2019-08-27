@@ -442,7 +442,7 @@ export default {
       }else{
         this.params = {};
         this.careerIds = [];
-        this.provincesList = [];
+        // this.provincesList = [];
         this.provincesId = null;
         this.cityList = [];
         this.city = null;

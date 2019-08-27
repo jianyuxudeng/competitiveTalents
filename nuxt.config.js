@@ -47,65 +47,65 @@ module.exports = {
     /*
      ** Build configuration
      */
-    // build: {
-    //     plugins: [
-    //         new MiniCssExtractPlugin({ filename: "[name]/css/[name].[chunkhash:8].css" }), 
-    //     ],
-    //     postcss: {
-    //         preset: {
-    //             autoprefixer: {
-    //                 grid: true
-    //             }
-    //         }
-    //     },
-    //     extend(config, { isDev, isClient }) {
-    //         if (isDev && isClient) {
-    //             config.module.rules.push({
-    //                 enforce: 'pre',
-    //                 test: /\.(js|vue)$/,
-    //                 loader: 'eslint-loader',
-    //                 exclude: /(node_modules)/
-    //             }, {
-    //                 test: /\.less$/,
-    //                 exclude: /node_modules/,
-    //                 use: [
+    build: {
+        plugins: [
+            new MiniCssExtractPlugin({ filename: "[name]/css/[name].[chunkhash:8].css" }), 
+        ],
+        postcss: {
+            preset: {
+                autoprefixer: {
+                    grid: true
+                }
+            }
+        },
+        extend(config, { isDev, isClient }) {
+            if (isDev && isClient) {
+                config.module.rules.push({
+                    enforce: 'pre',
+                    test: /\.(js|vue)$/,
+                    loader: 'eslint-loader',
+                    exclude: /(node_modules)/
+                }, {
+                    test: /\.less$/,
+                    exclude: /node_modules/,
+                    use: [
 
-    //                     MiniCssExtractPlugin.loader, {
-    //                         loader: "css-loader",
-    //                         options: {
-    //                             minimize: true
-    //                         }
-    //                     }, 
-    //                     {
-    //                         loader: "css-loader"
-    //                     },
-    //                     {
-    //                         loader: "less-loader"
-    //                     }, {
-    //                         loader: "postcss-loader"
-    //                     }
-    //                 ]
-    //             }, {
-    //                 test: /\.css$/,
-    //                 use: [
-    //                     MiniCssExtractPlugin.loader, {
-    //                         loader: "css-loader",
-    //                         options: {
-    //                             minimize: true
-    //                         }
-    //                     },
-    //                     {
-    //                         loader: "css-loader"
-    //                     },
-    //                     "postcss-loader"
-    //                 ]
-    //             })
-    //         }
-    //     },
-    //     filenames: {
-    //         css: ({ isDev }) => isDev ? '[name].css' : '[contenthash].css',
-    //     },
-    // },
+                        MiniCssExtractPlugin.loader, {
+                            loader: "css-loader",
+                            options: {
+                                minimize: true
+                            }
+                        }, 
+                        {
+                            loader: "css-loader"
+                        },
+                        {
+                            loader: "less-loader"
+                        }, {
+                            loader: "postcss-loader"
+                        }
+                    ]
+                }, {
+                    test: /\.css$/,
+                    use: [
+                        MiniCssExtractPlugin.loader, {
+                            loader: "css-loader",
+                            options: {
+                                minimize: true
+                            }
+                        },
+                        {
+                            loader: "css-loader"
+                        },
+                        "postcss-loader"
+                    ]
+                })
+            }
+        },
+        filenames: {
+            css: ({ isDev }) => isDev ? '[name].css' : '[contenthash].css',
+        },
+    },
 
     router: {
         extendRoutes(routes, resolve) {

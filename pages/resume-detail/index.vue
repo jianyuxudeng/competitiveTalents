@@ -14,7 +14,7 @@
                 <dd>
                   <div class="name">{{userDetail.username}}</div>
                   <p>{{experience.length > 0 ? experience[0].company_name : null}} / {{experience.length > 0 ? experience[0].career_name : null}}</p>
-                  <p>{{userDetail.workTimeLen}} / {{education.length > 0 ? education[0].qualifications : null}} / {{userDetail.birthLen}}岁</p>
+                  <p>{{userDetail.workTimeLen}}年工作经验 / {{education.length > 0 ? education[0].qualifications : null}} / {{userDetail.birthLen}}岁</p>
                   <div class="tel">
                     <div v-if="userDetail.phone">
                       <a-icon type="tablet" />

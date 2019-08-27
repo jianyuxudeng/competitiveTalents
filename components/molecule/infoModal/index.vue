@@ -23,7 +23,7 @@
                           v-decorator="[
                             'username',
                             {
-                                initialValue: modelData.username,
+                                initialValue: modelData.username?modelData.username:'',
                                 rules: [{ required: false }]
                             }
                           ]"
@@ -47,7 +47,7 @@
                           v-decorator="[
                             'sex',
                             {
-                                initialValue: modelData.sex + '',
+                                initialValue: modelData.sex?modelData.sex + '':'',
                                 rules: [{ required: false }]
                             }
                           ]"
@@ -86,7 +86,7 @@
                           v-decorator="[
                             'phone',
                             {
-                                initialValue: modelData.phone,
+                                initialValue: modelData.phone?modelData.phone:'',
                                 rules: [{ required: false }]
                             }
                           ]"
@@ -102,7 +102,7 @@
                           v-decorator="[
                             'indenty',
                             {
-                                initialValue: modelData.indenty + '',
+                                initialValue: modelData.indenty?modelData.indenty + '':'',
                                 rules: [{ required: false }]
                             }
                           ]"
@@ -230,6 +230,11 @@ export default {
                   if(this.birth){
                       _data.birth = this.birth;
                   }
+                  _data&&Object.keys(_data).map(item=>{
+                      if(!_data[item]||_data[item]==undefined||_data[item]=='undefined'){
+                          delete _data[item];
+                      }
+                  })
                   ajax.post('user/detail', _data).then(res => {
                       if(res.retcode == 0) {
                           this.modelData = null;

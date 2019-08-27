@@ -73,7 +73,7 @@
                       <span>{{item.workTime}}</span>
                       <span>{{item.phone}}</span>
                       <!-- <span>{{item.edit_time}}</span> -->
-                      <span>投递时间: {{item.send_time}}</span>
+                      <span>投递时间: {{item.send_time&&moment(item.send_time).format('YYYY-MM-DD')}}</span>
                   </td>
               </tr>
           </table>
@@ -87,6 +87,7 @@ import "./index.less";
 import ajax from '../../../plugins/api';
 import util from '../../../plugins/utils/util';
 import area from '../../../plugins/utils/area';
+import moment from 'moment';
 
 export default {
   name: "mailbox",
@@ -118,6 +119,7 @@ export default {
       this.jobsData();
   },
   methods: {
+      moment,
       format: util.format,
       init() {
           area.map(ele => {
@@ -238,7 +240,11 @@ export default {
                 this.rows.map(item => {
                     if(item.send_time) item.send_time = this.format(item.send_time);
                     if(item.edit_time) item.edit_time = this.format(item.edit_time);
-                    if(item.city) item.city = JSON.parse(item.city).name;
+                    if(item.city&&item.city!='null'){
+                      item.city = JSON.parse(item.city).name;
+                    }else{
+                        item.city='';
+                    }
                 });
                 this.total = res.data.total;
               }

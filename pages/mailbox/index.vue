@@ -75,6 +75,12 @@
               <template slot="username" slot-scope="text, record">
                   <span @click="() => handleItem(record)">{{text}}</span>
               </template>
+              <template slot="edit_time" slot-scope="text, record">
+                  <span @click="() => handleItem(record)">{{text&&moment(text).format('YYYY-MM-DD')}}</span>
+              </template>
+              <template slot="send_time" slot-scope="text, record">
+                  <span @click="() => handleItem(record)">{{text&&moment(text).format('YYYY-MM-DD')}}</span>
+              </template>
           </a-table>
       </div>
       <a-pagination showQuickJumper :defaultCurrent="1" :total="total" @change="onChangePage"></a-pagination>
@@ -86,6 +92,7 @@ import "./index.less";
 import ajax from '../../plugins/api';
 import util from '../../plugins/utils/util';
 import area from '../../plugins/utils/area';
+import moment from 'moment';
 
 export default {
   name: "mailbox",
@@ -106,8 +113,8 @@ export default {
               {title: '年龄', dataIndex: 'age', width: '6%'},
               {title: '年限', dataIndex: 'workTime'},
               {title: '联系电话', dataIndex: 'phone', width: '10%'},
-              {title: '简历更新时间', dataIndex: 'edit_time'},
-              {title: '投递时间', dataIndex: 'send_time'}
+              {title: '简历更新时间', dataIndex: 'edit_time',scopedSlots: { customRender: 'edit_time' }},
+              {title: '投递时间', dataIndex: 'send_time',scopedSlots: { customRender: 'send_time' }}
           ],
           rows: [],
           total: 0,
@@ -129,6 +136,7 @@ export default {
       this.jobsData();
   },
   methods: {
+      moment,
       format: util.format,
       init() {
           area.map(ele => {
@@ -248,7 +256,11 @@ export default {
               this.rows.map(item => {
                   if(item.send_time) item.send_time = this.format(item.send_time);
                   if(item.edit_time) item.edit_time = this.format(item.edit_time);
-                  if(item.city) item.city = JSON.parse(item.city).cityName;
+                  if(item.city&&item.city!='null'){
+                      item.city = JSON.parse(item.city).name;
+                  }else{
+                      item.city='';
+                  }
               });
               this.total = res.data.total;
           })

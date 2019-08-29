@@ -47,12 +47,12 @@
                 class="w159"
                 @change="handleProvinces"
                 v-decorator="[
-                                  'region',
-                                  {
-                                      initialValue: provincesId,
-                                      rules: [{ required: true, message: '请选择工作地区' }]
-                                  }
-                              ]"
+                  'region',
+                  {
+                      initialValue: provincesId,
+                      rules: [{ required: true, message: '请选择工作地区' }]
+                  }
+                ]"
               >
                 <a-select-option
                   v-for="item in provincesList"
@@ -127,12 +127,12 @@
             <a-input
               size="large"
               v-decorator="[
-                              'address',
-                              {
-                                  initialValue: params.address,
-                                  rules: [{ required: true, message: '请输入工作地址' }]
-                              }
-                          ]"
+                'address',
+                {
+                    initialValue: params.address,
+                    rules: [{ required: true, message: '请输入工作地址' }]
+                }
+              ]"
             ></a-input>
           </a-form-item>
           <a-form-item class="right justify" label="关键词">
@@ -140,12 +140,12 @@
               size="large"
               placeholder="输入职位关键词，提高被搜索概率"
               v-decorator="[
-                              'keywords',
-                              {
-                                  initialValue: params.keywords,
-                                  rules: [{ required: true, message: '请输入关键词' }]
-                              }
-                          ]"
+                'keywords',
+                {
+                    initialValue: params.keywords,
+                    rules: [{ required: true, message: '请输入关键词' }]
+                }
+              ]"
             ></a-input>
           </a-form-item>
         </div>
@@ -436,12 +436,13 @@ export default {
       this.provincesList = area;
       let _id = this.$route.query.id;
       const res = await this.getCareers();
+      console.log( this.provincesList)
       if (_id&&res) {
         this.devData(_id);
       }else{
         this.params = {};
         this.careerIds = [];
-        this.provincesList = [];
+        // this.provincesList = [];
         this.provincesId = null;
         this.cityList = [];
         this.city = null;

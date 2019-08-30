@@ -45,7 +45,7 @@
               >{{item.labelName}}</a-select-option>
             </a-select>
           </a-form-item>
-          <a-form-item label="所在城市" :colon="false" :label-col="labelCol" :wrapper-col="wrapperCol">
+          <a-form-item label="期望工作地点" :colon="false" :label-col="labelCol" :wrapper-col="wrapperCol">
             <a-cascader
               :fieldNames="{label: 'name', value: 'id', children: 'item'}"
               :options="areas"
@@ -154,8 +154,8 @@ export default {
   data() {
     return {
       modelData: null,
-      labelCol: { span: 3 },
-      wrapperCol: { span: 21 },
+      labelCol: { span: 5 },
+      wrapperCol: { span: 19 },
       form: this.$form.createForm(this),
       labels: {},
       areas: [],

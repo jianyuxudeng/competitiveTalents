@@ -45,7 +45,7 @@
               >{{item.labelName}}</a-select-option>
             </a-select>
           </a-form-item>
-          <a-form-item label="所在城市" :colon="false">
+          <a-form-item label="期望工作地点" :colon="false">
             <a-cascader
               :fieldNames="{label: 'name', value: 'id', children: 'item'}"
               :options="areas"

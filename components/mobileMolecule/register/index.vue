@@ -66,7 +66,8 @@
                 </a-input>
             </a-form-item>
             <!-- btn按钮 -->
-            <a-form-item>
+            <a-form-item class="register_btn">
+                <a-checkbox @change="handelRead">我已阅读条款/声明</a-checkbox>
                 <a-button type="primary" html-type="submit">注册</a-button>
             </a-form-item>
         </a-form>
@@ -95,6 +96,7 @@ export default {
         countDown: null,
         times: null,
         isPhone: true, //手机号还是账号登录
+        isRead: false
       }
   },
   mounted() {
@@ -124,19 +126,24 @@ export default {
         this.$message.warning('请输入手机号');
       }
     },
+    handelRead(e) { //是否阅读规则
+      this.isRead = e.target.checked;
+    },
     handleSubmit(e) { //提交
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
             values = Object.assign(values, {type: this.active});
-            ajax.post('register', values).then(res => {
-                if(res.retcode == 0) {
-                    this.$message.success(res.msg);
-                    this.$emit('handleShow', 1)
-                }else{
-                    this.$message.warning(res.msg);
-                }
-            });
+            if(this.isRead) {
+                ajax.post('register', values).then(res => {
+                    if(res.retcode == 0) {
+                        this.$message.success(res.msg);
+                        this.$emit('handleShow', 1)
+                    }else{
+                        this.$message.warning(res.msg);
+                    }
+                });
+            }
         }
       });
     }

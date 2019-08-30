@@ -114,7 +114,7 @@
                         </a-select>
                     </a-form-item>
                     <a-form-item
-                        label="工作时间"
+                        label="参加工作时间"
                         :colon="false"
                         :label-col="labelCol"
                         :wrapper-col="wrapperCol"
@@ -123,6 +123,7 @@
                     </a-form-item>
                     <a-form-item label="1" :label-col="labelCol" class="btn">
                         <a-button type="primary" html-type="submit">保存</a-button>
+                        <a-button @click="handleCancel">取消</a-button>
                     </a-form-item>
                 </a-form>
             </div>
@@ -150,8 +151,8 @@ export default {
       return{
           dateFormat: 'YYYY-MM-DD',
           modelData: null,
-          labelCol: {span: 3},
-          wrapperCol: {span: 21},
+          labelCol: {span: 5},
+          wrapperCol: {span: 19},
           form: this.$form.createForm(this),
           labels: {},
           areas: [],

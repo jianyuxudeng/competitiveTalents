@@ -102,13 +102,14 @@
                         </a-select>
                     </a-form-item>
                     <a-form-item
-                        label="工作时间"
+                        label="参加工作时间"
                         :colon="false"
                     >
                         <a-date-picker :defaultValue="modelData.workTime&&moment(modelData.workTime, dateFormat)" @change="handleWorkTime" />
                     </a-form-item>
                     <a-form-item label="1" class="btn">
                         <a-button type="primary" html-type="submit">保存</a-button>
+                        <a-button @click="handleCancel">取消</a-button>
                     </a-form-item>
                 </a-form>
             </div>

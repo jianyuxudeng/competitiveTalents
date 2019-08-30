@@ -11,7 +11,7 @@
             <div class="page_modal">
                 <a-form :form="form" @submit="handleSubmit">
                     <a-form-item>
-                        <h4>增加项目经验</h4>
+                        <h4>增加项目经历</h4>
                     </a-form-item>
                     <a-form-item
                         label="项目名称"

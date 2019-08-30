@@ -7,7 +7,7 @@
         <!-- nav -->
         <div class="head_nav">
           <a @click="goHome">首页</a>
-          <a v-for="item in navs" :key="item.code">
+          <a v-for="item in navs" :key="item.code" @mouseover="handleSelect(true, item.code)" @mouseleave="handleSelect(false, item.code)">
             <span @click="navLink(item.code)">{{item.name}}</span>
             <em v-if="isLogin && item.code=='logout'"><a-icon :type="isSelect ? 'caret-up' : 'caret-down'" /></em>
             <ul v-if="isSelect && item.code=='logout'">
@@ -140,14 +140,15 @@ export default {
           this.$router.push({
             path: '/' + code
           })
-        }else{
-          this.isSelect = !this.isSelect;
         }
       }else{
         this.$router.push({
           path: '/login'
         })
       }
+    },
+    handleSelect(e, code) {
+      if(code == 'logout') this.isSelect = e;
     },
     goResumeDetail() {
         if(util.getStore('userInfo').type == 2) {

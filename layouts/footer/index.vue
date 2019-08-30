@@ -1,6 +1,7 @@
 <template>
   <footer id="footer" ref="footer" :class="exducationFooter">
-    <img src="../../assets/images/foot_img.jpg" alt="">
+    <span>沪ICP备18044668号-3</span>
+    <!-- <img src="../../assets/images/foot_img.jpg" alt=""> -->
   </footer>
 </template>
 <script>

@@ -8,7 +8,7 @@
         <div class="head_nav">
           <a @click="goHome">首页</a>
           <a v-for="item in navs" :key="item.code" @mouseover="handleSelect(true, item.code)" @mouseleave="handleSelect(false, item.code)">
-            <span @click="navLink(item.code)">{{item.name}}</span>
+            <span :class="{info_name: isLogin && userInfo.type == 2 && item.code == 'logout'}" @click="navLink(item.code)">{{item.name}}</span>
             <em v-if="isLogin && item.code=='logout'"><a-icon :type="isSelect ? 'caret-up' : 'caret-down'" /></em>
             <ul v-if="isSelect && item.code=='logout'">
               <li @click="goResumeDetail">{{userInfo.type == 2 ? '个人信息' : '企业信息'}}</li>
@@ -56,57 +56,63 @@ export default {
       let _navs = [];
       let _isLogin = false;
       if(userInfo) {
-        switch (userInfo.type) {
-          case 2:
-            _isLogin = true;
-            _navs = [
-              {
-                name: '我的简历',
-                code: 'resume-detail'
-              },
-              {
-                name: '投递情况',
-                code: 'delivery-status'
-              },
-              {
-                name: '职位收藏',
-                code: 'job-collection'
-              },
-              {
-                name: userInfo.username,
-                code: 'logout'
-              }
-            ];
-            break;
-          case 3: 
-            _isLogin = true;
-            _navs = [
-              {
-                name: '职位发布',
-                code: 'job-release'
-              },
-              {
-                name: '职位管理',
-                code: 'resume-manage'
-              },
-              {
-                name: '收件箱',
-                code: 'mailbox'
-              },
-              {
-                name: '企业信息',
-                code: 'company-info'
-              },
-              {
-                name: userInfo.username,
-                code: 'logout'
-              }
-            ];
-            break;
-        
-          default:
-            break;
-        }
+        ajax.get('user/' + userInfo.id).then(res => {
+          if(res.retcode == 0) {
+            switch (userInfo.type) {
+              case 2:
+                _isLogin = true;
+                _navs = [
+                  {
+                    name: '我的简历',
+                    code: 'resume-detail'
+                  },
+                  {
+                    name: '投递情况',
+                    code: 'delivery-status'
+                  },
+                  {
+                    name: '职位收藏',
+                    code: 'job-collection'
+                  },
+                  {
+                    name: res.data.name || res.data.username,
+                    code: 'logout'
+                  }
+                ];
+                break;
+              case 3: 
+                _isLogin = true;
+                _navs = [
+                  {
+                    name: '职位发布',
+                    code: 'job-release'
+                  },
+                  {
+                    name: '职位管理',
+                    code: 'resume-manage'
+                  },
+                  {
+                    name: '收件箱',
+                    code: 'mailbox'
+                  },
+                  {
+                    name: '企业信息',
+                    code: 'company-info'
+                  },
+                  {
+                    name: res.data.name || res.data.username,
+                    code: 'logout'
+                  }
+                ];
+                break;
+            
+              default:
+                break;
+            };
+            this.navs = _navs;
+            this.isLogin = _isLogin;
+          }
+        })
       } else{
         _isLogin = false;
         _navs = [
@@ -127,9 +133,9 @@ export default {
               code: 'login'
             }
           ];
+          this.navs = _navs;
+          this.isLogin = _isLogin;
       };
-      this.navs = _navs;
-      this.isLogin = _isLogin;
       this.userInfo = userInfo;
     },
     //导航路由跳转

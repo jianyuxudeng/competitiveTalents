@@ -77,7 +77,11 @@ export default {
       let _navs = [];
       let _isLogin = false;
       if(userInfo) {
-        this.username = userInfo.username;
+        ajax.get('user/' + userInfo.id).then(res => {
+          if(res.retcode == 0) {
+            this.username = res.data.name || res.data.username;
+          }
+        });
         _isLogin = true;
         switch (userInfo.type) {
           case 2:

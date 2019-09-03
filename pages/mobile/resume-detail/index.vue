@@ -9,7 +9,7 @@
             <a-row>
               <dl>
                 <dt>
-                  <img src="../../../assets/images/tx.png" alt />
+                  <img :src="userDetail.avatar" alt />
                 </dt>
                 <dd>
                   <div class="name">

@@ -158,9 +158,15 @@ export default {
             ajax.post('login', values).then(res => {
                 if(res.retcode == 0) {
                     util.setStore('userInfo', res.data);
-                    this.$router.push({
-                        path: '/'
-                    })
+                    if(res.data.type == 2) {
+                      this.$router.push({
+                          path: '/resume-detail'
+                      })
+                    }else{
+                      this.$router.push({
+                          path: '/'
+                      })
+                    }
                 }else{
                     this.$message.warning(res.msg);
                 }

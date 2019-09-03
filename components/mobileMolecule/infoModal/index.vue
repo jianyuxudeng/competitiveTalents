@@ -14,6 +14,24 @@
                         <h4>基本信息</h4>
                     </a-form-item>
                     <a-form-item
+                        label="头像"
+                        :colon="false"
+                    >
+                        <a-upload
+                            :action="upLoadUrl"
+                            listType="picture-card"
+                            :fileList="fileList"
+                            :supportServerRender="true"
+                            :withCredentials="true"
+                            class="upload"
+                            @change="handleChange"
+                        >
+                            <div v-if="fileList.length < 1">
+                                <a-button type="primary">上传头像</a-button>
+                            </div>
+                        </a-upload>
+                    </a-form-item>
+                    <a-form-item
                         label="姓名"
                         :colon="false"
                     >
@@ -69,6 +87,24 @@
                         </a-cascader>
                     </a-form-item>
                     <a-form-item
+                        label="户口所在城市"
+                        :colon="false"
+                    >
+                        <a-cascader
+                          :fieldNames="{label: 'name', value: 'id', children: 'item'}"
+                          :options="areas"
+                          :defaultValue="homeCityArr"
+                          @change="onHomeCity"
+                          placeholder="请选择城市"
+                        >
+                            <template slot="displayRender" slot-scope="{labels}">
+                                <span v-for="(label, index) in labels" :key="index">
+                                    <span v-if="index == 1">{{label}}</span>
+                                </span>
+                            </template>
+                        </a-cascader>
+                    </a-form-item>
+                    <a-form-item
                         label="手机号码"
                         :colon="false"
                     >
@@ -77,6 +113,62 @@
                             'phone',
                             {
                                 initialValue: modelData.phone,
+                                rules: [{ required: false }]
+                            }
+                          ]"
+                         />
+                    </a-form-item>
+                    <a-form-item
+                        label="邮箱"
+                        :colon="false"
+                    >
+                        <a-input
+                          v-decorator="[
+                            'email',
+                            {
+                                initialValue: modelData.email,
+                                rules: [{ required: false }]
+                            }
+                          ]"
+                         />
+                    </a-form-item>
+                    <a-form-item
+                        label="婚姻状况"
+                        :colon="false"
+                    >
+                        <a-input
+                          v-decorator="[
+                            'marital',
+                            {
+                                initialValue: modelData.marital,
+                                rules: [{ required: false }]
+                            }
+                          ]"
+                         />
+                    </a-form-item>
+                    <a-form-item
+                        label="政治面貌"
+                        :colon="false"
+                    >
+                        <a-input
+                          v-decorator="[
+                            'political',
+                            {
+                                initialValue: modelData.political,
+                                rules: [{ required: false }]
+                            }
+                          ]"
+                         />
+                    </a-form-item>
+                    <a-form-item
+                        label="海外经历"
+                        :colon="false"
+                    >
+                        <a-input
+                          v-decorator="[
+                            'overseas',
+                            {
+                                initialValue: modelData.overseas,
                                 rules: [{ required: false }]
                             }
                           ]"
@@ -95,10 +187,11 @@
                             }
                           ]"
                         >
+                            <a-select-option value="0">在职-暂不考虑</a-select-option>
                             <a-select-option value="1">离职-随时到岗</a-select-option>
                             <a-select-option value="2">在职-月内到岗</a-select-option>
                             <a-select-option value="3">在职-考虑机会</a-select-option>
-                            <a-select-option value="4">在校学生</a-select-option>
+                            <a-select-option value="4">应届毕业生</a-select-option>
                         </a-select>
                     </a-form-item>
                     <a-form-item
@@ -141,10 +234,15 @@ export default {
           labels: {},
           areas: [],
           city: null,
+          homeCity: null,
           birth: null,
           workTime: null,
           citys: {},
-          cityArr: []
+          cityArr: [],
+          fileList: [],
+          homeCitys: {},
+          homeCityArr: [],
+          upLoadUrl: util.upLoadUrl,
       }
   },
   watch: {
@@ -155,6 +253,21 @@ export default {
               let cityArr = this.citys?this.findParentById(this.areas, this.citys.id, 'id', 'item'):[];
               this.cityArr = this.citys?[...cityArr, this.citys.id]:[];
           };
+          if(this.modelData && this.modelData.homeCity) {
+              this.homeCitys = JSON.parse(this.modelData.homeCity);
+              let homeCityArr = this.homeCitys?this.findParentById(this.areas, this.homeCitys.id, 'id', 'item'):[];
+              this.homeCityArr = this.homeCitys?[...homeCityArr, this.homeCitys.id]:[];
+          };
+          if(this.modelData && this.modelEdit.avatar) {
+              this.fileList = [
+                  {
+                      uid: '-1',
+                      name: 'xxx.png',
+                      status: 'done',
+                      url: this.modelEdit.avatar
+                  }
+              ]
+          }
       }
   },
   mounted() {
@@ -171,6 +284,9 @@ export default {
                   item: item.items
               })
           });
+      },
+      handleChange ({ fileList }) {
+          this.fileList = fileList;
       },
       handleBirth(date, dateString) { //生日
           this.birth = dateString;
@@ -194,6 +310,22 @@ export default {
               }
           })
       },
+      onHomeCity(value) { //户口所在地
+          let _homeCity = Object.assign({}, {
+              id: value[1]
+          });
+          this.areas.map(item => {
+              if(item.id == value[0]) {
+                  item.item.map(i => {
+                      if(i.id == value[1]) {
+                          this.homeCity = Object.assign(_homeCity, {
+                              name: i.name
+                          })
+                      }
+                  })
+              }
+          })
+      },
       handleCancel() { //关闭弹窗
           this.modelData = null;
           this.$emit('cancelModel', 'infoModel');
@@ -209,11 +341,19 @@ export default {
                   if(this.city){
                       _data.city = JSON.stringify(this.city);
                   }
+                  if(this.homeCity) {
+                      _data.homeCity = JSON.stringify(this.homeCity);
+                  }
                   if(this.workTime){
                       _data.workTime = this.workTime;
                   }
                   if(this.birth){
                       _data.birth = this.birth;
+                  }
+                  if(this.fileList.length > 0) {
+                      _data.avatar = this.fileList[0].url || this.fileList[0].response.data.imageList[0];
+                  }else{
+                      _data.avatar = null;
                   }
                   ajax.post('user/detail', _data).then(res => {
                       if(res.retcode == 0) {

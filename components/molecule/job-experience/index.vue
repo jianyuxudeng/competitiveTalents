@@ -57,11 +57,12 @@
                           v-decorator="[
                             'trades_id',
                             {
-                                initialValue: modelData.trades_id ? Number(modelData.trades_id) : null,
+                                initialValue: modelData.trades_id ? Number(modelData.trades_id) || '0' : null,
                                 rules: [{ required: false }]
                             }
                           ]"
                          >
+                             <a-select-option value="0">非电竞行业</a-select-option>
                              <a-select-option
                                  v-for="item in labels.trades"
                                  :key="item.id"
@@ -158,6 +159,20 @@
                          </a-select>
                     </a-form-item>
                     <a-form-item
+                        label="税前月薪"
+                        :colon="false"
+                    >
+                        <a-input
+                          v-decorator="[
+                            'salary',
+                            {
+                                initialValue: modelData.salary,
+                                rules: [{ required: false }]
+                            }
+                          ]"
+                         />
+                    </a-form-item>
+                    <a-form-item
                         label="工作内容"
                         class="start"
                         :colon="false"
@@ -165,6 +180,7 @@
                         :wrapper-col="wrapperCol"
                     >
                         <a-textarea
+                          placeholder="为保护个人隐私，请不要填写手机号、微信、QQ等联系方式；"
                           v-decorator="[
                             'content',
                             {
@@ -244,13 +260,29 @@ export default {
           this.come_time = null;
           this.leave_time = null;
           this.is_show = false;
-          this.$emit('cancelModel', 'jobExperienceModel');
+          this.$emit('cancelModel', 'jobExperienceModal');
       },
       handleSubmit (e) { //提交
           e.preventDefault();
           this.form.validateFields((err, values) => {
               if (!err) {
                   let userInfo = util.getStore('userInfo');
+                  let _trades_name = null;
+                  let _career_type = null;
+                  if(values.trades_id == '0') {
+                      _trades_name = '非电竞行业';
+                  }else{
+                      this.labels.trades.map(item => {
+                          if(item.id == values.trades_id) {
+                              _trades_name = item.labelName;
+                          }
+                      })
+                  };
+                  this.labels.careers.map(item => {
+                      if(item.id == values.career_id) {
+                          _career_type = item.labelName;
+                      }
+                  })
                   let params = Object.assign({}, {
                       ...values,
                       skills: `${values.skills}`,
@@ -258,7 +290,9 @@ export default {
                       leave_time: this.leave_time,
                       is_show: values.is_show ? 0 : 1,
                       user_id: userInfo.id,
-                      id: this.modelEdit.id || null
+                      id: this.modelEdit.id || null,
+                      trades_name: _trades_name,
+                      career_type: _career_type
                   });
                   if(this.modelData.isEdit) {
                       ajax.put('user/experience', params).then(res => {

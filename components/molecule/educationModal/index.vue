@@ -28,6 +28,23 @@
                         />
                     </a-form-item>
                     <a-form-item
+                        label="是否统招"
+                        :colon="false"
+                    >
+                        <a-radio-group
+                          v-decorator="[
+                            'strategy',
+                            {
+                                initialValue: modelData.strategy,
+                                rules: [{ required: false }]
+                            }
+                          ]"
+                        >
+                            <a-radio value="是">是</a-radio>
+                            <a-radio value="否">否</a-radio>
+                        </a-radio-group>
+                    </a-form-item>
+                    <a-form-item
                         label="在校时间"
                         :colon="false"
                     >

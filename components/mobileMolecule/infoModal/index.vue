@@ -242,7 +242,7 @@ export default {
           fileList: [],
           homeCitys: {},
           homeCityArr: [],
-          upLoadUrl: util.upLoadUrl,
+          upLoadUrl: util.upLoadUrl
       }
   },
   watch: {

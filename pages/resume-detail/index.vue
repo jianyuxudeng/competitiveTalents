@@ -423,6 +423,7 @@
 import "./index.less";
 import ajax from "../../plugins/api";
 import util from "../../plugins/utils/util";
+import html2canvas from 'html2canvas';
 
 export default {
   name: "resume_detail",
@@ -551,9 +552,7 @@ export default {
           y: 0,
           x: 0
         }).then(canvas => {
-          this.resumesImg = canvas
-            .toDataURL("image/png")
-            .replace("image/png", "image/octet-stream");
+          this.resumesImg = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
           this.showResumesVis = true;
           this.isShow = true;
         });
@@ -582,9 +581,7 @@ export default {
           y: 0,
           x: 0
         }).then(canvas => {
-          const imgUri = canvas
-            .toDataURL("image/png")
-            .replace("image/png", "image/octet-stream");
+          const imgUri = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
           const a = document.createElement("a");
           a.href = imgUri;
           a.click();

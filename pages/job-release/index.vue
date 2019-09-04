@@ -567,7 +567,7 @@ export default {
       }
     },
     async getCareers() {
-      const res = await ajax.get("careers");
+      const res = await ajax.get("electric-career");
       if (res) {
         this.careers = res.data || [];
       }

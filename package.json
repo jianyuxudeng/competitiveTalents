@@ -27,6 +27,7 @@
         "eslint-friendly-formatter": "^4.0.1",
         "eslint-loader": "^2.1.1",
         "eslint-plugin-vue": "^4.0.0",
+        "html2canvas": "^1.0.0-rc.3",
         "jquery": "^3.4.0",
         "less": "^3.9.0",
         "less-loader": "^5.0.0",

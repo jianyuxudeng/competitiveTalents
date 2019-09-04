@@ -328,7 +328,7 @@ export default {
       });
     },
     careersDev() {
-      ajax.get("careers").then(res => {
+      ajax.get("electric-career").then(res => {
         if (res.retcode == 0) {
           this.careers = res.data || [];
         }

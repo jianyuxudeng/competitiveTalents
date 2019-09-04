@@ -544,16 +544,14 @@ export default {
       context.scale(2, 2);
       setTimeout(() => {
         html2canvas(document.querySelector("#resume_detail"), {
-          taintTest: false,
-          allowTaint: true,
-          userCORS: true,
+          // taintTest: false,
+          // allowTaint: true,
+          // userCORS: true,
           canvas: canvas2,
           y: 0,
           x: 0
         }).then(canvas => {
-          this.resumesImg = canvas
-            .toDataURL("image/png")
-            .replace("image/png", "image/octet-stream");
+          this.resumesImg = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
           this.showResumesVis = true;
           this.isShow = true;
         });
@@ -575,16 +573,14 @@ export default {
       context.scale(2, 2);
       setTimeout(() => {
         html2canvas(document.querySelector("#resume_detail"), {
-          taintTest: false,
-          allowTaint: true,
-          userCORS: true,
+          // taintTest: false,
+          // allowTaint: true,
+          // userCORS: true,
           canvas: canvas2,
           y: 0,
           x: 0
         }).then(canvas => {
-          const imgUri = canvas
-            .toDataURL("image/png")
-            .replace("image/png", "image/octet-stream");
+          const imgUri = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
           const a = document.createElement("a");
           a.href = imgUri;
           a.click();

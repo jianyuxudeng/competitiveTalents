@@ -423,7 +423,6 @@
 import "./index.less";
 import ajax from "../../plugins/api";
 import util from "../../plugins/utils/util";
-import html2canvas from 'html2canvas';
 
 export default {
   name: "resume_detail",
@@ -545,9 +544,9 @@ export default {
       context.scale(2, 2);
       setTimeout(() => {
         html2canvas(document.querySelector("#resume_detail"), {
-          taintTest: false,
-          allowTaint: true,
-          userCORS: true,
+          // taintTest: false,
+          // allowTaint: true,
+          // userCORS: true,
           canvas: canvas2,
           y: 0,
           x: 0

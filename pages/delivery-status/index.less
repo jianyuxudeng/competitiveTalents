@@ -1,5 +1,6 @@
 .delivery_status{
     width: 11.8rem;
+    min-height: 4rem;
     margin: .4rem auto;
     display: flex;
     justify-content: space-between;
@@ -35,6 +36,23 @@
                 font-size: .2rem;
                 color: #969696;
                 line-height: .48rem;
+                position: relative;
+                ul{
+                    width: 100%;
+                    position: absolute;
+                    left: 0;
+                    top: .48rem;
+                    z-index: 9;
+                    li{
+                        width: 100%;
+                        background: #969696;
+                        border: 1px solid #cdcdcd;
+                        text-align: center;
+                        font-size: .2rem;
+                        color: #ffffff;
+                        cursor: pointer;
+                    }
+                }
                 &.active{
                     color: #515ffd;
                     border-bottom: .03rem solid #515ffd;

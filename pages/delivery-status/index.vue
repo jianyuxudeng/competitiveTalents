@@ -13,7 +13,12 @@
                   </a-row>
               </div>
               <div class="nav">
-                  <a v-for="(item, index) in navs" :key="index" :class="{active: active == index}" @click="handleNav(index)">{{item}}</a>
+                  <a v-for="(item, index) in navs" :key="index" :class="{active: active == index}" @click="handleNav(index)">
+                      {{item}}
+                      <ul v-if="isTrue && index == 3">
+                          <li v-for="i in interviews" :key="i.index" @click="handleInterviews(i.index)">{{i.name}}</li>
+                      </ul>
+                  </a>
               </div>
               <a-collapse v-for="item in list" :key="item.id">
                   <a-collapse-panel key="1">
@@ -28,7 +33,7 @@
                                   <a-col class="right">
                                       <p>{{item.send_time ? format(item.send_time) : item.send_time}}</p>
                                       <div>
-                                          {{active == 0 ? '投递成功' : '被查看'}}
+                                          {{item.activeName}}
                                           <a-icon type="caret-down" />
                                       </div>
                                   </a-col>
@@ -93,10 +98,17 @@ export default {
   },
   data() {
       return{
-          navs: ['投递成功', '被查看', '邀请面试', '不合适'],
+          navs: ['投递成功', '被查看', '有意向', '邀请面试', '不合适'],
           active: 0,
           rows: [],
-          list: []
+          list: [],
+          interviews: [
+              {name: '全部', index: 0},
+              {name: '待确认', index: 1},
+              {name: '已确认', index: 2},
+              {name: '已拒绝', index: 3}
+          ],
+          isTrue: false
       }
   },
   mounted() {
@@ -107,11 +119,13 @@ export default {
       handleNav(index) {
           this.active = index;
           let _list = [];
+          if(index != 3) this.isTrue = false;
           switch (index) {
               case 0:
                   this.rows.map(item => {
-                      item.steps = ['投递成功', '简历被查看', '邀面试'];
+                      item.steps = ['投递成功', '简历被查看', '有意向', '邀面试'];
                       item.isIndex = 0;
+                      item.activeName = '投递成功';
                       if(item.is_read == '0') {
                           _list.push(item);
                       }
@@ -120,8 +134,9 @@ export default {
                   break;
               case 1:
                   this.rows.map(item => {
-                      item.steps = ['投递成功', '简历被查看', '邀面试'];
+                      item.steps = ['投递成功', '简历被查看', '有意向', '邀面试'];
                       item.isIndex = 1;
+                      item.activeName = '简历被查看';
                       if(item.is_read == '1') {
                           _list.push(item);
                       }
@@ -130,24 +145,49 @@ export default {
                   break;
               case 2:
                   this.rows.map(item => {
-                      item.steps = ['投递成功', '简历被查看', '邀面试'];
+                      item.steps = ['投递成功', '简历被查看', '有意向', '邀面试'];
                       item.isIndex = 2;
-                      if(item.is_interview == '1') {
+                      item.activeName = '有意向';
+                      if(item.is_interview == '2') {
                           _list.push(item);
                       }
                   });
                   this.list = _list;
                   break;
               case 3:
+                  this.isTrue = !this.isTrue;
+                  break;
+              case 4:
                   this.rows.map(item => {
-                      item.steps = ['投递成功', '简历被查看', '不合适'];
-                      item.isIndex = 2;
+                      item.steps = ['投递成功', '简历被查看', '有意向', '不合适'];
+                      item.isIndex = 3;
+                      item.activeName = '不合适';
                       if(item.is_read == '2') {
                           _list.push(item);
                       }
                   });
                   this.list = _list;
                   break;
+              default:
+                  break;
+          }
+      },
+      handleInterviews(index) {
+          this.isTrue = false;
+          let _list = [];
+          switch (index) {
+              case 0:
+                  this.rows.map(item => {
+                      item.steps = ['投递成功', '简历被查看', '有意向', '邀面试'];
+                      item.isIndex = 3;
+                      item.activeName = '邀面试';
+                      if(item.is_interview == '1') {
+                          _list.push(item);
+                      }
+                  });
+                  this.list = _list;
+                  break;
+          
               default:
                   break;
           }
@@ -165,8 +205,9 @@ export default {
                   this.rows = res.data || [];
                   let _list = [];
                   this.rows.map(item => {
-                      item.steps = ['投递成功', '简历被查看', '邀面试'];
+                      item.steps = ['投递成功', '简历被查看', '有意向', '邀面试'];
                       item.isIndex = 0;
+                      item.activeName = '投递成功';
                       if(item.is_read == '0') {
                           _list.push(item);
                       }

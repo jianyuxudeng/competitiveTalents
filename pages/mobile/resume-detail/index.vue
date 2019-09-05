@@ -9,7 +9,8 @@
             <a-row>
               <dl>
                 <dt>
-                  <img :src="userDetail.avatar" alt />
+                  <img v-if="!userDetail.avatar" src="../../../assets/images/tx.png" alt />
+                  <img v-else :src="userDetail.avatar" />
                 </dt>
                 <dd>
                   <div class="name">

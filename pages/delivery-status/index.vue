@@ -187,6 +187,17 @@ export default {
                   });
                   this.list = _list;
                   break;
+              case 1:
+                  this.rows.map(item => {
+                      item.steps = ['投递成功', '简历被查看', '有意向', '邀面试'];
+                      item.isIndex = 3;
+                      item.activeName = '邀面试';
+                      if(item.is_interview == '1' && item.status == '0') {
+                          _list.push(item);
+                      }
+                  });
+                  this.list = _list;
+                  break;
           
               default:
                   break;

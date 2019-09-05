@@ -182,7 +182,7 @@ export default {
     },
     handleEmail() { //绑定邮箱
       if(this.email) {
-        ajax.post('user/detail', {
+        ajax.put('updateEmail', {
           user_id: this.userInfo.id,
           email: this.email
         }).then(res => {
@@ -262,8 +262,8 @@ export default {
             if(res.data.userInfo[0].sex) this.sex = res.data.userInfo[0].sex;
             if(res.data.userInfo[0].anonymous) this.anonymous = res.data.userInfo[0].anonymous + '';
             if(res.data.userInfo[0].is_hide) this.is_hide = res.data.userInfo[0].is_hide == 1 ? true : false;
-            if(res.data.userInfo[0].email) {
-              this.email = res.data.userInfo[0].email;
+            if(res.data.email) {
+              this.email = res.data.email;
               this.isEmail = true;
             };
           }

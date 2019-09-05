@@ -55,7 +55,14 @@
                         :label-col="labelCol"
                         :wrapper-col="wrapperCol"
                     >
-                        <a-date-picker :defaultValue="modelData.birth&&moment(modelData.birth, dateFormat)" @change="handleBirth" />
+                        <a-date-picker
+                          v-decorator="[
+                            'birth',
+                            {
+                                initialValue: modelData.birth&&moment(modelData.birth, dateFormat),
+                            }
+                          ]"
+                        />
                     </a-form-item>
                     <a-form-item
                         label="性别"
@@ -83,9 +90,14 @@
                         :wrapper-col="wrapperCol"
                     >
                         <a-cascader
+                            v-decorator="[
+                            'hasCity',
+                            {
+                                initialValue: cityArr,
+                            }
+                           ]"
                           :fieldNames="{label: 'name', value: 'id', children: 'item'}"
                           :options="areas"
-                          :defaultValue="cityArr"
                           @change="onCascader"
                           placeholder="请选择城市"
                         >
@@ -105,7 +117,12 @@
                         <a-cascader
                           :fieldNames="{label: 'name', value: 'id', children: 'item'}"
                           :options="areas"
-                          :defaultValue="homeCityArr"
+                           v-decorator="[
+                            'hasHomeCity',
+                            {
+                                initialValue: homeCityArr,
+                            }
+                           ]"
                           @change="onHomeCity"
                           placeholder="请选择城市"
                         >
@@ -224,7 +241,13 @@
                         :label-col="labelCol"
                         :wrapper-col="wrapperCol"
                     >
-                        <a-date-picker :defaultValue="modelData.workTime&&moment(modelData.workTime, dateFormat)" @change="handleWorkTime" />
+                        <a-date-picker  v-decorator="[
+                            'workTime',
+                            {
+                                initialValue:modelData.workTime&&moment(modelData.workTime, dateFormat),
+                                rules: [{ required: false }]
+                            }
+                        ]" />
                     </a-form-item>
                     <a-form-item label="1" :label-col="labelCol" class="btn">
                         <a-button type="primary" html-type="submit">保存</a-button>
@@ -263,8 +286,6 @@ export default {
           areas: [],
           city: null,
           homeCity: null,
-          birth: null,
-          workTime: null,
           citys: {},
           cityArr: [],
           homeCitys: {},
@@ -280,6 +301,7 @@ export default {
               this.citys = JSON.parse(this.modelData.city);
               let cityArr = this.citys?this.findParentById(this.areas, this.citys.id, 'id', 'item'):[];
               this.cityArr = this.citys?[...cityArr, this.citys.id]:[];
+              console.log(this.citys )
           };
           if(this.modelData && this.modelData.homeCity) {
               this.homeCitys = JSON.parse(this.modelData.homeCity);
@@ -315,12 +337,6 @@ export default {
       },
       handleChange ({ fileList }) {
           this.fileList = fileList;
-      },
-      handleBirth(date, dateString) { //生日
-          this.birth = dateString;
-      },
-      handleWorkTime(date, dateString) { //工作时间
-          this.workTime = dateString;
       },
       onCascader(value) { //地址
           let _city = Object.assign({}, {
@@ -363,31 +379,38 @@ export default {
           this.form.validateFields((err, values) => {
               if (!err) {
                   let userInfo = util.getStore('userInfo');
+                  let hasCity = JSON.parse(JSON.stringify(values)).hasCity;
+                  let hasHomeCity = JSON.parse(JSON.stringify(values)).hasHomeCity;
+                  values.workTime = values.workTime&&moment(values.workTime).format('YYYY-MM-DD');
+                  values.birth = values.birth&&moment(values.birth).format('YYYY-MM-DD');
+                  delete values.hasCity;
+                  delete values.hasHomeCity
                   let _data = Object.assign(values, {
-                      user_id: userInfo.id
+                      user_id: userInfo.id,
                   });
+                
                   if(this.city){
-                      _data.city = JSON.stringify(this.city);
+                    _data.city = JSON.stringify(this.city);
                   }
-                  if(this.homeCity) {
-                      _data.homeCity = JSON.stringify(this.homeCity);
+                  if(hasCity.length<1){
+                    this.city=null;
+                    this.cityArr=[];
+                    _data.city = '';
                   }
-                  if(this.workTime){
-                      _data.workTime = this.workTime;
+                  
+                  if(this.homeCity){
+                    _data.homeCity = JSON.stringify(this.homeCity);
                   }
-                  if(this.birth){
-                      _data.birth = this.birth;
+                  if(hasHomeCity.length<1){
+                    this.homeCity=null;
+                    this.homeCityArr=[];
+                    _data.homeCity = '';
                   }
                   if(this.fileList.length > 0) {
                       _data.avatar = this.fileList[0].url || this.fileList[0].response.data.imageList[0];
                   }else{
                       _data.avatar = null;
                   }
-                  _data&&Object.keys(_data).map(item=>{
-                      if(!_data[item]||_data[item]==undefined||_data[item]=='undefined'){
-                          delete _data[item];
-                      }
-                  })
                   ajax.post('user/detail', _data).then(res => {
                       if(res.retcode == 0) {
                           this.modelData = null;

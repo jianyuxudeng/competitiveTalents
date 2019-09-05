@@ -9,7 +9,8 @@
             <a-row type="flex" justify="space-between" align="top">
               <dl>
                 <dt>
-                  <img src="../../assets/images/tx.png" alt />
+                  <img v-if="!userDetail.avatar" src="../../assets/images/tx.png" alt />
+                  <img v-else :src="userDetail.avatar" />
                 </dt>
                 <dd>
                   <div class="name">{{userDetail.username}}</div>

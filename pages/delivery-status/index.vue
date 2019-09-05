@@ -105,7 +105,7 @@ export default {
           interviews: [
               {name: '全部', index: 0},
               {name: '待确认', index: 1},
-              {name: '已确认', index: 2},
+              {name: '已接受', index: 2},
               {name: '已拒绝', index: 3}
           ],
           isTrue: false
@@ -173,7 +173,6 @@ export default {
           }
       },
       handleInterviews(index) {
-          this.isTrue = false;
           let _list = [];
           switch (index) {
               case 0:
@@ -198,10 +197,33 @@ export default {
                   });
                   this.list = _list;
                   break;
+              case 2:
+                  this.rows.map(item => {
+                      item.steps = ['投递成功', '简历被查看', '有意向', '邀面试'];
+                      item.isIndex = 3;
+                      item.activeName = '已接受';
+                      if(item.is_interview == '1' && item.status == '1') {
+                          _list.push(item);
+                      }
+                  });
+                  this.list = _list;
+                  break;
+              case 3:
+                  this.rows.map(item => {
+                      item.steps = ['投递成功', '简历被查看', '有意向', '邀面试'];
+                      item.isIndex = 3;
+                      item.activeName = '已拒绝';
+                      if(item.is_interview == '1' && item.status == '2') {
+                          _list.push(item);
+                      }
+                  });
+                  this.list = _list;
+                  break;
           
               default:
                   break;
-          }
+          };
+          this.isTrue = false;
       },
       refresh() {
           this.devData();

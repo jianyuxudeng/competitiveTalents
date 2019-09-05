@@ -70,13 +70,18 @@ export default {
         () => {
           if (document.documentElement.clientWidth > 750) {
             if(fullpath.indexOf('mobile')>-1){
-              fullpath = '/'
+               fullpath = '/'
                this.$router.push(fullpath);
             }
           } else {
             if(fullpath.indexOf('mobile')<0){
-              fullpath = '/mobile'
-               this.$router.push(fullpath);
+              if(this.getQueryVariable('emailRepassword')) {
+                fullpath = '/mobile/login?isShow=5&email=645068340@qq.com&emailRepassword=true&code=198415'
+                this.$router.push(fullpath);
+              }else{
+                fullpath = '/mobile'
+                this.$router.push(fullpath);
+              }
             }
           }
         },
@@ -102,6 +107,17 @@ export default {
         },
         false
       );
+    }
+  },
+  methods: {
+    getQueryVariable(variable){
+        var query = decodeURIComponent(window.location.search.substring(1));
+        var vars = query.split("&");
+        for (var i=0;i<vars.length;i++) {
+                var pair = vars[i].split("=");
+                if(pair[0] == variable){return pair[1];}
+        }
+        return(false);
     }
   },
   components: {

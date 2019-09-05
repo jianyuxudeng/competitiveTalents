@@ -62,12 +62,12 @@
                             }
                           ]"
                          >
-                             <a-select-option value="0">非电竞行业</a-select-option>
                              <a-select-option
                                  v-for="item in labels.trades"
                                  :key="item.id"
                                  :value="item.id"
                              >{{item.labelName}}</a-select-option>
+                             <a-select-option value="0">非电竞行业</a-select-option>
                          </a-select>
                     </a-form-item>
                     <a-form-item
@@ -102,7 +102,7 @@
                           ]"
                          >
                              <a-select-option
-                                 v-for="item in labels.careers"
+                                 v-for="item in labels.jobTypes"
                                  :key="item.id"
                                  :value="item.id"
                              >{{item.labelName}}</a-select-option>
@@ -278,7 +278,7 @@ export default {
                           }
                       })
                   };
-                  this.labels.careers.map(item => {
+                  this.labels.jobTypes.map(item => {
                       if(item.id == values.career_id) {
                           _career_type = item.labelName;
                       }

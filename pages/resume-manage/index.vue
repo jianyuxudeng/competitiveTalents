@@ -160,7 +160,7 @@ export default {
             depatment: null,
             keywords: null,
             pageSize: 10,
-            pageNumber: 1
+            pageNumber: 1,
         }
     };
   },
@@ -168,6 +168,8 @@ export default {
    
   },
   mounted() {
+      let userInfo = util.getStore('userInfo');
+      this.params.user_id = userInfo.id;
       this.init();
   },
   methods: {

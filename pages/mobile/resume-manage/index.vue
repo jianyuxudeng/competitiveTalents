@@ -252,7 +252,10 @@ export default {
       },
       //获取数据
       devData() {
-          let _params = this.params;
+          let userInfo = util.getStore('userInfo');
+          let _params = Object.assign(this.params, {
+              user_id: userInfo.id
+          });
           ajax.get('jobs', _params).then(res => {
               if(res.retcode == 0) {
                   this.rows = res.data.list || [];

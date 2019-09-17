@@ -77,8 +77,7 @@
                     <template slot="operation" slot-scope="text, record">
                         <div class="operation">
                             <span @click="() => placement(record)">职位置顶</span>
-                            <!-- <span>职位刷新</span>
-                            <span>职位推荐</span> -->
+                            <span @click="() => del(record)">职位删除</span>
                         </div>
                     </template>
                     <template slot="operationBtn" slot-scope="text, record">
@@ -230,6 +229,8 @@ export default {
           };
           this.handleModify(_obj);
       },
+      //删除
+      del(record) {},
       handleModify(obj={}) { //置顶，下线职位
           ajax.put('jobs', obj).then(res => {
               if(res.retcode == 0) {

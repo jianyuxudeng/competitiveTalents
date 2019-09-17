@@ -83,6 +83,7 @@
                         <div class="operation_btn">
                             <span @click="() => modify(record)">修改职位</span>
                             <span @click="() => offline(record)">{{record.is_on == 0 ? '上线职位' : '下线职位'}}</span>
+                            <span @click="() => del(record)">职位删除</span>
                         </div>
                     </template>
                 </a-table>
@@ -112,13 +113,14 @@ export default {
             {
                 title: '职位名称', 
                 dataIndex: 'name',
-                scopedSlots: { customRender: 'name' }
+                scopedSlots: { customRender: 'name' },
+                width: '28%'
             },
             // {title: '发布日期', dataIndex: 'sendTime'},
             // {title: '截至日期', dataIndex: 'deadTime'},
             // {title: '所属部门', dataIndex: 'depatment'},
-            {title: '发布地点', dataIndex: 'regionName'},
-            {title: '投递', dataIndex: 'resumes'},
+            {title: '发布地点', dataIndex: 'regionName', width: '20%'},
+            {title: '投递', dataIndex: 'resumes', width: '16%'},
             // {
             //     title: '操作', 
             //     dataIndex: 'operation', 
@@ -131,7 +133,7 @@ export default {
                 dataIndex: 'operationBtn', 
                 // colSpan: 0,
                 scopedSlots: { customRender: 'operationBtn' },
-                width: '40%'
+                width: '36%'
             }
         ],
         rows: [], //列表数据
@@ -218,6 +220,8 @@ export default {
           };
           this.handleModify(_obj);
       },
+      //删除
+      del(record) {},
       //下线
       offline(record) {
           let _obj = {

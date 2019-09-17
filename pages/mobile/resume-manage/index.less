@@ -163,10 +163,16 @@
                         }
                     }
                     .operation_btn{
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: space-between;
                         font-size: .16rem;
                         color: #515ffd;
                         span{
                             cursor: pointer;
+                            &:nth-of-type(3){
+                                color: #f00;
+                            }
                         }
                     }
                 }

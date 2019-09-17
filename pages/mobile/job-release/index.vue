@@ -549,11 +549,21 @@ export default {
           if (_id) {
             params.id = _id;
             ajax.put("jobs", params).then(res => {
-              if (res.retcode == 0) this.$message.success(res.msg);
+              if (res.retcode == 0) {
+                this.$message.success(res.msg);
+                this.$router.push({
+                  path: 'resume-manage'
+                })
+              };
             });
           } else {
             ajax.post("jobs", params).then(res => {
-              if (res.retcode == 0) this.$message.success(res.msg);
+              if (res.retcode == 0) {
+                this.$message.success(res.msg);
+                this.$router.push({
+                  path: 'resume-manage'
+                })
+              };
             });
           }
         }

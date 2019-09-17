@@ -225,7 +225,7 @@
               <a-textarea 
                 size="large" 
                 :autosize="{ minRows: 6, maxRows: 10 }"
-                :maxLength="100"
+                :maxLength="1000"
                 v-decorator="[
                   'des',
                   {
@@ -234,7 +234,7 @@
                   }
                 ]"
               ></a-textarea>
-              <p>0/100文字</p>
+              <p>0/1000文字</p>
             </a-form-item>
             <!-- 公司LOGO -->
             <a-form-item 

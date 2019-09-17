@@ -1,5 +1,5 @@
 <template>
-  <section class="login">
+  <section class="mlogin">
       <img src="../../../assets/images/mobile/login_bg.jpg" />
       <div class="login_conten">
           <!-- logo -->

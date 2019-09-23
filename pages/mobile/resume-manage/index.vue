@@ -96,6 +96,7 @@
 import "./index.less";
 import ajax from '../../../plugins/api';
 import util from '../../../plugins/utils/util';
+import { Modal } from 'ant-design-vue';
 export default {
   name: "resume-manage",
   data() {
@@ -221,7 +222,26 @@ export default {
           this.handleModify(_obj);
       },
       //删除
-      del(record) {},
+      del(record) {
+          Modal.confirm({
+              content: '确定要删除职位吗？',
+              iconType: 'none',
+              closable: true,
+              onOk: () => {
+                  let userInfo = util.getStore('userInfo');
+                  let _obj = Object.assign({}, {
+                      user_id: userInfo.id,
+                      id: record.id
+                  });
+                  ajax.delete('jobs', _obj).then(res => {
+                      this.$message.success(res.msg);
+                      if(res.retcode == 0) {
+                          this.init();
+                      }
+                  })
+              }
+          })
+      },
       //下线
       offline(record) {
           let _obj = {

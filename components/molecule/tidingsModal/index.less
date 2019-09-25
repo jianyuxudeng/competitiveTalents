@@ -1,0 +1,31 @@
+.tidings{
+    width: 11.81rem;
+    .table{
+        border: 1px solid #c8c8c8;
+        border-top: none;
+        border-radius: 0 0 .08rem .08rem;
+        overflow: hidden;
+        p{
+            padding: 0 .4rem;
+            margin: 0;
+            height: .6rem;
+            border-bottom: 1px solid #c8c8c8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: .16rem;
+            color: #464646;
+            cursor: pointer;
+            &:last-child{
+                border-bottom: none;
+            }
+            &.read{
+                color: #969696;
+            }
+        }
+    }
+    .ant-pagination{
+        margin: .3rem auto 0;
+        text-align: center;
+    }
+}

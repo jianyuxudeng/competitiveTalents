@@ -9,6 +9,7 @@
       </div>
       <companyInfoModal v-if="active == 0"></companyInfoModal>
       <letterModal v-if="active == 1"></letterModal>
+      <frequentlyAddress v-if="active == 2"></frequentlyAddress>
       <tidingsModal v-if="active == 3"></tidingsModal>
     </div>
   </section>
@@ -18,6 +19,7 @@
 import "./index.less";
 import companyInfoModal from '../../components/molecule/companyInfoModal';
 import letterModal from '../../components/molecule/letterModal';
+import frequentlyAddress from '../../components/molecule/frequentlyAddress';
 import tidingsModal from '../../components/molecule/tidingsModal';
 
 export default {
@@ -25,6 +27,7 @@ export default {
   components: {
     companyInfoModal,
     letterModal,
+    frequentlyAddress,
     tidingsModal
   },
   data() {

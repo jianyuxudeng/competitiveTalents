@@ -15,7 +15,7 @@
               <a-input 
                 placeholder="请输入公司全称" 
                 size="large"
-                :maxLength="10"
+                :maxLength="50"
                 v-decorator="[
                   'name',
                   {
@@ -32,7 +32,7 @@
             >
               <a-input 
                 size="large"
-                :maxLength="10"
+                :maxLength="50"
                 v-decorator="[
                   'abbreviation',
                   {
@@ -144,7 +144,7 @@
             >
               <a-input 
                 size="large"
-                :maxLength="30"
+                :maxLength="50"
                 v-decorator="[
                   'website',
                   {
@@ -162,7 +162,7 @@
             >
               <a-input 
                 size="large"
-                :maxLength="30" 
+                :maxLength="50" 
                 v-decorator="[
                   'address',
                   {
@@ -179,7 +179,7 @@
             >
               <a-input 
                 size="large"
-                :maxLength="20"
+                :maxLength="50"
                 v-decorator="[
                   'email',
                   {
@@ -201,7 +201,6 @@
               <a-textarea 
                 size="large" 
                 :autosize="{ minRows: 6, maxRows: 10 }"
-                :maxLength="1000"
                 v-decorator="[
                   'des',
                   {
@@ -210,7 +209,6 @@
                   }
                 ]"
               ></a-textarea>
-              <p>0/1000文字</p>
             </a-form-item>
             <!-- 公司LOGO -->
             <a-form-item 

@@ -56,6 +56,7 @@ export default {
       if (document.documentElement.clientWidth > 750) {
         if (fullpath.indexOf("mobile") > -1) {
           fullpath = fullpath.split('mobile')[1];
+         
           this.$router.push(fullpath);
         }
       } else {

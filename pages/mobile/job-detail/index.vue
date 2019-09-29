@@ -22,7 +22,7 @@
               </dd>
             </dl>
           </a-col>
-          <a-col v-if="userInfo.type == 2" class="detail_head_btn">
+          <a-col v-if="userInfo&&userInfo.type == 2" class="detail_head_btn">
             <a-button class="back" size="large" @click="(collectionPosition(!params.collect))">
               <a-icon type="star" />
               <span v-if="!params.collect">收藏</span>
@@ -30,7 +30,7 @@
             </a-button>
             <a-button type="primary" size="large" :disabled="!sendAgain" @click="handleModel">投递简历</a-button>
           </a-col>
-          <a-col v-if="userInfo.type == 3" class="detail_head_btn">
+          <a-col v-if="userInfo&&userInfo.type == 3" class="detail_head_btn">
             <a-button type="primary" size="large" @click="placement(params.id)">置顶</a-button>
             <a-button type="primary" size="large" @click="modify(params.id)">修改职位</a-button>
             <a-button type="primary" size="large" @click="offline(params.id, params.is_on)">{{params.is_on == 0 ? '上线职位' : '下线职位'}}</a-button>

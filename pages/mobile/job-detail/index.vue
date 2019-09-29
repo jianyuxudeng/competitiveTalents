@@ -160,6 +160,7 @@
 import "./index.less";
 import ajax from '../../../plugins/api';
 import util from '../../../plugins/utils/util';
+import moment from 'moment';
 
 export default {
   name: "job_detail",
@@ -197,6 +198,7 @@ export default {
     this.labelDev();
   },
   methods: {
+      moment,
       offline(id, is_on) {
         let _obj = {
             id: id,
@@ -330,7 +332,7 @@ export default {
                   skills: this.params.skills.split(',')
                 })
               };
-              if(this.params.sendTime) this.params.sendTime = util.format(this.params.sendTime);
+              if(this.params.sendTime) this.params.sendTime = this.params.sendTime&&moment(this.params.sendTime).format('YYYY-MM-DD');
               this.labels.workExpress.map(item => {
                 if(item.id == this.params.workExperience) {
                   this.params = Object.assign(this.params, {workExperience: item.labelName});

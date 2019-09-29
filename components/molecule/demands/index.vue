@@ -21,7 +21,7 @@
                           </p>
                       </div>
                       <div>
-                          <span v-if="item.sendTime">[{{moment(item.sendTime).format('HH:mm')}}发布]</span>
+                          <span v-if="item.sendTime">[{{moment().diff(moment(item.sendTime),'days')>0? moment().diff(moment(item.sendTime),'days')+'天前':  moment().diff(moment(item.sendTime),'hours')+'小时前' }}发布]</span>
                           <span>{{item.jobPrice}}/月</span>
                       </div>
                   </div>

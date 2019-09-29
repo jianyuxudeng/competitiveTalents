@@ -145,7 +145,7 @@
                         </div>
                         <div class="times">
                             <a-icon type="clock-circle" />
-                            <span>发布时间 {{item.sendTime}}</span>
+                            <span v-if="item.sendTime">发布时间 {{moment().diff(moment(item.sendTime),'days')>0? moment().diff(moment(item.sendTime),'days')+'天前':moment().diff(moment(item.sendTime),'hours')+'小时前'}}</span>
                         </div>
                     </div>
                   </div>
@@ -218,6 +218,7 @@ export default {
       this.getData();
   },
   methods: {
+      moment,
       init(obj) { //初始化数据
           this.regionList = [ //地区
               {id: null, name: '不限'},

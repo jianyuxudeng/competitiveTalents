@@ -191,18 +191,24 @@ export default {
           }
         })
       }else{
-        if(!this.userInfo) {
-          this.$router.push({
-            path: 'search-positions'
-          })
-        }else{
-          this.$router.push({
+        // if(!this.userInfo) {
+        //   this.$router.push({
+        //     path: 'search-positions'
+        //   })
+        // }else{
+        //   this.$router.push({
+        //     path: 'job-detail',
+        //     query: {
+        //       id: e.id
+        //     }
+        //   })
+        // }
+         this.$router.push({
             path: 'job-detail',
             query: {
               id: e.id
             }
           })
-        }
       }
     },
     onMore() { //点击MORE按钮

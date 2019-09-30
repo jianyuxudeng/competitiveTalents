@@ -22,7 +22,7 @@
               </dd>
             </dl>
           </a-col>
-          <a-col v-if="userInfo.type == 2" class="detail_head_btn">
+          <a-col v-if="userInfo&&userInfo.type == 2" class="detail_head_btn">
             <a-button class="back" size="large" @click="(collectionPosition(!params.collect))">
               <a-icon type="star" />
               <span v-if="!params.collect">收藏</span>
@@ -30,7 +30,7 @@
             </a-button>
             <a-button type="primary" size="large" :disabled="!sendAgain" @click="handleModel">投递简历</a-button>
           </a-col>
-          <a-col v-if="userInfo.type == 3" class="detail_head_btn">
+          <a-col v-if="userInfo&&userInfo.type == 3" class="detail_head_btn">
             <a-button type="primary" size="large" @click="placement(params.id)">置顶</a-button>
             <a-button type="primary" size="large" @click="modify(params.id)">修改职位</a-button>
             <a-button type="primary" size="large" @click="offline(params.id, params.is_on)">{{params.is_on == 0 ? '上线职位' : '下线职位'}}</a-button>
@@ -160,6 +160,7 @@
 import "./index.less";
 import ajax from '../../../plugins/api';
 import util from '../../../plugins/utils/util';
+import moment from 'moment';
 
 export default {
   name: "job_detail",
@@ -197,6 +198,7 @@ export default {
     this.labelDev();
   },
   methods: {
+      moment,
       offline(id, is_on) {
         let _obj = {
             id: id,
@@ -330,7 +332,7 @@ export default {
                   skills: this.params.skills.split(',')
                 })
               };
-              if(this.params.sendTime) this.params.sendTime = util.format(this.params.sendTime);
+              if(this.params.sendTime) this.params.sendTime = this.params.sendTime&&moment(this.params.sendTime).format('YYYY-MM-DD');
               this.labels.workExpress.map(item => {
                 if(item.id == this.params.workExperience) {
                   this.params = Object.assign(this.params, {workExperience: item.labelName});

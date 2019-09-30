@@ -56,7 +56,7 @@ export default {
       let _navs = [];
       let _isLogin = false;
       if(userInfo) {
-        ajax.get('user/' + userInfo.id).then(res => {
+        ajax.get('user/' + userInfo.id,{},this).then(res => {
           if(res.retcode == 0) {
             switch (userInfo.type) {
               case 2:

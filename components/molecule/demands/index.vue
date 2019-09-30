@@ -21,7 +21,7 @@
                           </p>
                       </div>
                       <div>
-                          <span>[{{util.formatTime(item.sendTime)}}发布]</span>
+                          <span v-if="item.sendTime">[{{moment().diff(moment(item.sendTime),'days')>0? moment().diff(moment(item.sendTime),'days')+'天前':  moment().diff(moment(item.sendTime),'hours')+'小时前' }}发布]</span>
                           <span>{{item.jobPrice}}/月</span>
                       </div>
                   </div>
@@ -59,6 +59,7 @@
 import "./index.less";
 import ajax from '../../../plugins/api';
 import util from '../../../plugins/utils/util';
+import moment from 'moment';
 
 export default {
   name: "demands",
@@ -84,6 +85,7 @@ export default {
       this.getLabelData();
   },
   methods: {
+      moment,
       init() { //初始化
           this.listCope = [];
           if(this.userInfo && this.userInfo.type == 3) {

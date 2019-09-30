@@ -1,4 +1,7 @@
 import axios from 'axios';
+import util from '../utils/util';
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
 
 const netWork = (()=>{
     const update = (obj) => {
@@ -17,6 +20,8 @@ const netWork = (()=>{
         instance.interceptors.response.use(function (response) {
             // 对响应数据做点什么
             if(response.data.retcode===409){
+                util.setStore('userInfo',null)
+                obj.$message.error('登陆已过期，请重新登录')
                 window.location.href='/login';
             }
             return response;

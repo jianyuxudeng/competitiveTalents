@@ -56,7 +56,7 @@
                                     <p>{{item.workExperience ? workExpress.find(i => i.id == item.workExperience).labelName : null}} / {{item.educational ? educationals.find(i => i.id == item.educational).labelName : null}}</p>
                                 </span>
                                 <span class="title_right">
-                                    <p>[{{item.sendTime ? formatTime(item.sendTime) : null}}发布]</p>
+                                    <p>[{{item.sendTime ? moment().diff(moment(item.sendTime),'days')>0? moment().diff(moment(item.sendTime),'days')+'天前':moment().diff(moment(item.sendTime),'hours')+'小时前' : null}}发布]</p>
                                     <span>{{item.jobPrice}}/月</span>
                                 </span>
                             </div>
@@ -199,6 +199,7 @@ export default {
       this.getData();
   },
   methods: {
+      moment,
       formatTime: util.formatTime,
       init(obj) { //初始化数据
           this.regionList = [ //地区

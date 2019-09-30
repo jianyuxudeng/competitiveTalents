@@ -17,7 +17,7 @@
               <a-input 
                 placeholder="请输入公司全称" 
                 size="large"
-                :maxLength="10"
+                :maxLength="50"
                 v-decorator="[
                   'name',
                   {
@@ -37,7 +37,7 @@
             >
               <a-input 
                 size="large"
-                :maxLength="10"
+                :maxLength="50"
                 v-decorator="[
                   'abbreviation',
                   {
@@ -159,7 +159,7 @@
             >
               <a-input 
                 size="large"
-                :maxLength="30"
+                :maxLength="50"
                 v-decorator="[
                   'website',
                   {
@@ -180,7 +180,7 @@
             >
               <a-input 
                 size="large"
-                :maxLength="30" 
+                :maxLength="50" 
                 v-decorator="[
                   'address',
                   {
@@ -200,32 +200,12 @@
             >
               <a-input 
                 size="large"
-                :maxLength="20"
+                :maxLength="50"
                 v-decorator="[
                   'email',
                   {
                     initialValue: params.email,
                     rules: [{ required: false, message: '' }]
-                  }
-                ]"
-              ></a-input>
-            </a-form-item>
-            <!-- 客服电话 -->
-            <a-form-item
-              class="form_item_6" 
-              label="客服电话" 
-              :label-col="formItemLayout6.labelCol"
-              :wrapper-col="formItemLayout6.wrapperCol"
-              :colon="false"
-            >
-              <a-input 
-                size="large"
-                :maxLength="11"
-                v-decorator="[
-                  'customer',
-                  {
-                    initialValue: params.customer,
-                    rules: [{ required: true, message: '请输入客服电话' }]
                   }
                 ]"
               ></a-input>
@@ -244,7 +224,6 @@
               <a-textarea 
                 size="large" 
                 :autosize="{ minRows: 6, maxRows: 10 }"
-                :maxLength="1000"
                 v-decorator="[
                   'des',
                   {
@@ -253,7 +232,7 @@
                   }
                 ]"
               ></a-textarea>
-              <p>0/1000文字</p>
+              <!-- <p>0/1000文字</p> -->
             </a-form-item>
             <!-- 公司LOGO -->
             <a-form-item 
@@ -301,69 +280,6 @@
                   <a-button type="primary">选择上传图片</a-button>
                 </a-upload>
               </div>
-            </a-form-item>
-          </div>
-          <div class="title">负责人信息</div>
-          <div class="form_centen">
-            <!-- 负责人 -->
-            <a-form-item
-              class="form_item_6" 
-              label="负责人" 
-              :label-col="formItemLayout6.labelCol"
-              :wrapper-col="formItemLayout6.wrapperCol"
-              :colon="false"
-            >
-              <a-input 
-                size="large"
-                :maxLength="12"
-                v-decorator="[
-                  'chargeName',
-                  {
-                    initialValue: params.chargeName,
-                    rules: [{ required: true, message: '请输入负责人名称' }]
-                  }
-                ]"
-              ></a-input>
-            </a-form-item>
-            <!-- 手机号码 -->
-            <a-form-item
-              class="form_item_4" 
-              label="手机号码" 
-              :label-col="formItemLayout4.labelCol"
-              :wrapper-col="formItemLayout4.wrapperCol"
-              :colon="false"
-            >
-              <a-input 
-                size="large"
-                :maxLength="11"
-                v-decorator="[
-                  'chargeTel',
-                  {
-                    initialValue: params.chargeTel,
-                    rules: [{ required: true, message: '请输入手机号码' }]
-                  }
-                ]"
-              ></a-input>
-            </a-form-item>
-            <!-- 邮箱地址 -->
-            <a-form-item
-              class="form_item_6" 
-              label="邮箱地址" 
-              :label-col="formItemLayout6.labelCol"
-              :wrapper-col="formItemLayout6.wrapperCol"
-              :colon="false"
-            >
-              <a-input 
-                size="large"
-                :maxLength="20"
-                v-decorator="[
-                  'chargeEmail',
-                  {
-                    initialValue: params.chargeEmail,
-                    rules: [{ required: true, message: '请输入邮箱地址' }]
-                  }
-                ]"
-              ></a-input>
             </a-form-item>
           </div>
         </div>

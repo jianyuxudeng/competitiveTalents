@@ -1,11 +1,13 @@
 <template>
   <section class="job_release page_centent">
-    <div class="nav-bg"></div>
     <a-form :form="form" @submit="handleSubmit">
       <div class="centent">
         <a-tabs :defaultActiveKey="active" @change="callback">
           <a-tab-pane v-for="item in labels.careers" :key="item.id" :tab="item.labelName"></a-tab-pane>
         </a-tabs>
+        <div class="list labelMat list_active">
+          <a-form-item label="职位信息"><div class="bg_laber"></div></a-form-item>
+        </div>
         <div class="list">
           <a-form-item class="left" label="职位名称">
             <a-cascader
@@ -40,7 +42,7 @@
           </a-form-item>
         </div>
         <div class="list">
-          <a-form-item class="left" label="工作地区">
+          <a-form-item class="left" label="发布城市">
             <a-row type="flex" justify="space-between" align="middle">
               <a-select
                 size="large"
@@ -50,7 +52,7 @@
                   'region',
                   {
                       initialValue: provincesId,
-                      rules: [{ required: true, message: '请选择工作地区' }]
+                      rules: [{ required: true, message: '请选择发布城市' }]
                   }
                 ]"
               >
@@ -123,14 +125,14 @@
           </a-form-item>
         </div>
         <div class="list">
-          <a-form-item class="left" label="工作地址">
+          <a-form-item class="left" label="上班地址">
             <a-input
               size="large"
               v-decorator="[
                 'address',
                 {
                     initialValue: params.address,
-                    rules: [{ required: true, message: '请输入工作地址' }]
+                    rules: [{ required: true, message: '请输入上班地址' }]
                 }
               ]"
             ></a-input>
@@ -204,23 +206,17 @@
               >{{item.labelName}}</a-select-option>
             </a-select>
           </a-form-item>
-          <a-form-item class="right" label="行业领域">
-            <a-select
+          <a-form-item class="right" label="工作周期">
+            <a-input
               size="large"
               v-decorator="[
-                              'trade',
+                              'work_time',
                               {
-                                  initialValue: handleIdTrue(params.trade),
+                                  initialValue: params.work_time,
                                   rules: [{ required: false }]
                               }
                           ]"
-            >
-              <a-select-option
-                v-for="item in labels.trades"
-                :key="item.id"
-                :value="item.id"
-              >{{item.labelName}}</a-select-option>
-            </a-select>
+            />
           </a-form-item>
         </div>
         <div class="list labelMat">
@@ -262,38 +258,6 @@
           </a-form-item>
         </div>
         <div class="list labelMat">
-          <a-form-item class="left" label="学历要求">
-            <a-select
-              size="large"
-              v-decorator="[
-                              'educational',
-                              {
-                                  initialValue: handleIdTrue(params.educational),
-                                  rules: [{ required: false }]
-                              }
-                          ]"
-            >
-              <a-select-option
-                v-for="item in labels.educationals"
-                :key="item.id"
-                :value="item.id"
-              >{{item.labelName}}</a-select-option>
-            </a-select>
-          </a-form-item>
-          <a-form-item class="right" label="工作周期">
-            <a-input
-              size="large"
-              v-decorator="[
-                              'work_time',
-                              {
-                                  initialValue: params.work_time,
-                                  rules: [{ required: false }]
-                              }
-                          ]"
-            />
-          </a-form-item>
-        </div>
-        <div class="list labelMat">
           <a-form-item class="left" label="工作形式">
             <a-input
               size="large"
@@ -315,7 +279,28 @@
           </a-form-item>
         </div>
         <div class="list labelMat">
-          <a-form-item class="left" label="是否急聘">
+          <a-form-item class="left" label="福利标签">
+            <!-- <a-select
+              size="large"
+              mode="multiple"
+              :tokenSeparators="[',']"
+              @change="handleSkills"
+              v-decorator="[
+                              'skills',
+                              {
+                                  initialValue: params.skills,
+                                  rules: [{ required: true, message: '请选择技能要求' }]
+                              }
+                          ]"
+            >
+              <a-select-option
+                v-for="item in labels.skills"
+                :key="item.id"
+                :value="item.labelName"
+              >{{item.labelName}}</a-select-option>
+            </a-select> -->
+          </a-form-item>
+          <a-form-item class="right" label="是否急聘">
             <a-radio-group
                 size="large"
                 v-decorator="[
@@ -377,9 +362,103 @@
             <p>0/1000文字</p>
           </a-form-item>
         </div>
+        <div class="list labelMat list_active">
+          <a-form-item label="职位要求"><div class="bg_laber"></div></a-form-item>
+        </div>
+        <div class="list labelMat">
+          <a-form-item class="left" label="工作年限"></a-form-item>
+          <a-form-item class="right" label="学历">
+            <a-select
+              size="large"
+              v-decorator="[
+                              'educational',
+                              {
+                                  initialValue: handleIdTrue(params.educational),
+                                  rules: [{ required: false }]
+                              }
+                          ]"
+            >
+              <a-select-option
+                v-for="item in labels.educationals"
+                :key="item.id"
+                :value="item.id"
+              >{{item.labelName}}</a-select-option>
+            </a-select>
+          </a-form-item>
+        </div>
+        <div class="list labelMat">
+          <a-form-item class="left" label="年龄"></a-form-item>
+          <a-form-item class="right" label="语音程度"></a-form-item>
+        </div>
+        <div class="list labelMat">
+          <a-form-item class="left" label="专业"></a-form-item>
+          <a-form-item class="right" label="行业">
+            <a-select
+              size="large"
+              v-decorator="[
+                              'trade',
+                              {
+                                  initialValue: handleIdTrue(params.trade),
+                                  rules: [{ required: false }]
+                              }
+                          ]"
+            >
+              <a-select-option
+                v-for="item in labels.trades"
+                :key="item.id"
+                :value="item.id"
+              >{{item.labelName}}</a-select-option>
+            </a-select>
+          </a-form-item>
+        </div>
+        <div class="list labelMat list_active">
+          <a-form-item label="其他设置"><div class="bg_laber"></div></a-form-item>
+        </div>
+        <div class="list labelMat">
+          <a-form-item class="left" label="性别"></a-form-item>
+          <a-form-item class="right" label="户口"></a-form-item>
+        </div>
+        <div class="list labelMat">
+          <a-form-item class="left" label="居住地"></a-form-item>
+          <a-form-item class="right" label="简历接收方式"></a-form-item>
+        </div>
+        <div class="list labelMat list_active">
+          <a-form-item label="服务选择"><div class="bg_laber"></div></a-form-item>
+        </div>
+        <div class="list mar_bot">
+          <a-row type="flex" justify="space-between" align="middle" class="mar_wid">
+            <a-row type="flex" align="middle">
+              <div class="item">
+                <div>
+                  <span>自动刷新</span>
+                  <a-checkbox></a-checkbox>
+                </div>
+                <p>剩余次数：27</p>
+              </div>
+              <div class="item">
+                <div>
+                  <span>置顶</span>
+                  <a-checkbox></a-checkbox>
+                </div>
+                <p>剩余次数：27</p>
+              </div>
+              <div class="item">
+                <div>
+                  <span>职位推荐</span>
+                  <a-checkbox></a-checkbox>
+                </div>
+                <p>剩余次数：27</p>
+              </div>
+            </a-row>
+            <a-button type="primary" class="list_btn">服务购买</a-button>
+          </a-row>
+        </div>
       </div>
       <a-form-item class="job_release_btn">
-        <a-button type="primary" html-type="submit">保存</a-button>
+        <a-button type="primary" html-type="submit">立即发布</a-button>
+        <a-button>保存为职位模板</a-button>
+        <a-button>预览</a-button>
+        <a-button html-type="submit">保存</a-button>
       </a-form-item>
     </a-form>
   </section>

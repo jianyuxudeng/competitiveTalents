@@ -85,7 +85,7 @@ export default {
                 _navs = [
                   {
                     name: '职位发布',
-                    code: 'job-release'
+                    code: 'job-management'
                   },
                   {
                     name: '职位管理',

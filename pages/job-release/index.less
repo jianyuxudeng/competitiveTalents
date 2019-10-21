@@ -1,11 +1,12 @@
 .job_release{
     .ant-form{
         width: 11.8rem;
-        margin: .6rem auto;
+        margin: 0 auto .6rem;
         .centent{
             width: 100%;
             border: 1px solid #d4d5d9;
-            border-radius: .08rem;
+            border-top: none;
+            border-radius: 0 0 .08rem .08rem;
             overflow: hidden;
             .ant-tabs{
                 margin-bottom: .16rem;
@@ -22,9 +23,45 @@
                 display: flex;
                 justify-content: space-between;
                 padding: 0 .2rem;
+                &.list_active{
+                    .ant-form-item{
+                        align-items: center;
+                    }
+                }
                 &.labelMat{
                     .ant-form-item-label{
                         margin-left: .1rem;
+                    }
+                }
+                &.mar_bot{
+                    margin-bottom: .36rem;
+                    .mar_wid{
+                        width: 100%;
+                        .item{
+                            width: 1.42rem;
+                            margin: 0 .1rem;
+                            text-align: center;
+                            div{
+                                width: 100%;
+                                height: .45rem;
+                                border: .02rem solid #e0e0e0;
+                                border-radius: .04rem;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                span{
+                                    margin-right: .1rem;
+                                }
+                                .ant-checkbox-inner{
+                                    border-radius: 100%;
+                                }
+                            }
+                            p{
+                                font-size: .16rem;
+                                color: #c8c8c8;
+                                margin-top: .1rem;
+                            }
+                        }
                     }
                 }
                 .ant-form-item{
@@ -34,6 +71,10 @@
                 }
                 label{
                     font-size: .16rem;
+                }
+                .bg_laber{
+                    height: .09rem;
+                    background: #edefff;
                 }
                 .ant-form-item-control-wrapper{
                     width: 10.52rem;
@@ -81,11 +122,19 @@
             }
         }
         .job_release_btn{
-            text-align: center;
+            padding: 0 .3rem;
+            .ant-form-item-children{
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+            }
         }
         .ant-btn{
             width: 2.16rem;
             margin-top: .3rem;
+            &.list_btn{
+                margin-top: 0;
+            }
         }
     }
 }

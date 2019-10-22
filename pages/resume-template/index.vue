@@ -1,6 +1,6 @@
 <template>
     <section class="page_centent">
-        <div class="resume_manage">
+        <div class="resume_template">
             <div class="head">
                 <!-- title -->
                 <div class="head_title">
@@ -60,12 +60,6 @@
                         >每页{{item}}条</a-select-option>
                     </a-select>
                 </div>
-                <div class="check_list">
-                    <a>批量刷新</a>
-                    <a>批量发布</a>
-                    <a>批量暂停</a>
-                    <a>复制职位</a>
-                </div>
             </div>
             <!-- table表格 -->
             <div class="table">
@@ -89,17 +83,9 @@
                     </template>
                     <template slot="operationBtn" slot-scope="text, record">
                         <div class="operation_btn">
-                            <p>
-                                <span @click="() => modify(record)">修改职位</span>
-                                <span>刷新</span>
-                            </p>
-                            <p>
-                                <span @click="() => offline(record)">下线职位</span>
-                                <span>暂停</span>
-                            </p>
-                            <p>
-                                <span>增加再发布</span>
-                            </p>
+                            <span @click="() => modify(record)">修改职位</span>
+                            <span @click="() => offline(record)">上线职位</span>
+                            <span @click="() => del(record)">职位删除</span>
                         </div>
                     </template>
                 </a-table>
@@ -114,7 +100,7 @@ import ajax from '../../plugins/api';
 import util from '../../plugins/utils/util';
 import { Modal } from 'ant-design-vue';
 export default {
-  name: "resume-manage",
+  name: "resume-template",
   data() {
     return {
         form: this.$form.createForm(this),
@@ -148,7 +134,7 @@ export default {
                 title: '操作', 
                 dataIndex: 'operationBtn', 
                 colSpan: 0,
-                width: '1.6rem',
+                width: '1rem',
                 scopedSlots: { customRender: 'operationBtn' }
             }
         ],
@@ -244,7 +230,7 @@ export default {
       offline(record) {
           let _obj = {
               id: record.id,
-              is_on: 0
+              is_on: 1
           };
           this.handleModify(_obj);
       },
@@ -294,7 +280,7 @@ export default {
           let userInfo = util.getStore('userInfo');
           let _params = Object.assign(this.params, {
               user_id: userInfo.id,
-              is_on: 1
+              is_on: 0
           });
           ajax.get('jobs', _params).then(res => {
               if(res.retcode == 0) {

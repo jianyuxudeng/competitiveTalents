@@ -88,13 +88,13 @@ export default {
                     code: 'job-management'
                   },
                   {
-                    name: '职位管理',
-                    code: 'resume-manage'
-                  },
-                  {
-                    name: '收件箱',
+                    name: '简历管理',
                     code: 'mailbox'
                   },
+                  // {
+                  //   name: '收件箱',
+                  //   code: 'mailbox'
+                  // },
                   {
                     name: '企业信息',
                     code: 'company-info'

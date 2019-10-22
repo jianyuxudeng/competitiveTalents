@@ -7,16 +7,25 @@
             </div>
         </div>
         <JobRelease v-if="active == 0"></JobRelease>
+        <ResumeManage v-if="active == 1"></ResumeManage>
+        <ResumeTemplate v-if="active == 2"></ResumeTemplate>
+        <BuyingPackages v-if="active == 3"></BuyingPackages>
     </section>
 </template>
 
 <script>
 import "./index.less";
 import JobRelease from '../job-release';
+import ResumeManage from '../resume-manage';
+import ResumeTemplate from '../resume-template';
+import BuyingPackages from '../buying-packages';
 export default {
     name: 'job-management',
     components: {
-        JobRelease
+        JobRelease,
+        ResumeManage,
+        ResumeTemplate,
+        BuyingPackages
     },
     data() {
         return {

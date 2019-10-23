@@ -91,10 +91,10 @@ export default {
                     name: '简历管理',
                     code: 'mailbox'
                   },
-                  // {
-                  //   name: '收件箱',
-                  //   code: 'mailbox'
-                  // },
+                  {
+                    name: '收件箱',
+                    code: 'company-info?active=3'
+                  },
                   {
                     name: '企业信息',
                     code: 'company-info'

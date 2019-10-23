@@ -36,6 +36,16 @@ export default {
         active: 0
       }
   },
+  watch: {
+    $route() {
+      let _active = this.$route.query.active || 0;
+      this.active = _active;
+    }
+  },
+  created() {
+    let _active = this.$route.query.active || 0;
+    this.active = _active;
+  },
   mounted() {
   },
   methods: {

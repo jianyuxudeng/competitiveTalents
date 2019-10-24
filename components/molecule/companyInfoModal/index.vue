@@ -210,6 +210,26 @@
                 ]"
               ></a-input>
             </a-form-item>
+            <a-form-item
+              class="form_item_6" 
+              label="客服电话" 
+              :label-col="formItemLayout6.labelCol"
+              :wrapper-col="formItemLayout6.wrapperCol"
+              :colon="false"
+            >
+              <a-input 
+                size="large"
+                :maxLength="11"
+                placeholder="021-XXXXXXXX"
+                v-decorator="[
+                  'customer_phone',
+                  {
+                    initialValue: params.customer_phone,
+                    rules: [{ required: true, message: '请输入客服电话' }]
+                  }
+                ]"
+              ></a-input>
+            </a-form-item>
           </div>
           <div class="title">公司其他信息</div>
           <div class="form_flex">
@@ -280,6 +300,70 @@
                   <a-button type="primary">选择上传图片</a-button>
                 </a-upload>
               </div>
+            </a-form-item>
+          </div>
+          <div class="title">负责人信息</div>
+          <div class="form_centen">
+            <a-form-item
+              class="form_item_6" 
+              label="负责人" 
+              :label-col="formItemLayout6.labelCol"
+              :wrapper-col="formItemLayout6.wrapperCol"
+              :colon="false"
+              :required="true"
+            >
+              <a-input 
+                placeholder="请输入负责人姓名" 
+                size="large"
+                :maxLength="10"
+                v-decorator="[
+                  'leader',
+                  {
+                    initialValue: params.leader,
+                    rules: [{ required: true, message: '请输入负责人姓名' }]
+                  }
+                ]"
+              ></a-input>
+            </a-form-item>
+            <a-form-item
+              class="form_item_4" 
+              label="手机号码" 
+              :label-col="formItemLayout4.labelCol"
+              :wrapper-col="formItemLayout4.wrapperCol"
+              :colon="false"
+              :required="true"
+            >
+              <a-input
+                size="large"
+                :maxLength="11"
+                v-decorator="[
+                  'leader_phone',
+                  {
+                    initialValue: params.leader_phone,
+                    rules: [{ required: true, message: '请输入手机号码' }]
+                  }
+                ]"
+              ></a-input>
+            </a-form-item>
+            <a-form-item
+              class="form_item_6" 
+              label="邮箱地址" 
+              :label-col="formItemLayout6.labelCol"
+              :wrapper-col="formItemLayout6.wrapperCol"
+              :colon="false"
+              :required="true"
+            >
+              <a-input
+                size="large"
+                :maxLength="50"
+                v-decorator="[
+                  'leader_email',
+                  {
+                    initialValue: params.leader_email,
+                    rules: [{ required: true, message: '请输入邮箱地址' }]
+                  }
+                ]"
+              ></a-input>
             </a-form-item>
           </div>
         </div>

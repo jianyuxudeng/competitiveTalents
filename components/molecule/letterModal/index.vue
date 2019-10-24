@@ -12,9 +12,9 @@
                             size="large"
                             :maxLength="10"
                             v-decorator="[
-                                'letterName',
+                                'title',
                                 {
-                                    initialValue: params.letterName,
+                                    initialValue: params.title,
                                     rules: [{ required: true, message: '请输入信件名称' }]
                                 }
                             ]"
@@ -30,9 +30,9 @@
                             :autosize="{ minRows: 20, maxRows: 50 }"
                             :maxLength="1000"
                             v-decorator="[
-                            'letterText',
+                            'content',
                             {
-                                initialValue: params.letterText,
+                                initialValue: params.content,
                                 rules: [{ required: true, message: '请输入信件内容' }]
                             }
                             ]"
@@ -56,25 +56,46 @@
 
 <script>
 import "./index.less";
-
+import ajax from '../../../plugins/api';
+import util from '../../../plugins/utils/util';
 export default {
   data() {
       return{
           form: this.$form.createForm(this),
           params: {
-              letterName: '',
-              letterText: ''
+              title: '',
+              content: ''
           }
       }
   },
   mounted() {
+      this.devData();
   },
   methods: {
       handleSubmit(e) {
           e.preventDefault();
           this.form.validateFields((err, values) => {
               if (!err) {
-                  console.log(values)
+                  let userInfo = util.getStore('userInfo');
+                  ajax.post('set-message-model', {
+                      ...values,
+                      user_id: userInfo.id
+                  }).then(res => {
+                      if(res.retcode == 0) {
+                          this.$message.success(res.msg);
+                          this.devData();
+                      }
+                  })
+              }
+          })
+      },
+      devData() {
+          let userInfo = util.getStore('userInfo');
+          ajax.get('set-message-model', {user_id: userInfo.id}).then(res => {
+              if(res.retcode == 0) {
+                  this.params = Object.assign(this.params, res.data);
+              }else{
+                  this.$message.warning(res.msg);
               }
           })
       }

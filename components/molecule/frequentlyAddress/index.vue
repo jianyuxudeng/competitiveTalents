@@ -118,26 +118,15 @@
 
 <script>
 import "./index.less";
+import ajax from '../../../plugins/api';
+import util from '../../../plugins/utils/util';
 import area from "../../../plugins/utils/area";
 
 export default {
   data() {
       return{
           form: this.$form.createForm(this),
-          list: [
-              {
-                  id: 1,
-                  region: {
-                      provincesId: 1,
-                      provincesName: "北京市",
-                      cityId: 1,
-                      cityName: "北京市",
-                      area: 1,
-                      areaName: "东城区"
-                  },
-                  address: '拱墅区18号'
-              }
-          ],
+          list: [],
           provinces: [],
           citys: [],
           areas: [],
@@ -151,6 +140,7 @@ export default {
       }
   },
   mounted() {
+      this.devData();
       this.init();
   },
   methods: {
@@ -171,7 +161,38 @@ export default {
           e.preventDefault();
           this.form.validateFields((err, values) => {
               if (!err) {
-                  console.log(values);
+                  let userInfo = util.getStore('userInfo');
+                  let region = values;
+                  let _type = null;
+                  this.provinces.map(item => {
+                      if(item.id == region.provincesId) {
+                          region.provincesName = item.name;
+                          item.items.map(i => {
+                              if(i.id == region.cityId) {
+                                  region.cityName = i.name;
+                                  i.items.map(h => {
+                                      if(h.id == region.area) region.areaName = h.name;
+                                  })
+                              }
+                          })
+                      }
+                  });
+                  let _params = {
+                      region: JSON.stringify(region),
+                      user_id: userInfo.id,
+                      address: region.address
+                  };
+                  if(this.active == null) {
+                      _type = 'post';
+                  }else{
+                      _type = 'put';
+                      _params.id = this.list[this.active].id;
+                  };
+                  ajax[_type]('address', _params).then(res => {
+                      if(res.retcode == 0) {
+                          this.devData();
+                      }
+                  })
               }
           });
       },
@@ -216,6 +237,7 @@ export default {
       },
       bindAdd() { //添加
           this.form.resetFields();
+          this.active = null;
           this.params = Object.assign({}, {
               provincesId: null,
               cityId: null,
@@ -228,7 +250,24 @@ export default {
           if(index == this.active) {
               this.bindAdd();
           };
-          this.list.splice(index, 1);
+          ajax.delete('address', {id: id}).then(res => {
+              if(res.retcode == 0) {
+                  this.devData();
+              }
+          });
+      },
+      devData() {
+          let userInfo = util.getStore('userInfo');
+          ajax.get('address', {user_id: userInfo.id}).then(res => {
+              if(res.retcode == 0) {
+                  this.list = res.data || [];
+                  if(this.list.length > 0) {
+                      this.list.map(item => {
+                          item.region = JSON.parse(item.region);
+                      })
+                  }
+              }
+          })
       }
   }
 };

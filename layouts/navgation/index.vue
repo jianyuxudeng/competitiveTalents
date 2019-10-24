@@ -9,12 +9,20 @@
           <a @click="goHome">首页</a>
           <a v-for="item in navs" :key="item.code" @mouseover="handleSelect(true, item.code)" @mouseleave="handleSelect(false, item.code)">
             <span :class="{info_name: isLogin && userInfo.type == 2 && item.code == 'logout'}" @click="navLink(item.code)">{{item.name}}</span>
-            <em v-if="isLogin && item.code=='logout'"><a-icon :type="isSelect ? 'caret-up' : 'caret-down'" /></em>
-            <ul v-if="isSelect && item.code=='logout'">
-              <li @click="goResumeDetail">{{userInfo.type == 2 ? '个人信息' : '企业信息'}}</li>
-              <li @click="goSettings" v-if="userInfo.type == 2">账号设置</li>
-              <li @click="goLodout" v-if="userInfo.type == 2">切换为招聘者</li>
-              <li @click="goLodout">退出登录</li>
+            <em v-if="isLogin && item.code=='logout'"><a-icon :type="isSelect && active=='logout' ? 'caret-up' : 'caret-down'" /></em>
+            <ul v-if="isSelect">
+              <template v-if="item.code == 'logout' && active == 'logout'">
+                <li @click="goResumeDetail" v-if="userInfo.type == 2">个人信息</li>
+                <li @click="goSettings" v-if="userInfo.type == 2">账号设置</li>
+                <li @click="goLodout" v-if="userInfo.type == 2">切换为招聘者</li>
+                <li @click="goLodout">退出登录</li>
+              </template>
+              <template v-if="item.code == 'install' && active == 'install'">
+                <li @click="goResumeDetail(0)">企业信息管理</li>
+                <li @click="goResumeDetail(1)">信件模板</li>
+                <li @click="goResumeDetail(2)">常用上班地址</li>
+                <li @click="goResumeDetail(3)">未读消息提醒</li>
+              </template>
             </ul>
           </a>
         </div>
@@ -33,7 +41,8 @@ export default {
       navs: [],
       isLogin: false,
       isSelect: false,
-      userInfo: null
+      userInfo: null,
+      active: null
     };
   },
   async asyncData() {
@@ -96,8 +105,8 @@ export default {
                     code: 'company-info?active=3'
                   },
                   {
-                    name: '企业信息',
-                    code: 'company-info'
+                    name: '系统设置',
+                    code: 'install'
                   },
                   {
                     name: res.data.name || res.data.username,
@@ -142,7 +151,7 @@ export default {
     navLink(code) {
       let userInfo = util.getStore('userInfo');
       if(userInfo) {
-        if(code != 'logout') {
+        if(code != 'logout' && code != 'install') {
           this.$router.push({
             path: '/' + code
           })
@@ -154,16 +163,22 @@ export default {
       }
     },
     handleSelect(e, code) {
-      if(code == 'logout') this.isSelect = e;
+      if(code == 'logout' || code == 'install') {
+        this.isSelect = e;
+        this.active = code;
+      };
     },
-    goResumeDetail() {
+    goResumeDetail(index) {
         if(util.getStore('userInfo').type == 2) {
             this.$router.push({
                 path: 'resume-detail'
             });
         }else{
             this.$router.push({
-                path: 'company-info'
+                path: 'company-info',
+                query: {
+                  active: index || null
+                }
             })
         };
         this.isSelect = false;

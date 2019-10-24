@@ -40,11 +40,17 @@ export default {
   watch: {
     $route() {
       let _active = this.$route.query.active || 0;
+      if(_active == 30) {
+        _active = 3;
+      };
       this.active = _active;
     }
   },
   created() {
     let _active = this.$route.query.active || 0;
+    if(_active == 30) {
+      _active = 3;
+    };
     this.active = _active;
   },
   mounted() {

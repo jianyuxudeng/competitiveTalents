@@ -102,7 +102,7 @@ export default {
                   },
                   {
                     name: '收件箱',
-                    code: 'company-info?active=3'
+                    code: 'company-info?active=30'
                   },
                   {
                     name: '系统设置',

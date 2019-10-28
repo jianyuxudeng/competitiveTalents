@@ -229,13 +229,6 @@ export default {
               index: 0,
               id: record.id
           })
-        //   this.$router.push({
-        //       path: 'job-management',
-        //       query: {
-        //           id: record.id,
-        //           index: 0
-        //       }
-        //   })
       },
       //置顶
       placement(record) {

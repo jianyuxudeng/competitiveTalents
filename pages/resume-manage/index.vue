@@ -225,12 +225,17 @@ export default {
       },
       //点击tabel里的每一项
       handleItem(record) {
-          this.$router.push({
-              path: 'job-detail',
-              query: {
-                  id: record.id
-              }
+          this.$emit('toJobRelease', {
+              index: 0,
+              id: record.id
           })
+        //   this.$router.push({
+        //       path: 'job-management',
+        //       query: {
+        //           id: record.id,
+        //           index: 0
+        //       }
+        //   })
       },
       //置顶
       placement(record) {

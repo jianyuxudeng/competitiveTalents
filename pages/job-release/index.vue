@@ -280,25 +280,16 @@
         </div>
         <div class="list labelMat">
           <a-form-item class="left" label="福利标签">
-            <!-- <a-select
+            <a-input
               size="large"
-              mode="multiple"
-              :tokenSeparators="[',']"
-              @change="handleSkills"
               v-decorator="[
-                              'skills',
-                              {
-                                  initialValue: params.skills,
-                                  rules: [{ required: true, message: '请选择技能要求' }]
-                              }
-                          ]"
-            >
-              <a-select-option
-                v-for="item in labels.skills"
-                :key="item.id"
-                :value="item.labelName"
-              >{{item.labelName}}</a-select-option>
-            </a-select> -->
+                  'welfare',
+                  {
+                      initialValue: params.welfare,
+                      rules: [{ required: false }]
+                  }
+              ]"
+            />
           </a-form-item>
           <a-form-item class="right" label="是否急聘">
             <a-radio-group
@@ -365,7 +356,7 @@
         <div class="list labelMat list_active">
           <a-form-item label="职位要求"><div class="bg_laber"></div></a-form-item>
         </div>
-        <div class="list labelMat">
+        <div class="list labelMat wt120">
           <a-form-item class="left" label="工作年限"></a-form-item>
           <a-form-item class="right" label="学历">
             <a-select
@@ -386,12 +377,45 @@
             </a-select>
           </a-form-item>
         </div>
-        <div class="list labelMat">
-          <a-form-item class="left" label="年龄"></a-form-item>
-          <a-form-item class="right" label="语音程度"></a-form-item>
+        <div class="list labelMat wt120">
+          <a-form-item class="left" label="年龄">
+            <a-input 
+              size="large"
+              v-decorator="[
+                'need_age',
+                {
+                  initialValue: params.need_age,
+                  rules: [{ required: false }]
+                }
+              ]"
+            />
+          </a-form-item>
+          <a-form-item class="right" label="语音程度">
+            <a-input
+              size="large"
+              v-decorator="[
+                'language_level',
+                {
+                  initialValue: params.language_level,
+                  rules: [{required: false}]
+                }
+              ]"
+            />
+          </a-form-item>
         </div>
-        <div class="list labelMat">
-          <a-form-item class="left" label="专业"></a-form-item>
+        <div class="list labelMat wt120">
+          <a-form-item class="left" label="专业">
+            <a-input
+              size="large"
+              v-decorator="[
+                'major',
+                {
+                  initialValue: params.major,
+                  rules: [{required: false}]
+                }
+              ]"
+            />
+          </a-form-item>
           <a-form-item class="right" label="行业">
             <a-select
               size="large"
@@ -414,13 +438,60 @@
         <div class="list labelMat list_active">
           <a-form-item label="其他设置"><div class="bg_laber"></div></a-form-item>
         </div>
-        <div class="list labelMat">
-          <a-form-item class="left" label="性别"></a-form-item>
-          <a-form-item class="right" label="户口"></a-form-item>
+        <div class="list labelMat wt120">
+          <a-form-item class="left" label="户口">
+            <a-input
+              size="large"
+              v-decorator="[
+                'residence',
+                {
+                  initialValue: params.residence,
+                  rules: [{required: false}]
+                }
+              ]"
+            />
+          </a-form-item>
+          <a-form-item class="right" label="性别">
+            <a-radio-group 
+              size="large"
+              v-decorator="[
+                'sex',
+                {
+                  initialValue: params.sex,
+                  rules: [{required: false}]
+                }
+              ]"
+            >
+              <a-radio value="男">男</a-radio>
+              <a-radio value="女">女</a-radio>
+            </a-radio-group>
+          </a-form-item>
         </div>
-        <div class="list labelMat">
-          <a-form-item class="left" label="居住地"></a-form-item>
-          <a-form-item class="right" label="简历接收方式"></a-form-item>
+        <div class="list labelMat wt120">
+          <a-form-item class="left" label="居住地">
+            <a-input
+              size="large"
+              v-decorator="[
+                'pplace',
+                {
+                  initialValue: params.pplace,
+                  rules: [{required: false}]
+                }
+              ]"
+            />
+          </a-form-item>
+          <a-form-item class="right" label="简历接收方式">
+            <a-input
+              size="large"
+              v-decorator="[
+                'receiving',
+                {
+                  initialValue: params.receiving,
+                  rules: [{required: false}]
+                }
+              ]"
+            />
+          </a-form-item>
         </div>
         <div class="list labelMat list_active">
           <a-form-item label="服务选择"><div class="bg_laber"></div></a-form-item>
@@ -455,8 +526,8 @@
         </div>
       </div>
       <a-form-item class="job_release_btn">
-        <a-button type="primary" html-type="submit">立即发布</a-button>
-        <a-button>保存为职位模板</a-button>
+        <a-button type="primary" @click="tapIsOn(1)" html-type="submit">立即发布</a-button>
+        <a-button @click="tapIsOn(0)" html-type="submit">保存为职位模板</a-button>
         <a-button>预览</a-button>
         <a-button html-type="submit">保存</a-button>
       </a-form-item>
@@ -476,6 +547,7 @@ export default {
   async asyncData() {
     return {};
   },
+  props: ['id'],
   data() {
     return {
       form: this.$form.createForm(this),
@@ -496,13 +568,9 @@ export default {
       active: null,
       params: {},
       careerIds: [],
-      deadTime: null
+      deadTime: null,
+      isOn: null
     };
-  },
-  watch: {
-    $route() {
-      this.init();
-    }
   },
   mounted() {
     this.init();
@@ -513,9 +581,8 @@ export default {
     async init() {
       //初始化
       this.provincesList = area;
-      let _id = this.$route.query.id;
+      let _id = localStorage.getItem('jobId');
       const res = await this.getCareers();
-      console.log( this.provincesList)
       if (_id&&res) {
         this.devData(_id);
       }else{
@@ -592,10 +659,13 @@ export default {
     handleJobPrice(value) {
       this.jobPrice = value;
     },
+    tapIsOn(index) {
+      this.isOn = index;
+    },
     handleSubmit(e) {
       //提交
       e.preventDefault();
-      let _id = this.$route.query.id;
+      let _id = localStorage.getItem('jobId');
       this.form.validateFields((err, values) => {
         if (!err) {
           let userInfo = util.getStore("userInfo");
@@ -617,7 +687,8 @@ export default {
             skills_ids: `${skills_ids}`,
             skills: `${values.skills}`,
             careers_type: this.active,
-            deadTime: this.deadTime || util.formatDate(new Date())
+            deadTime: this.deadTime || util.formatDate(new Date()),
+            is_on: this.isOn
           });
           params &&
             Object.keys(params).map(item => {
@@ -630,18 +701,22 @@ export default {
             ajax.put("jobs", params).then(res => {
               if (res.retcode == 0) {
                 this.$message.success(res.msg);
-                this.$router.push({
-                  path: 'resume-manage'
-                })
+                if(this.isOn == 1) {
+                  this.$emit('handleActive', 1);
+                }else{
+                  this.$emit('handleActive', 2);
+                }
               };
             });
           } else {
             ajax.post("jobs", params).then(res => {
               if (res.retcode == 0) {
                 this.$message.success(res.msg);
-                this.$router.push({
-                  path: 'resume-manage'
-                })
+                if(this.isOn == 1) {
+                  this.$emit('handleActive', 1);
+                }else{
+                  this.$emit('handleActive', 2);
+                }
               };
             });
           }

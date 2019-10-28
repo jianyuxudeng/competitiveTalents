@@ -211,11 +211,9 @@ export default {
       },
       //点击tabel里的每一项
       handleItem(record) {
-          this.$router.push({
-              path: 'job-detail',
-              query: {
-                  id: record.id
-              }
+          this.$emit('toJobRelease', {
+              index: 0,
+              id: record.id
           })
       },
       //置顶
